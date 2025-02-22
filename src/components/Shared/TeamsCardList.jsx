@@ -1,25 +1,55 @@
 import PropTypes from "prop-types";
-import { FaRegSadTear, FaTrash } from "react-icons/fa"; // Import delete icon
+import { FaRegSadTear, FaSearch, FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { useState } from "react";
+import Loading from "./Loading";
 
-const TeamsCardList = ({ title, onDelete, onSelect, isLoading }) => {
+const TeamsCardList = ({ title, favoritesLoading, favoritePlayersSports, onDelete, onSelect, isLoading }) => {
     const items = useSelector((state) => state.favorites.favoriteTeams);
+    const [searchQuery, setSearchQuery] = useState("");
+
+    // Filter teams based on searchQuery
+    const filteredTeams = items?.filter((team) =>
+        team?.teamRef?.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     return (
         <div>
-            <h2 className={`text-xl font-bold px-1 py-3 mb-4`}>{title}</h2>
-            <div className="space-y-4">
-                {items?.length > 0 ? (
-                    items?.map((item) => (
-                        <div
+            {/* Search Input */}
+            <div className="col-span-8 flex items-center bg-[rgba(255,255,255,0.32)] px-4 py-3 rounded-full shadow-lg">
+                <div className="text-white mr-2 text-2xl">
+                    <FaSearch />
+                </div>
+                <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search teams..."
+                    className="flex-1 bg-transparent text-white placeholder-gray-300 focus:outline-none px-2"
+                />
+            </div>
 
+            <h2 className="text-xl font-bold px-1 py-3 mb-3 mt-2">{title}</h2>
+
+            {favoritesLoading ? <Loading /> : <div className="space-y-4">
+                {items?.length === 0 ? (
+                    <div className="flex flex-col rounded-xl items-center justify-center p-6 text-gray-400">
+                        <FaRegSadTear className="w-10 h-10 mb-2 rounded-xl" />
+                        <p>No favorite teams added yet.</p>
+                    </div>
+                ) : filteredTeams?.length > 0 ? (
+                    filteredTeams.map((item) => (
+                        <div
                             key={item.teamId}
                             className="flex items-center justify-between px-6 py-3 bg-secondary rounded-lg"
                         >
-                            <div onClick={() => {
-                                onSelect(item)
-                                console.log("hello");
-                            }} className="flex cursor-pointer items-center space-x-4">
+                            <div
+                                onClick={() => {
+                                    console.log("item", item);
+                                    onSelect(item, favoritePlayersSports)
+                                }}
+                                className="flex cursor-pointer items-center space-x-4"
+                            >
                                 <img
                                     src={item?.teamRef?.logo || "https://via.placeholder.com/100"}
                                     loading="lazy"
@@ -29,35 +59,30 @@ const TeamsCardList = ({ title, onDelete, onSelect, isLoading }) => {
                                 <span>{item?.teamRef?.name}</span>
                             </div>
                             <button
-                                className={` ${isLoading ? "opacity-6 text-red-300 " : "hover:text-red-600 text-red-500 "} text-red-500  transition  flex items-center justify-center`}
+                                className={` ${isLoading ? "opacity-6 text-red-300" : "hover:text-red-600 text-red-500"
+                                    } text-red-500 transition flex items-center justify-center`}
                                 onClick={() => onDelete(item)}
-                                disabled={isLoading} // Disable button when loading
+                                disabled={isLoading}
                             >
                                 <FaTrash className="w-5 h-5" />
                             </button>
                         </div>
-                    )))
-                    : (
-                        <div className="flex flex-col rounded-xl items-center justify-center p-6 text-gray-400">
-                            <FaRegSadTear className="w-10 h-10 mb-2 rounded-xl" />
-                            <p>No favorite teams added yet.</p>
-                        </div>
-                    )}
-            </div>
+                    ))
+                ) : (
+                    <div className="flex flex-col rounded-xl items-center justify-center p-6 text-gray-400">
+                        <FaRegSadTear className="w-10 h-10 mb-2 rounded-xl" />
+                        <p>No matching teams found.</p>
+                    </div>
+                )}
+            </div>}
         </div>
     );
 };
 
 TeamsCardList.propTypes = {
     title: PropTypes.string.isRequired,
-    items: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.number.isRequired,
-            name: PropTypes.string.isRequired,
-            image: PropTypes.string.isRequired,
-        })
-    ),
     onDelete: PropTypes.func.isRequired,
+    onSelect: PropTypes.func.isRequired,
 };
 
 export default TeamsCardList;

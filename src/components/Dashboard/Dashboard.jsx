@@ -11,50 +11,131 @@ import PlayersAreaChart from "../Shared/PlayersAreaChart";
 import { AreaChartData } from "../PlayersInsights/PlayerData";
 import AlertCard from "../PlayersInsights/AlertCard";
 import SearchBar from "./SearchBar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getFavouriteHighlights } from "../../Api/Favorite/Favorite";
 import { setFavoritePlayersHighlightsLoading, setFavoriteTeamsHighlightsLoading } from "../../slices";
-import { setFavoritePlayersHighlights, setFavoriteTeamHighlights } from "../../slices/favoritesSlice";
-import { useDispatch } from "react-redux";
+import { resetHighlights, setFavoriteLeaguesHighlights, setFavoritePlayersHighlights, setFavoriteTeamsHighlights } from "../../slices/favoritesSlice";
+import { useDispatch, useSelector } from "react-redux";
+import PlayerInsightSearchBar from "../Shared/PlayerInsightSearchBar";
+import usePlayerActions from "../../hooks/usePlayerActions";
+import useTeamActions from "../../hooks/useTeamActions";
+import TeamInsightSearchBar from "../Shared/TeamInsightSearchBar";
+import { setPlayerOrTeam, setSportsNameDashboard } from "../../slices/selectionSlice";
+import LeagueAreaChart from "../Shared/LeagueAreaChart";
 
 const Dashboard = () => {
-    const sportName = "soccer";
+
+    const { favoriteLeaguessHighlights } = useSelector((state) => state.favorites); // Get loading states
+    const { playerOrTeam, sportsNameDashboard } = useSelector((state) => state.selection); // Access Redux state
+    const [sportsName, setSportsName] = useState("soccer");
+
     const dispatch = useDispatch()
 
     useEffect(() => {
         const fetchHighlights = async () => {
-            if (!sportName) return; // Don't fetch if sportName is empty
+            if (!sportsNameDashboard || favoriteLeaguessHighlights.length > 0) return; // Prevent fetching if data exists
 
             dispatch(setFavoritePlayersHighlightsLoading(true));
             dispatch(setFavoriteTeamsHighlightsLoading(true));
 
             try {
-                const res = await getFavouriteHighlights(sportName);
+                const res = await getFavouriteHighlights(sportsNameDashboard);
                 dispatch(setFavoritePlayersHighlights(res?.data.players));
-                dispatch(setFavoriteTeamHighlights(res?.data.teams));
+                dispatch(setFavoriteTeamsHighlights(res?.data.teams));
+                dispatch(setFavoriteLeaguesHighlights(res?.data.leagues));
+
             } catch (err) {
-                // dispatch(setError(err.message));
-                console.log("Error Occured")
+                console.log("Error Occurred", err);
             } finally {
                 dispatch(setFavoritePlayersHighlightsLoading(false));
                 dispatch(setFavoriteTeamsHighlightsLoading(false));
             }
         };
-
         fetchHighlights();
-    }, [sportName, dispatch]);
+    }, [sportsNameDashboard, dispatch]); // Re-run only if sportsNameDashboard changes OR leagues data is empty
+
+
+    const { handleSearch, handleSelectPlayer } = usePlayerActions();
+    const { handleSelectTeam, SearchTeam } = useTeamActions();
 
     return (
         <>
             <main className="flex overflow-hidden min-h-screen bg-primary  p-8 flex-col">
-                <SearchBar />
+                {/* <SearchBar /> */}
+                <div className=" grid grid-cols-1 lg:grid-cols-2 gap-2">
+                    {/* Conditional Rendering */}
+                    {playerOrTeam === "player" ? (
+                        <>
+                            <div className="col-span-12 w-full  flex  ">
+                                {/* <PlayerInsightSearchBar /> */}
+                                <PlayerInsightSearchBar sportsName={sportsName} onSearch={handleSearch} onSelect={handleSelectPlayer} />
+                                <div className="">
+                                    <select
+                                        value={sportsName}
+                                        onChange={(e) => setSportsName(e.target.value)}
+                                        className="bg-primarySolid w-full h-full text-white px-4 py-2 md:py-3 rounded-r-full focus:outline-none h-full shadow-[0px_1px_55px_0px_rgba(84,84,84,0.06)]"
+                                    >
+                                        <option value="soccer">Soccer</option>
+                                        <option value="american-football">American Football</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </>) : (
+                        <div className={`col-span-12 w-full  flex `}>
+                            <TeamInsightSearchBar onSearch={SearchTeam} sportsName={sportsName} onSelect={handleSelectTeam} />
+                            <div className="h-full ">
+                                <select
+                                    value={sportsName}
+                                    onChange={(e) => setSportsName(e.target.value)}
+                                    className="bg-primarySolid w-full h-full text-white px-4 py-3 rounded-r-full focus:outline-none shadow-[0px_1px_55px_0px_rgba(84,84,84,0.06)]"
+                                >
+                                    <option value="soccer">Soccer</option>
+                                    <option value="american-football">American Football</option>
+                                </select>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="flex w-full col-span-12  gap-2">
+
+                        {/* Player/Team Dropdown */}
+                        <select
+                            value={playerOrTeam}
+                            onChange={(e) => dispatch(setPlayerOrTeam(e.target.value))}
+                            className="bg-primarySolid w-full text-white px-4 py-2 rounded-full focus:outline-none shadow-[0px_1px_55px_0px_rgba(84,84,84,0.06)]"
+                        >
+                            <option value="player">Player</option>
+                            <option value="team">Team</option>
+                        </select>
+
+                        {/* Sport Dropdown */}
+                        <select
+                            value={sportsNameDashboard}
+                            onChange={(e) => {
+                                dispatch(setSportsNameDashboard(e.target.value))
+                                dispatch(resetHighlights())
+
+                            }}
+                            className="bg-primarySolid w-full text-white px-4 py-2 rounded-full focus:outline-none shadow-[0px_1px_55px_0px_rgba(84,84,84,0.06)]"
+                        >
+                            <option value="soccer">Soccer</option>
+                            <option value="basketball">Basketball</option>
+                            <option value="american-football">American football</option>
+                        </select>
+
+                        {/* Advanced Search Button */}
+                        <button className="bg-primarySolid w-full overflow-auto  px-2 lg:px-4 py-2   rounded-full text-white">
+                            Advanced
+                        </button>
+                    </div>
+                </div>
                 <div className="self-center">
                     <div className="">
                         <div className="">
                             <section className="mt-6 w-full">
-                                <div className="grid grid-cols-1  md:grid-cols-3 gap-4">
-                                    <div className="md:col-span-2">
-                                        <PlayersAreaChart data={AreaChartData} />
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div className="md:col-span-2 ">
+                                        <LeagueAreaChart data={favoriteLeaguessHighlights} />
                                     </div>
                                     <AlertCard />
                                 </div>

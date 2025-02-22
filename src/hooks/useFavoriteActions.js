@@ -1,54 +1,58 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import {
-    setFavoritePlayersHighlights,
-    setFavoriteTeamHighlights,
-    setError
-} from "../redux/highlightsSlice";
-import {
-    setFavoritePlayersHighlightsLoading,
-    setFavoriteTeamsHighlightsLoading
-} from "../redux/loadingSlice"; // Import loading actions
-import { getFavouriteHighlights } from "../api"; // API function
+// import { useDispatch, useSelector } from "react-redux";
+// import { useEffect } from "react";
+// import {
+//     setFavoritePlayersHighlights,
+//     setFavoriteTeamsHighlights,
+//     setError
+// } from "../redux/highlightsSlice";
+// import {
+//     setFavoritePlayersHighlightsLoading,
+//     setFavoriteTeamsHighlightsLoading
+// } from "../redux/loadingSlice"; // Import loading actions
+// import { getFavouriteHighlights } from "../api"; // API function
 
-const useFavouriteHighlights = (sportName) => {
-    const dispatch = useDispatch();
-    const { favoritePlayersHighlights, favoriteTeamHighlights } = useSelector(
-        (state) => state.highlights
-    );
-    const { favoritePlayersHighlightsLoading, favoriteTeamsHighlightsLoading, error } = useSelector(
-        (state) => state.loading
-    );
+// const useFavouriteHighlights = (sportName) => {
+//     console.log("sportName", sportName);
 
-    useEffect(() => {
-        const fetchHighlights = async () => {
-            dispatch(setFavoritePlayersHighlightsLoading(true));
-            dispatch(setFavoriteTeamsHighlightsLoading(true));
+//     const dispatch = useDispatch();
+//     const { favoritePlayersHighlights, favoriteTeamHighlights } = useSelector(
+//         (state) => state.highlights
+//     );
+//     const { favoritePlayersHighlightsLoading, favoriteTeamsHighlightsLoading, error } = useSelector(
+//         (state) => state.loading
+//     );
 
-            try {
-                const res = await getFavouriteHighlights(sportName);
+//     useEffect(() => {
+//         const fetchHighlights = async () => {
+//             console.log("sportName", sportName);
 
-                if (res?.data) {
-                    dispatch(setFavoritePlayersHighlights(res.data.players || []));
-                    dispatch(setFavoriteTeamHighlights(res.data.teams || []));
-                }
-            } catch (err) {
-                dispatch(setError(err.message));
-            } finally {
-                dispatch(setFavoritePlayersHighlightsLoading(false));
-                dispatch(setFavoriteTeamsHighlightsLoading(false));
-            }
-        };
+//             dispatch(setFavoritePlayersHighlightsLoading(true));
+//             dispatch(setFavoriteTeamsHighlightsLoading(true));
 
-        fetchHighlights();
-    }, [sportName, dispatch]);
+//             try {
+//                 const res = await getFavouriteHighlights(sportName);
 
-    return {
-        players: favoritePlayersHighlights,
-        teams: favoriteTeamHighlights,
-        loading: favoritePlayersHighlightsLoading || favoriteTeamsHighlightsLoading,
-        error,
-    };
-};
+//                 if (res?.data) {
+//                     dispatch(setFavoritePlayersHighlights(res.data.players || []));
+//                     dispatch(setFavoriteTeamsHighlights(res.data.teams || []));
+//                 }
+//             } catch (err) {
+//                 dispatch(setError(err.message));
+//             } finally {
+//                 dispatch(setFavoritePlayersHighlightsLoading(false));
+//                 dispatch(setFavoriteTeamsHighlightsLoading(false));
+//             }
+//         };
 
-export default useFavouriteHighlights;
+//         fetchHighlights();
+//     }, [sportName, dispatch]);
+
+//     return {
+//         players: favoritePlayersHighlights,
+//         teams: favoriteTeamHighlights,
+//         loading: favoritePlayersHighlightsLoading || favoriteTeamsHighlightsLoading,
+//         error,
+//     };
+// };
+
+// export default useFavouriteHighlights;

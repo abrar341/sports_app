@@ -2,9 +2,13 @@ import { useState, useEffect } from "react";
 import { FaSearch, FaSlidersH } from "react-icons/fa";
 import { IoIosClose } from "react-icons/io";
 import { useLocation, useNavigate } from "react-router-dom";
+import { normalizeSearchTeamData } from "../../utils/normalizeData";
+import { setSelectedTeamSports } from "../../slices/selectionSlice";
+import { useDispatch } from "react-redux";
 
 
-const TeamInsightSearchBar = ({ onSearch, onSelect, placeholder = "Search By Team..." }) => {
+
+const TeamInsightSearchBar = ({ onSearch, sportsName, onSelect, placeholder = "Search By Team..." }) => {
     const [searchQuery, setSearchQuery] = useState("");
     const [results, setResults] = useState([]);
     const [debouncedQuery, setDebouncedQuery] = useState("");
@@ -12,6 +16,8 @@ const TeamInsightSearchBar = ({ onSearch, onSelect, placeholder = "Search By Tea
 
     const location = useLocation();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
 
     // Debounce Logic: Wait for 600ms before setting the debouncedQuery
     useEffect(() => {
@@ -27,10 +33,12 @@ const TeamInsightSearchBar = ({ onSearch, onSelect, placeholder = "Search By Tea
     // Fetch results when debouncedQuery updates
     useEffect(() => {
         if (debouncedQuery.length > 2) {
+            console.log("hello i am here");
+
             setLoading(true);
             (async () => {
                 try {
-                    const result = await onSearch(debouncedQuery);
+                    const result = await onSearch(debouncedQuery, sportsName);
                     setResults(result?.data || []);
                 } catch (error) {
                     console.error("Error fetching search results:", error);
@@ -42,13 +50,13 @@ const TeamInsightSearchBar = ({ onSearch, onSelect, placeholder = "Search By Tea
         } else {
             setResults([]);
         }
-    }, [debouncedQuery, onSearch]);
+    }, [debouncedQuery, onSearch, sportsName]);
 
     return (
         <div className="relative w-full">
             {/* Search Bar */}
-            <div className="grid gap-2 grid-cols-9">
-                <div className="col-span-8 flex items-center bg-[rgba(255,255,255,0.32)] px-4 py-3 rounded-full shadow-lg">
+            <div className="">
+                <div className="col-span-8 flex items-center bg-[rgba(255,255,255,0.32)] px-4 py-3 rounded-l-full shadow-lg">
                     <div className="text-white mr-2 text-2xl">
                         <FaSearch />
                     </div>
@@ -66,7 +74,7 @@ const TeamInsightSearchBar = ({ onSearch, onSelect, placeholder = "Search By Tea
                                 <div className="w-4 flex items-center justify-center h-4 border-2 border-gray-300 border-t-white rounded-full animate-spin"></div>
 
                                 :
-                                <div className="flex mb-[0.5px] items-center justify-center h-4 border-gray-300 ">
+                                <div className="flex text-white mb-[0.5px] items-center justify-center h-4 border-gray-300 ">
                                     results {results?.length}
                                 </div>
                         }
@@ -83,10 +91,6 @@ const TeamInsightSearchBar = ({ onSearch, onSelect, placeholder = "Search By Tea
                             <IoIosClose className="w-full h-full mt-[0.5px]" />
                         </button>}
                 </div>
-
-                <button className="bg-primarySolid flex justify-center items-center text-white p-2 rounded-full hover:bg-blue-700 focus:outline-none ml-2 text-2xl">
-                    <FaSlidersH />
-                </button>
             </div>
 
             {/* Search Results */}
@@ -98,42 +102,43 @@ const TeamInsightSearchBar = ({ onSearch, onSelect, placeholder = "Search By Tea
                             <div className="w-6 h-6 border-4 border-gray-300 border-t-white rounded-full animate-spin"></div>
                         </div>
                     )}
-
                     {/* Display Results */}
                     <div className="grid grid-cols-1 sm:grid-cols-2">
                         {!loading &&
                             results.length > 0 &&
-                            results.map((team) => (
-                                <div
-                                    key={team?.playerId}
-                                    className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-800 hover:rounded-lg transition-all duration-200"
-                                    onClick={() => {
-                                        onSelect(team)
-                                        setSearchQuery("")
-                                        setDebouncedQuery("");
-                                        if (location.pathname !== "/team-insight") {
-                                            navigate("/team-insight");
-                                            setTimeout(() => {
-                                                window.scrollTo({ top: 0, behavior: "smooth" });
-                                            }, 100); // Small delay to ensure scroll after navigation
-                                        }
-                                    }}
-
-                                >
-                                    <img
-                                        src={team.logo || "https://via.placeholder.com/40"} // Fallback Image
-                                        loading="lazy" // Lazy loading added
-                                        alt={team.name}
-                                        className="w-12 h-12 rounded-full mr-4 object-cover border border-gray-600 shadow-md"
-                                    />
-                                    <div className="flex flex-col">
-                                        <span className="text-white text-lg font-medium">
-                                            {team?.name}
-                                        </span>
-
+                            results.map((team) => {
+                                const normalizedTeam = normalizeSearchTeamData(team, sportsName);
+                                return (
+                                    <div
+                                        key={normalizedTeam.teamId}
+                                        className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-800 hover:rounded-lg transition-all duration-200"
+                                        onClick={() => {
+                                            dispatch(setSelectedTeamSports(sportsName))
+                                            onSelect(normalizedTeam, sportsName);
+                                            setSearchQuery("");
+                                            setDebouncedQuery("");
+                                            if (location.pathname !== "/team-insight") {
+                                                navigate("/team-insight");
+                                                setTimeout(() => {
+                                                    window.scrollTo({ top: 0, behavior: "smooth" });
+                                                }, 100); // Small delay to ensure scroll after navigation
+                                            }
+                                        }}
+                                    >
+                                        <img
+                                            src={normalizedTeam.logo || "https://via.placeholder.com/40"} // Fallback Image
+                                            loading="lazy" // Lazy loading added
+                                            alt={normalizedTeam.name}
+                                            className="w-12 h-12 rounded-full mr-4 object-cover border border-gray-600 shadow-md"
+                                        />
+                                        <div className="flex flex-col">
+                                            <span className="text-white text-base font-medium">
+                                                {normalizedTeam.name}
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                     </div>
                 </div>
             )}

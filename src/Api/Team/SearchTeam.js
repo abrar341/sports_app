@@ -1,17 +1,25 @@
 import api from '../api';
 
-export const searchTeam = async (query) => {
+export const searchTeam = async (query, sportsName) => {
     try {
-        const res = await api.get(`/soccer/team/searchTeam?query=${query}`);
+        const endpoint = sportsName === "soccer"
+            ? `/soccer/team/searchTeam?query=${query}`
+            : `/american-football/team/search?query=${query}`;
+        const res = await api.get(endpoint);
         return res.data;
     } catch (error) {
         console.log(error);
     }
 };
 
-export const getTeamProfile = async (teamId) => {
+export const getTeamProfile = async (teamId, sportsName) => {
     try {
-        const res = await api.get(`/soccer/team/getTeambyTeamId?teamId=${teamId}`);
+        const endpoint = sportsName === "soccer"
+            ? `/soccer/team/getTeambyTeamId?teamId=${teamId}`
+            : `/american-football/team/getTeam?teamId=${teamId}`;
+
+        const res = await api.get(endpoint);
+        // /american-football/team/getTeam?teamId=1
         return res.data;
     } catch (error) {
         console.error("Error fetching team profile:", error);
@@ -19,8 +27,9 @@ export const getTeamProfile = async (teamId) => {
     }
 };
 
-export const addFavoriteTeam = async (teamRef, teamId) => {
-    const sportName = "soccer"
+export const addFavoriteTeam = async (teamRef, teamId, sportName) => {
+    console.log("teamId, sportName", teamId, sportName);
+
     try {
         const res = await api.post('/favourites/addTeam', {
             teamRef,
@@ -34,8 +43,7 @@ export const addFavoriteTeam = async (teamRef, teamId) => {
     }
 };
 
-export const removeFavoriteTeam = async (teamRef, teamId) => {
-    const sportName = "soccer"
+export const removeFavoriteTeam = async (teamRef, teamId, sportName) => {
 
     try {
         const res = await api.delete('/favourites/removeTeam', {

@@ -6,14 +6,15 @@ import { getFavourites } from "../Api/Player/SearchPlayer";
 const useFetchFavouritePlayers = () => {
     const dispatch = useDispatch();
     const favoritePlayers = useSelector(state => state.favorites.favoritePlayers); // Get from Redux
+    const { favoritePlayersSports } = useSelector(state => state.selection); // Get from Redux
+
     const [loading, setLoading] = useState(true);
+    const [favoritesLoading, setFavoritesLoading] = useState(true);
 
     const fetchFavouritePlayers = useCallback(async () => {
-        setLoading(true);
+        setFavoritesLoading(true);
         try {
-            const response = await getFavourites();
-            console.log("Favourite Players Response:", response);
-
+            const response = await getFavourites(favoritePlayersSports);
             const favourites = response?.data?.favourites?.[0];
             if (favourites) {
                 dispatch(setFavoritePlayersList(favourites.players || []));
@@ -22,14 +23,15 @@ const useFetchFavouritePlayers = () => {
         } catch (error) {
             console.error("Error fetching favourite players:", error);
         }
-        setLoading(false);
-    }, [dispatch]);
+        setFavoritesLoading(false);
+    }, [dispatch, favoritePlayersSports]);
 
     useEffect(() => {
         fetchFavouritePlayers();
-    }, [fetchFavouritePlayers]);
+    }, [fetchFavouritePlayers, favoritePlayersSports]);
 
-    return { favoritePlayers, loading, refetch: fetchFavouritePlayers }; // Return values
+
+    return { favoritePlayers, favoritesLoading, loading, refetch: fetchFavouritePlayers }; // Return values
 };
 
 export default useFetchFavouritePlayers;

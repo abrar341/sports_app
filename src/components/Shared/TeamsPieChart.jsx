@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
+import Loading from "./Loading";
 
 const TeamsPieChart = ({ data }) => {
     const [selectedSeason, setSelectedSeason] = useState("All");
@@ -37,8 +39,9 @@ const TeamsPieChart = ({ data }) => {
 
     const hasData = aggregatedData.some(({ value }) => value > 0);
     const colorScheme = ["#3B82F6", "#22C55E"];
+    const { teamStatsLoading } = useSelector((state) => state.loading);
 
-    return (
+    return teamStatsLoading ? <Loading /> : (
         <div className="bg-secondary rounded-xl p-4 flex flex-col items-center h-full">
             {/* Season Dropdown */}
             <div className="h-full w-full flex justify-end items-center">

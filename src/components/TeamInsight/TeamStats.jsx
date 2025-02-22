@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 const TeamStatistics = ({ statsData }) => {
     const { teamStatsLoading } = useSelector((state) => state.loading); // Get loading states
 
-
     if (!statsData || statsData.length === 0) {
         return <div className="p-6 bg-secondary rounded-xl py-8 text-white">No data available</div>;
     }

@@ -3,8 +3,11 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     favoritePlayers: [],
     favoriteTeams: [],
+    favoritePlayersOfSelectedPlayerSport: [], // New state for selected player sport favorites
+    favoriteTeamsOfSelectedTeamSport: [], // New state for selected player sport favorites
     favoritePlayersHighlights: [], // New array for player highlights
-    favoriteTeamHighlights: [],    // New array for team highlights
+    favoriteTeamsHighlights: [],    // New array for team highlights
+    favoriteLeaguessHighlights: [], // New array for league highlights
 };
 
 const favoritesSlice = createSlice({
@@ -34,7 +37,34 @@ const favoritesSlice = createSlice({
             });
         },
 
-        // New reducers for handling player and team highlights
+        // New reducers for managing favoritePlayersOfSelectedPlayerSport
+        addPlayerToSelectedSportFavorites: (state, action) => {
+            if (!state.favoritePlayersOfSelectedPlayerSport.some(player => player.playerId === action.payload.playerId)) {
+                state.favoritePlayersOfSelectedPlayerSport.push(action.payload);
+            }
+        },
+        removePlayerFromSelectedSportFavorites: (state, action) => {
+            state.favoritePlayersOfSelectedPlayerSport = state.favoritePlayersOfSelectedPlayerSport.filter(player => {
+                return player.playerId != action.payload;
+            });
+        },
+
+        // New reducers for managing favoritePlayersOfSelectedPlayerSport
+        addFavoriteTeamsOfSelectedTeamSport: (state, action) => {
+            if (!state.favoriteTeamsOfSelectedTeamSport.includes(action.payload)) {
+                state.favoriteTeamsOfSelectedTeamSport.push(action.payload);
+            }
+        },
+
+        removeFavoriteTeamsOfSelectedTeamSport: (state, action) => {
+            state.favoriteTeamsOfSelectedTeamSport = state.favoriteTeamsOfSelectedTeamSport.filter(team => {
+                console.log("Checking team:", action.payload);
+                return team.teamId != action.payload;
+            });
+        },
+
+
+        // New reducers for handling player, team, and league highlights
         addPlayerHighlight: (state, action) => {
             if (!state.favoritePlayersHighlights.some(highlight => highlight.id === action.payload.id)) {
                 state.favoritePlayersHighlights.push(action.payload);
@@ -46,12 +76,22 @@ const favoritesSlice = createSlice({
             );
         },
         addTeamHighlight: (state, action) => {
-            if (!state.favoriteTeamHighlights.some(highlight => highlight.id === action.payload.id)) {
-                state.favoriteTeamHighlights.push(action.payload);
+            if (!state.favoriteTeamsHighlights.some(highlight => highlight.id === action.payload.id)) {
+                state.favoriteTeamsHighlights.push(action.payload);
             }
         },
         removeTeamHighlight: (state, action) => {
-            state.favoriteTeamHighlights = state.favoriteTeamHighlights.filter(
+            state.favoriteTeamsHighlights = state.favoriteTeamsHighlights.filter(
+                highlight => highlight.id !== action.payload
+            );
+        },
+        addLeagueHighlight: (state, action) => {
+            if (!state.favoriteLeaguessHighlights.some(highlight => highlight.id === action.payload.id)) {
+                state.favoriteLeaguessHighlights.push(action.payload);
+            }
+        },
+        removeLeagueHighlight: (state, action) => {
+            state.favoriteLeaguessHighlights = state.favoriteLeaguessHighlights.filter(
                 highlight => highlight.id !== action.payload
             );
         },
@@ -60,7 +100,21 @@ const favoritesSlice = createSlice({
             state.favoritePlayers = [];
             state.favoriteTeams = [];
             state.favoritePlayersHighlights = [];
-            state.favoriteTeamHighlights = [];
+            state.favoriteTeamsHighlights = [];
+            state.favoriteLeaguessHighlights = [];
+        },
+        resetHighlights: (state) => {
+            state.favoritePlayersHighlights = [];
+            state.favoriteTeamsHighlights = [];
+            state.favoriteLeaguessHighlights = [];
+        },
+        // New reducers for favoritePlayersOfSelectedPlayerSport
+        setFavoritePlayersOfSelectedPlayerSport: (state, action) => {
+            state.favoritePlayersOfSelectedPlayerSport = action.payload;
+        },
+        // New reducers for favoriteTeamsOfSelectedTeamSport
+        setFavoriteTeamsOfSelectedTeamSport: (state, action) => {
+            state.favoriteTeamsOfSelectedTeamSport = action.payload;
         },
         setFavoritePlayersList: (state, action) => {
             state.favoritePlayers = action.payload;
@@ -71,8 +125,11 @@ const favoritesSlice = createSlice({
         setFavoritePlayersHighlights: (state, action) => {
             state.favoritePlayersHighlights = action.payload;
         },
-        setFavoriteTeamHighlights: (state, action) => {
-            state.favoriteTeamHighlights = action.payload;
+        setFavoriteTeamsHighlights: (state, action) => {
+            state.favoriteTeamsHighlights = action.payload;
+        },
+        setFavoriteLeaguesHighlights: (state, action) => {
+            state.favoriteLeaguessHighlights = action.payload;
         },
     },
 });
@@ -80,17 +137,28 @@ const favoritesSlice = createSlice({
 export const {
     addPlayerToFavorites,
     removePlayerFromFavorites,
+    addPlayerToSelectedSportFavorites, // ✅ New export
+    removePlayerFromSelectedSportFavorites, // ✅ New export
     addTeamToFavorites,
     removeTeamFromFavorites,
     addPlayerHighlight,
     removePlayerHighlight,
     addTeamHighlight,
     removeTeamHighlight,
+    addLeagueHighlight,
+    removeLeagueHighlight,
     clearAllFavorites,
     setFavoritePlayersList,
     setFavoriteTeamsList,
     setFavoritePlayersHighlights,
-    setFavoriteTeamHighlights,
+    setFavoriteTeamsHighlights,
+    setFavoritePlayersOfSelectedPlayerSport,
+    setFavoriteTeamsOfSelectedTeamSport,
+    addFavoriteTeamsOfSelectedTeamSport,
+    removeFavoriteTeamsOfSelectedTeamSport,
+    setFavoriteLeaguesHighlights,
+    resetHighlights,
+
 } = favoritesSlice.actions;
 
 export default favoritesSlice.reducer;

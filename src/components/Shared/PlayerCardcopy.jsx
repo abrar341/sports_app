@@ -4,36 +4,27 @@ import { MdOutlineFavorite, MdOutlineFavoriteBorder } from "react-icons/md";
 import { addFavoritePlayer, getFavourites, removeFavoritePlayer } from "../../Api/Player/SearchPlayer";
 import { useDispatch, useSelector } from "react-redux";
 import useIsPlayerFavorite from "../../hooks/useIsPlayerFavorite";
-import { addPlayerToFavorites, addPlayerToSelectedSportFavorites, removePlayerFromFavorites, removePlayerFromSelectedSportFavorites } from "../../slices/favoritesSlice";
+import { addPlayerToFavorites, removePlayerFromFavorites } from "../../slices/favoritesSlice";
 import { useState } from "react";
-import { calculateFootballPlayerStats, calculatePlayerStats } from "../../utils/calculateStats";
+import { calculatePlayerStats } from "../../utils/calculateStats";
 import Loading from "./Loading";
-import { getStatsConfig } from "../../utils/statsConfig";
 
 
-const PlayerCard = ({ selectedPlayer, playerStats, favoritesLoading }) => {
-    const { playerId, playerRef, name, age, nationality, position, image, college, sportName } = selectedPlayer;
+const PlayerCard = ({ playerId, playerStats, playerRef, name, age, profileLoading, nationality, position, image }) => {
+
     const [isLoading, setIsLoading] = useState(false);
     const isFavorite = useIsPlayerFavorite(playerId);
     const dispatch = useDispatch();
 
-    const playerStatsData =
-        sportName === "soccer"
-            ? calculatePlayerStats(playerStats)
-            : sportName === "american-football"
-                ? calculateFootballPlayerStats(playerStats)
-                : {};
-
-    const statsConfig = getStatsConfig(sportName, playerStatsData);
-    const { favoritePlayersSports } = useSelector(state => state.selection); // Get from Redux
-
+    const { totalGoals, assists, points } = calculatePlayerStats(playerStats);
 
     const handleAddFavorite = async () => {
         setIsLoading(true);
         try {
-            const res = await addFavoritePlayer(playerRef, playerId, sportName);
+            const res = await addFavoritePlayer(playerRef, playerId);
             const fetchedPlayers = res?.data?.favourites?.[0]?.players || [];
             if (fetchedPlayers.length === 0) {
+                console.error("No players found in response.");
                 return;
             }
             // Get the last player from fetchedPlayers
@@ -48,12 +39,8 @@ const PlayerCard = ({ selectedPlayer, playerStats, favoritesLoading }) => {
                 },
             };
 
-            dispatch(addPlayerToSelectedSportFavorites(favoritePlayerData));
-
-            if (sportName === favoritePlayersSports) {
-                dispatch(addPlayerToFavorites(favoritePlayerData));
-            }
-
+            // Dispatch the favorite player to Redux store
+            dispatch(addPlayerToFavorites(favoritePlayerData));
             setIsLoading(false);
 
         } catch (error) {
@@ -64,16 +51,17 @@ const PlayerCard = ({ selectedPlayer, playerStats, favoritesLoading }) => {
         }
     };
 
-    const handleRemoveFavoritePlayer = async (player, playerRef, sportName) => {
+    const handleRemoveFavoritePlayer = async (player, playerRef) => {
+        console.log("player to remove", player);
 
         setIsLoading(true);
         try {
-            const res = await removeFavoritePlayer(playerRef, player, sportName); // Pass player.playerId
+
+            const res = await removeFavoritePlayer(playerRef, player); // Pass player.playerId
+
             if (res) {
-                dispatch(removePlayerFromSelectedSportFavorites(player)); // Remove correct player
-                if (sportName === favoritePlayersSports) {
-                    dispatch(removePlayerFromFavorites(player));
-                }
+                console.log("Removing player:", player);
+                dispatch(removePlayerFromFavorites(player)); // Remove correct player
             }
         } catch (error) {
             console.error("Error removing player from favorites:", error);
@@ -89,7 +77,7 @@ const PlayerCard = ({ selectedPlayer, playerStats, favoritesLoading }) => {
     return teamStatsLoading || playerProfileLoading ? <Loading /> : (
         <div className="relative bg-secondary p-6 h-[320px] rounded-xl flex flex-col items-center shadow-lg">
             {
-                playerProfileLoading ? <div className="flex w-full h-full justify-center items-center py-4">
+                profileLoading ? <div className="flex w-full h-full justify-center items-center py-4">
                     <div className="w-6 h-6 border-4 border-primarySolid border-t-secondary rounded-full animate-spin"></div>
                 </div>
                     : <>
@@ -101,18 +89,17 @@ const PlayerCard = ({ selectedPlayer, playerStats, favoritesLoading }) => {
                             className="w-20 h-20 object-cover rounded-full mb-2 border-4 border-blue-700 shadow-md"
                         />
                         <div className=" top-5 absolute right-5">
-                            {isLoading || favoritesLoading ? (
-                                <div className="w-6 h-6  border-4 border-black border-t-primarySolid rounded-full animate-spin"></div>
+                            {isLoading ? (
+                                <div className="w-6 h-6  border-4 border-gray-400 border-t-white rounded-full animate-spin"></div>
                             ) : isFavorite ? (
-                                <MdOutlineFavorite onClick={() => handleRemoveFavoritePlayer(playerId, playerRef, sportName)} className="cursor-pointer w-6 h-6" />
+                                <MdOutlineFavorite onClick={() => handleRemoveFavoritePlayer(playerId, playerRef)} className="cursor-pointer w-6 h-6" />
                             ) : (
                                 <MdOutlineFavoriteBorder onClick={handleAddFavorite} className="cursor-pointer w-6 h-6" />
                             )}
                         </div>
 
                         <h3 className="text-lg font-bold text-white">{name}</h3>
-                        {college && <p className="text-sm text-gray-400 mb-1">{college}</p>}
-                        {age ? <p className="text-sm text-gray-400 mb-2">{age || 0} Years Old</p> : "-"}
+                        <p className="text-sm text-gray-400 mb-2">{getAge(age) || 0} Years Old</p>
                         {/* Player Details */}
                         <div className="flex justify-between w-full text-sm text-gray-300 mb-4">
                             <p>
@@ -124,12 +111,18 @@ const PlayerCard = ({ selectedPlayer, playerStats, favoritesLoading }) => {
                         </div>
                         {/* Player Stats */}
                         <div className="flex justify-between w-full border-t border-blue-800 pt-4">
-                            {statsConfig.map((stat, index) => (
-                                <div key={index} className="text-center">
-                                    <p className="text-sm text-gray-300">{stat.label}</p>
-                                    <p className={`text-lg font-bold ${stat.color}`}>{stat.value}</p>
-                                </div>
-                            ))}
+                            <div className="text-center">
+                                <p className="text-sm text-gray-300">Total Goals</p>
+                                <p className="text-lg font-bold text-red-400">{totalGoals || 0}</p>
+                            </div>
+                            <div className="text-center">
+                                <p className="text-sm text-gray-300">Assists</p>
+                                <p className="text-lg font-bold text-green-400">{assists || 0}</p>
+                            </div>
+                            <div className="text-center">
+                                <p className="text-sm text-gray-300">Points</p>
+                                <p className="text-lg font-bold text-blue-400">{points || 0}</p>
+                            </div>
                         </div>
                     </>}
         </div>

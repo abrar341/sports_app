@@ -1,11 +1,18 @@
 import api from '../api';
 
-export const searchPlayer = async (query) => {
+export const searchPlayer = async (query, sportsName) => {
+    console.log("sportsName", sportsName);
+
     try {
-        const res = await api.get(`/soccer/player/searchPlayer?query=${query}`);
+        const endpoint = sportsName === "soccer"
+            ? `/soccer/player/searchPlayer?query=${query}`
+            : `/american-football/player/search?query=${query}`;
+
+        const res = await api.get(endpoint);
         return res.data;
     } catch (error) {
-        console.log(error);
+        console.error("Error fetching player data:", error);
+        return null; // Returning null to handle errors gracefully
     }
 };
 
@@ -19,12 +26,12 @@ export const getPlayerProfile = async (playerId) => {
     }
 };
 
-export const addFavoritePlayer = async (playerRef, playerId) => {
+export const addFavoritePlayer = async (playerRef, playerId, sportName) => {
     try {
         const res = await api.post('/favourites/addPlayer', {
             playerRef,
             playerId,
-            sportName: "soccer"
+            sportName
         });
         return res.data;
     } catch (error) {
@@ -33,9 +40,10 @@ export const addFavoritePlayer = async (playerRef, playerId) => {
     }
 };
 
-export const removeFavoritePlayer = async (playerRef, playerId) => {
+export const removeFavoritePlayer = async (playerRef, playerId, sportName) => {
+    console.log("playerRef, playerId, sportName", playerRef, playerId, sportName);
+
     try {
-        const sportName = "soccer";
         const res = await api.delete(`/favourites/removePlayer`, {
             params: { playerRef, playerId, sportName } // Send params in the URL
         });
@@ -58,16 +66,27 @@ export const getPlayerAggregatedStats = async (playerId) => {
     }
 };
 
+export const getFavourites = async (sports) => {
+    console.log("sports1", sports);
 
-export const getFavourites = async () => {
     try {
-        const res = await api.get(`/favourites/getFavourites`);
+        const res = await api.get(`/favourites/getFavourites/?sportName=${sports}`);
         return res.data;
     } catch (error) {
         console.log(error);
     }
 };
 
+//american footaball player detail
+export const getAmericanFootballPlayer = async (playerId) => {
+    try {
+        const res = await api.get(`/american-football/player/getPlayer?playerId=${playerId}`);
+        return res.data;
+    } catch (error) {
+        console.error("Error fetching American football player profile:", error);
+        return null; // Return null to handle errors gracefully in the UI
+    }
+};
 
 
 

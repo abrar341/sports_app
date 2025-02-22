@@ -2,7 +2,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
-import PlayerCard from "./PlayerCard";
+import PlayerCard from "./PlayerCardcopy";
 import { TeamPlayerCardData } from "../TeamInsight/TeamInsightData";
 import "../../styles/App.css";
 import { GrNext } from "react-icons/gr";

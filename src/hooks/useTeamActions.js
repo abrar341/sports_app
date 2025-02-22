@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
     setTeamProfileLoading,
     setTeamStatsLoading,
@@ -7,13 +7,22 @@ import {
 } from "../slices"; // Adjust path as needed
 import { getTeamProfile, searchTeam } from "../Api/Team/SearchTeam";
 import { useNavigate } from "react-router-dom";
+import { setSelectedTeamSports } from "../slices/selectionSlice";
+import { setFavoriteTeamsOfSelectedTeamSport } from "../slices/favoritesSlice";
 
 const useTeamActions = () => {
+    const { selectedTeamSports } = useSelector((state) => state.selection);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+
     // Function to select a team and fetch team details
-    const handleSelectTeam = async (team) => {
+    const handleSelectTeam = async (team, sportsName) => {
+        if (sportsName && sportsName !== selectedTeamSports) {
+            dispatch(setSelectedTeamSports(sportsName))
+            dispatch(setFavoriteTeamsOfSelectedTeamSport([]))
+        }
+
         if (location.pathname !== "/team-insight") {
             navigate("/team-insight");
             setTimeout(() => {
@@ -23,7 +32,8 @@ const useTeamActions = () => {
         try {
             dispatch(setTeamProfileLoading(true));
             dispatch(setTeamStatsLoading(true));
-            const { data } = await getTeamProfile(team.teamId);
+
+            const { data } = await getTeamProfile(team.teamId, sportsName);
 
             if (Array.isArray(data)) {
                 if (data.length > 0) {
@@ -33,9 +43,13 @@ const useTeamActions = () => {
                     dispatch(setSelectedTeam(null));
                 }
             } else if (data) {
-                dispatch(setSelectedTeam(data.team));
-                dispatch(setSelectedTeamStats(data?.TeamStatistics));
-
+                if (sportsName === "soccer") {
+                    dispatch(setSelectedTeam(data.team));
+                    dispatch(setSelectedTeamStats(data?.TeamStatistics));
+                } else {
+                    dispatch(setSelectedTeam(data));
+                    dispatch(setSelectedTeamStats([]));
+                }
             } else {
                 console.warn("No profile data found for the selected team.");
             }
@@ -44,13 +58,12 @@ const useTeamActions = () => {
         } finally {
             dispatch(setTeamProfileLoading(false));
             dispatch(setTeamStatsLoading(false));
-
         }
     };
 
     // Function to search for teams
-    const SearchTeam = async (query) => {
-        return await searchTeam(query); // Returns team list
+    const SearchTeam = async (query, sportsName) => {
+        return await searchTeam(query, sportsName); // Returns team list
     };
 
     return { handleSelectTeam, SearchTeam };

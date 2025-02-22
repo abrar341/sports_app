@@ -22,7 +22,6 @@ export const fetchPlayerData = createAsyncThunk(
             } else {
                 console.warn("No profile data found for the selected player.");
             }
-
             const statsResponse = await getPlayerAggregatedStats(playerId);
             const playerStats = statsResponse?.data || [];
 
@@ -45,6 +44,11 @@ const initialState = {
     selectedTeam: null,
     selectedTeamStats: [],
     selectedPlayerStats: [],
+    selectedPlayerSports: null, // Added state
+    selectedTeamSports: null, // Added state
+    favoritePlayersSports: "soccer", // Added state
+    playerOrTeam: "player", // Added state
+    sportsNameDashboard: "soccer", // selected Sports Name at Dashboard
 };
 
 const selectionSlice = createSlice({
@@ -63,11 +67,31 @@ const selectionSlice = createSlice({
         setSelectedPlayerStats: (state, action) => {
             state.selectedPlayerStats = action.payload ? [...action.payload] : [];
         },
+        setPlayerOrTeam: (state, action) => {
+            state.playerOrTeam = action.payload;
+        },
+        setSportsNameDashboard: (state, action) => {
+            state.sportsNameDashboard = action.payload;
+        },
+        setSelectedPlayerSports: (state, action) => {
+            state.selectedPlayerSports = action.payload;
+        },
+        setSelectedTeamSports: (state, action) => {
+            state.selectedTeamSports = action.payload;
+        },
+        setFavoritePlayersSports: (state, action) => {
+            state.favoritePlayersSports = action.payload;
+        },
         resetSelection: (state) => {
             state.selectedPlayer = null;
             state.selectedTeam = null;
             state.selectedTeamStats = [];
             state.selectedPlayerStats = [];
+            state.playerOrTeam = "player"; // Reset to default
+            state.sportsNameDashboard = "soccer"; // Reset to default
+            state.selectedPlayerSports = "soccer"; // Reset to default
+            state.selectedTeamSports = "soccer"; // Reset to default
+            state.favoritePlayersSports = "soccer"; // Reset to default
         },
     },
     extraReducers: (builder) => {
@@ -78,5 +102,5 @@ const selectionSlice = createSlice({
     },
 });
 
-export const { setSelectedPlayer, setSelectedPlayerStats, setSelectedTeam, setSelectedTeamStats, resetSelection } = selectionSlice.actions;
+export const { setSelectedPlayer, setFavoritePlayersSports, setSelectedPlayerStats, setSelectedTeamSports, setSelectedPlayerSports, setSelectedTeam, setSelectedTeamStats, setPlayerOrTeam, setSportsNameDashboard, resetSelection } = selectionSlice.actions;
 export default selectionSlice.reducer;

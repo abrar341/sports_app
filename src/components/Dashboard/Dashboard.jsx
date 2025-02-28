@@ -23,6 +23,11 @@ import TeamInsightSearchBar from "../Shared/TeamInsightSearchBar";
 import { setPlayerOrTeam, setSportsNameDashboard } from "../../slices/selectionSlice";
 import LeagueAreaChart from "../Shared/LeagueAreaChart";
 
+import { io } from "socket.io-client";
+import { initializeScoreUpdates, setLiveFixtures, setUpcomingFixtures, setUpcomingFixturesOdds } from "../../slices/fixturesSlice";
+
+const socket = io("http://localhost:3000"); // Change to your backend URL
+
 const Dashboard = () => {
 
     const { favoriteLeaguessHighlights } = useSelector((state) => state.favorites); // Get loading states
@@ -54,9 +59,12 @@ const Dashboard = () => {
         fetchHighlights();
     }, [sportsNameDashboard, dispatch]); // Re-run only if sportsNameDashboard changes OR leagues data is empty
 
-
     const { handleSearch, handleSelectPlayer } = usePlayerActions();
     const { handleSelectTeam, SearchTeam } = useTeamActions();
+
+    useEffect(() => {
+        dispatch(initializeScoreUpdates())
+    }, [dispatch]);
 
     return (
         <>

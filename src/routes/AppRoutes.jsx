@@ -16,6 +16,8 @@ import Dashboard from '../components/Dashboard/Dashboard.jsx';
 import BettingOdds from '../components/BettingOdds/BettingOdds.jsx';
 import { GameInsights } from '../components/GameInsights/GameInsights.jsx';
 import Main from '../components/Test/Main.jsx';
+import GameDetails from '../components/GameInsights/GameDetails.jsx';
+import MatchDetailPage from './MatchDetailPage.jsx';
 
 const AppRoutes = () => {
     const { userInfo } = useSelector((state) => state.auth);
@@ -36,9 +38,11 @@ const AppRoutes = () => {
             {/* <Route element={<ProtectedRoute />}> */}
             <Route element={<ProtectedRoute ><DashboardPage /></ProtectedRoute>}>
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/match" element={<MatchDetailPage />} />
                 <Route path="/player-insight" element={<PlayersInsightsMain />} />
                 <Route path="/team-insight" element={<TeamInsightMain />} />
                 <Route path="/games-insight" element={<GameInsights />} />
+                <Route path="/games-insight/:leagueId/:status/:fixtureId" element={<GameDetails />} />
                 <Route path="/subscription" element={<SubscriptionMain />} />
                 <Route path="/betting-odds" element={<BettingOdds />} />
                 <Route path="/dashboard/player-team-favourites" element={<PlayerTeamFavourites />} />

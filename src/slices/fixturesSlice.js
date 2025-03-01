@@ -70,6 +70,9 @@ export const fetchAFFixtures = createAsyncThunk(
 );
 
 const initialState = {
+
+    gameInsightSelectedGame: 'soccer',
+
     upcomingFixtures: [],
     liveFixtures: [],
     completedFixtures: [],
@@ -88,6 +91,9 @@ const fixturesSlice = createSlice({
     name: "fixtures",
     initialState,
     reducers: {
+        setGameInsightSelectedGame: (state, action) => {
+            state.gameInsightSelectedGame = action.payload;
+        },
         setUpcomingFixtures: (state, action) => {
             state.upcomingFixtures = action.payload || [];
         },
@@ -140,7 +146,7 @@ const fixturesSlice = createSlice({
     // },
 });
 
-export const { setUpcomingFixtures, setLiveFixtures, setUpcomingFixturesOdds, setFixturesLoading, setCompletedFixtures, resetFixtures, setAFUpcomingFixtures, setAFLiveFixtures, setAFCompletedFixtures } = fixturesSlice.actions;
+export const { setUpcomingFixtures, setLiveFixtures, setUpcomingFixturesOdds, setFixturesLoading, setCompletedFixtures, resetFixtures, setAFUpcomingFixtures, setAFLiveFixtures, setAFCompletedFixtures, setGameInsightSelectedGame } = fixturesSlice.actions;
 export default fixturesSlice.reducer;
 
 export const initializeScoreUpdates = () => (dispatch) => {

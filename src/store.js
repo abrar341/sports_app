@@ -29,6 +29,7 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false, // Ignore serialization warnings
+      immutableCheck: false, // Disable ImmutableStateInvariantMiddleware
     }).concat(apiSlice.middleware),
   devTools: true,
 });

@@ -110,10 +110,10 @@ const TeamInsight = () => {
                             <BarcelonaPlayersHeader name={selectedTeam?.name} />
                         </div>
 
-                        {/* Player Cards */}
+                        {/* Player Cards
                         <div className="col-span-12">
                             <PlayerCardsList />
-                        </div>
+                        </div> */}
 
                         {selectedTeamStats.length > 0 &&
                             <>

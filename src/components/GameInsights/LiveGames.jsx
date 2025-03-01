@@ -1,68 +1,106 @@
-"use client";
 import React, { useState, useEffect } from "react";
 import Loading from "../Shared/Loading";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+// import { AFliveFixtures, liveFixtures } from "./live";
 
-export const LiveGames = () => {
-    //soccer fixtures
-    const { liveFixtures, fixturesLoading } = useSelector((state) => state.fixtures);
-
+export const LiveGames = ({ selectedGame }) => {
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedLeague, setSelectedLeague] = useState(null);
     const pageSize = 5;
 
-    useEffect(() => {
-        if (liveFixtures?.data?.length > 0) {
-            setSelectedLeague(liveFixtures.data[0].leagueId); // Set default league
-        }
-    }, [liveFixtures]);
+    // Determine if it's soccer or American football
+    const isSoccer = selectedGame === "soccer";
 
-    const handleGameClick = (leagueId, fixtureId, status) => {
-        navigate(`/games-insight/${leagueId}/${status}/${fixtureId}`);
-    };
+    const { liveFixtures, fixturesLoading } = useSelector((state) => state.fixtures);
+    const { AFliveFixtures, AFfixturesLoading } = useSelector((state) => state.fixtures);
+
+    // Update selectedLeague when the game type changes
+    useEffect(() => {
+        if (isSoccer && liveFixtures?.data?.length > 0) {
+            setSelectedLeague(liveFixtures.data[0].league.id);
+        } else if (!isSoccer && AFliveFixtures?.data?.length > 0) {
+            const firstLeague = AFliveFixtures.data.find((league) => league.liveGames.length > 0)?.liveGames[0]?.league.leagueId;
+            if (firstLeague) setSelectedLeague(firstLeague);
+        }
+    }, [selectedGame, liveFixtures, AFliveFixtures]); // Now listens to `selectedGame` changes
+
 
     // Extract unique leagues
-    const leagues = liveFixtures?.data?.map((league) => ({
-        id: league.leagueId,
-        name: league.leagueName,
-    })) || [];
+    const leagues = isSoccer
+        ? (Array.isArray(liveFixtures?.data)
+            ? liveFixtures.data
+                .map((match) => ({
+                    id: match.league.id,
+                    name: match.league.name,
+                }))
+                .filter((league, index, self) =>
+                    index === self.findIndex((l) => l.id === league.id)
+                )
+            : [])
+        : (Array.isArray(AFliveFixtures?.data)
+            ? [
+                ...new Map(
+                    AFliveFixtures.data
+                        .flatMap((league) => Array.isArray(league.liveGames) ? league.liveGames : []) // Ensure liveGames is an array
+                        .map((game) => [game.league.leagueId, { id: game.league.leagueId, name: game.league.name }])
+                ).values(),
+            ]
+            : []);
 
-    // Get fixtures for selected league
-    const selectedFixtures =
-        liveFixtures?.data?.find((league) => league.leagueId === selectedLeague)?.fixtures || [];
+    // Get fixtures for the selected league
+    const selectedFixtures = isSoccer
+        ? (Array.isArray(liveFixtures?.data)
+            ? liveFixtures.data.filter((match) => match.league.id === selectedLeague)
+            : [])
+        : (Array.isArray(AFliveFixtures?.data)
+            ? AFliveFixtures.data
+                .flatMap((league) => Array.isArray(league.liveGames) ? league.liveGames : []) // Ensure liveGames is an array
+                .filter((game) => game.league.leagueId === selectedLeague)
+            : []);
+
 
     // Pagination logic
     const totalPages = Math.ceil(selectedFixtures.length / pageSize);
     const paginatedGames = selectedFixtures.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
+    // Change league & reset page only when league changes
     const handleLeagueChange = (e) => {
-        setSelectedLeague(Number(e.target.value));
-        setCurrentPage(1); // Reset to first page when league changes
+        const newLeague = Number(e.target.value);
+        if (newLeague !== selectedLeague) {
+            setSelectedLeague(newLeague);
+            setCurrentPage(1);
+        }
     };
+    const handleGameClick = (leagueId, fixtureId, status) => {
+        navigate(`/games-insight/${selectedGame}/${leagueId}/${status}/${fixtureId}`);
+    };
+
 
     return (
         <section className="self-stretch h-full md:col-span-2 my-auto min-w-60 max-md:max-w-full">
             <div className="flex justify-between">
                 <h2 className="text-2xl flex items-center font-bold leading-none max-md:max-w-full text-white">
-                    Live Games
+                    Live {isSoccer ? "Soccer" : "American Football"} Games
                 </h2>
 
                 {/* League Selection Dropdown */}
-                {liveFixtures.length && <div className="mt-4">
-                    <select
-                        value={selectedLeague || ""}
-                        onChange={handleLeagueChange}
-                        className="p-2 text-base bg-primarySolid text-white border-gray-300 rounded-lg focus:outline-none"
-                    >
-                        {leagues.map((league) => (
-                            <option key={league.id} value={league.id}>
-                                {league.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>}
+                {leagues.length > 0 && (
+                    <div className="mt-4">
+                        <select
+                            value={selectedLeague || ""}
+                            onChange={handleLeagueChange}
+                            className="p-2 text-base bg-primarySolid text-white border-gray-300 rounded-lg focus:outline-none"
+                        >
+                            {leagues.map((league) => (
+                                <option key={league.id} value={league.id}>
+                                    {league.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                )}
             </div>
 
             <div className="mt-6 w-full text-lg max-md:max-w-full">
@@ -72,38 +110,40 @@ export const LiveGames = () => {
                     <div className="text-right">Current Score</div>
                 </div>
 
-                {fixturesLoading && paginatedGames.length === 0 && !liveFixtures.data ? (
+                {(fixturesLoading || AFfixturesLoading) && paginatedGames.length === 0 ? (
                     <Loading />
                 ) : paginatedGames.length > 0 ? (
-                    paginatedGames.map((game, index) => (
+                    paginatedGames.map((match, index) => (
                         <div
-                            onClick={() => handleGameClick(selectedLeague, game.fixtureId, "live")}
                             key={index}
+                            onClick={() => handleGameClick(selectedLeague, isSoccer ? match.fixture.id : match.gameId, "live")}
                             className="flex overflow-hidden gap-5 justify-between px-4 py-3 mt-2 w-full text-center rounded-lg border border-solid bg-secondary border-white border-opacity-15 max-md:max-w-full text-white cursor-pointer"
                         >
                             {/* Teams Section */}
                             <div className="flex items-center gap-4 w-1/3 max-md:w-full">
                                 <div className="flex items-center gap-2 text-right w-full justify-end max-md:justify-center">
-                                    <img src={game.teams.home.logo} alt={game.teams.home.name} className="w-7 h-7 rounded-full" />
-                                    <span className="text-base font-semibold truncate">{game.teams.home.name}</span>
+                                    <img src={match.teams.home.logo} alt={match.teams.home.name} className="w-7 h-7 rounded-full" />
+                                    <span className="text-base font-semibold truncate">{match.teams.home.name}</span>
                                 </div>
 
                                 <div className="text-sm font-semibold w-auto text-center">VS</div>
 
                                 <div className="flex items-center gap-2 text-left w-full justify-start max-md:justify-center">
-                                    <img src={game.teams.away.logo} alt={game.teams.away.name} className="w-7 h-7 rounded-full" />
-                                    <span className="text-base font-semibold truncate">{game.teams.away.name}</span>
+                                    <img src={match.teams.away.logo} alt={match.teams.away.name} className="w-7 h-7 rounded-full" />
+                                    <span className="text-base font-semibold truncate">{match.teams.away.name}</span>
                                 </div>
                             </div>
 
                             {/* Time Left */}
                             <div className="text-base font-semibold w-1/3 text-center max-md:w-full">
-                                {game.status.elapsed ? `${game.status.elapsed} min` : "Live"}
+                                {isSoccer ? match.fixture.status.elapsed + " min" : match.status.short}
                             </div>
 
                             {/* Current Score */}
                             <div className="text-base font-semibold w-1/3 text-right max-md:w-full">
-                                {game.goals.home ?? 0} - {game.goals.away ?? 0}
+                                {isSoccer
+                                    ? `${match.goals.home ?? 0} - ${match.goals.away ?? 0}`
+                                    : `${match.scores.home.total ?? 0} - ${match.scores.away.total ?? 0}`}
                             </div>
                         </div>
                     ))

@@ -3,13 +3,16 @@ import { useSelector } from "react-redux";
 import { ChevronDown, ChevronUp } from "lucide-react"; // Modern icons
 
 const Odds = ({ leagueId, fixtureId }) => {
+
+    console.log("leagueId, fixtureId", leagueId, fixtureId);
+
     const { upcomingFixturesOdds } = useSelector((state) => state.fixtures);
     const [selectedBet, setSelectedBet] = useState(null);
     const [openBookmaker, setOpenBookmaker] = useState(null); // Track open bookmakers
 
     // Find the odds for the specific fixture
     const matchOdds = upcomingFixturesOdds?.data?.find(
-        (item) => item.league.id === Number(leagueId.leagueId) && item.fixture.id === Number(fixtureId)
+        (item) => item.league.id === Number(leagueId) && item.fixture.id === Number(fixtureId)
     );
 
     if (!matchOdds) {

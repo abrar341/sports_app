@@ -1,45 +1,53 @@
-"use client";
 import React, { useState, useEffect } from "react";
 import { formatDateTime } from "./UpcomingGames";
 import Loading from "../Shared/Loading";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-export const CompletedGames = () => {
-    //soccer completed fixtures
-    const { completedFixtures, fixturesLoading } = useSelector((state) => state.fixtures);
+export const CompletedGames = ({ selectedGame }) => {
+    const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedLeague, setSelectedLeague] = useState(null);
-    const navigate = useNavigate();
 
+    // Fetch completed fixtures from Redux store
+    const { completedFixtures, fixturesLoading } = useSelector((state) => state.fixtures); // Soccer
+    const { AFcompletedFixtures, AFfixturesLoading } = useSelector((state) => state.fixtures); // American Football
+
+    const isSoccer = selectedGame === "soccer";
+    const fixturesData = isSoccer ? completedFixtures : AFcompletedFixtures;
+    const loading = isSoccer ? fixturesLoading : AFfixturesLoading;
     const pageSize = 5;
 
-    const handleGameClick = (leagueId, fixtureId, status) => {
-        navigate(`/games-insight/${leagueId}/${status}/${fixtureId}`);
-    };
-
-    useEffect(() => {
-        if (completedFixtures?.data?.length > 0) {
-            setSelectedLeague(completedFixtures.data[0].leagueId); // Set default league
-        }
-    }, [completedFixtures]);
-
-    // Extract unique leagues
-    const leagues = completedFixtures?.data?.map((league) => ({
-        id: league.leagueId,
-        name: league.leagueName,
+    // Extract leagues from the dataset
+    const leagues = fixturesData?.data?.map((league) => ({
+        id: isSoccer ? league.leagueId : league.leagueName, // Different structures
+        name: isSoccer ? league.leagueName : league.leagueName,
     })) || [];
 
-    // Get fixtures for selected league
-    const selectedFixtures =
-        completedFixtures?.data?.find((league) => league.leagueId === selectedLeague)?.fixtures || [];
+    useEffect(() => {
+        if (fixturesData?.data?.length > 0) {
+            setSelectedLeague(isSoccer ? fixturesData.data[0].leagueId : fixturesData.data[0].leagueName);
+        }
+    }, [fixturesData, selectedGame]);
+
+    // Get fixtures based on selected league
+    const selectedFixtures = fixturesData?.data?.find((league) =>
+        isSoccer ? league.leagueId === selectedLeague : league.leagueName === selectedLeague
+    );
+
+    // Extract games properly
+    const games = isSoccer ? selectedFixtures?.fixtures || [] : selectedFixtures?.completedGames || [];
 
     // Pagination logic
-    const totalPages = Math.ceil(selectedFixtures.length / pageSize);
-    const paginatedGames = selectedFixtures.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+    const totalPages = Math.ceil(games.length / pageSize);
+    const paginatedGames = games.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+    const handleGameClick = (leagueId, fixtureId, status) => {
+        navigate(`/games-insight/${selectedGame}/${leagueId}/${status}/${fixtureId}`);
+    };
 
     const handleLeagueChange = (e) => {
-        setSelectedLeague(Number(e.target.value));
+        setSelectedLeague(e.target.value);
         setCurrentPage(1); // Reset to first page when league changes
     };
 
@@ -47,7 +55,7 @@ export const CompletedGames = () => {
         <section className="mt-6 h-full w-full min-h-[270px] max-md:max-w-full">
             <div className="flex justify-between">
                 <h2 className="text-2xl flex items-center font-bold leading-none max-md:max-w-full text-white">
-                    Completed Games
+                    Completed {isSoccer ? "Soccer" : "American Football"} Games
                 </h2>
 
                 {/* League Selection Dropdown */}
@@ -73,12 +81,12 @@ export const CompletedGames = () => {
                     <div>Date</div>
                 </div>
 
-                {fixturesLoading && paginatedGames.length === 0 ? (
+                {loading && paginatedGames.length === 0 ? (
                     <Loading />
                 ) : paginatedGames.length > 0 ? (
                     paginatedGames.map((game, index) => (
                         <div
-                            onClick={() => handleGameClick(selectedLeague, game.fixtureId, "completed")}
+                            onClick={() => handleGameClick(isSoccer ? selectedLeague : game.league.leagueId, game.gameId || game.fixtureId, "completed")}
                             key={index}
                             className="flex items-center cursor-pointer justify-between gap-5 px-4 py-3 mt-2 w-full rounded-lg border border-solid bg-secondary border-white border-opacity-15 max-md:flex-col text-white"
                         >
@@ -99,12 +107,14 @@ export const CompletedGames = () => {
 
                             {/* Score Section */}
                             <div className="text-base font w-1/3 text-center max-md:w-full">
-                                {game.goals.home ?? 0} - {game.goals.away ?? 0}
+                                {isSoccer
+                                    ? `${game.goals.home ?? 0} - ${game.goals.away ?? 0}`
+                                    : `${game.scores.home.total ?? 0} - ${game.scores.away.total ?? 0}`}
                             </div>
 
                             {/* Date Section */}
                             <div className="text-sm w-1/3 text-right max-md:text-center max-md:w-full">
-                                {formatDateTime(game.date)}
+                                {isSoccer ? formatDateTime(game.date) : formatDateTime(game.date.date)}
                             </div>
                         </div>
                     ))

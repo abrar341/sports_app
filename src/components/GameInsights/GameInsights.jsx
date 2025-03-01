@@ -11,15 +11,24 @@ import { Statistics } from './Statistics';
 import { WinLossTrends } from './WinLossTrends';
 import PlayerInsightSearchBar from '../Shared/PlayerInsightSearchBar';
 import TrendingInsightCard from '../Dashboard/TrendingInsightCard';
-import { fetchFixtures } from '../../slices/fixturesSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchAFFixtures, fetchFixtures } from '../../slices/fixturesSlice';
+
 
 export const GameInsights = () => {
     const dispatch = useDispatch();
 
+    // Get selected game from Redux store
+    const gameInsightSelectedGame = useSelector((state) => state.fixtures.gameInsightSelectedGame);
+
     useEffect(() => {
-        dispatch(fetchFixtures());
-    }, [dispatch]);
+        if (gameInsightSelectedGame === 'soccer') {
+            dispatch(fetchFixtures());
+        } else if (gameInsightSelectedGame === 'american-football') {
+            dispatch(fetchAFFixtures());
+        }
+    }, [dispatch, gameInsightSelectedGame]);
+
 
     return (
         <main className="w-full max-md:max-w-full bg-primary p-8">
@@ -28,12 +37,12 @@ export const GameInsights = () => {
                 <GameSelector />
                 <div className="mt-6 w-full max-md:max-w-full">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 justify-between items-center w-full max-md:max-w-full">
-                        <LiveGames />
+                        <LiveGames selectedGame={gameInsightSelectedGame} />
                         <Insights />
                     </div>
                     <div className="flex flex-col justify-center mt-6 w-full max-md:max-w-full">
-                        <UpcomingGames />
-                        <CompletedGames />
+                        <UpcomingGames selectedGame={gameInsightSelectedGame} />
+                        <CompletedGames selectedGame={gameInsightSelectedGame} />
                     </div>
                 </div>
                 <section className="mt-6 w-full max-md:max-w-full">

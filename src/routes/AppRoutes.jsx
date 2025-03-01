@@ -42,7 +42,7 @@ const AppRoutes = () => {
                 <Route path="/player-insight" element={<PlayersInsightsMain />} />
                 <Route path="/team-insight" element={<TeamInsightMain />} />
                 <Route path="/games-insight" element={<GameInsights />} />
-                <Route path="/games-insight/:leagueId/:status/:fixtureId" element={<GameDetails />} />
+                <Route path="/games-insight/:gameType/:leagueId/:status/:fixtureId" element={<GameDetails />} />
                 <Route path="/subscription" element={<SubscriptionMain />} />
                 <Route path="/betting-odds" element={<BettingOdds />} />
                 <Route path="/dashboard/player-team-favourites" element={<PlayerTeamFavourites />} />

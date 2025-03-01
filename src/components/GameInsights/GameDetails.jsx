@@ -3,51 +3,87 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { formatDateTime } from "./UpcomingGames";
 import { getFixtureById } from "../../Api/Fixtures/get/fixtures";
-import Summary from "./Summary";
 import Loading from "../Shared/Loading";
+import { liveFixtures } from "./live";
+import Summary from "./Summary";
 import Odds from "./Odds";
 
 const GameDetails = () => {
-    const { status, leagueId, fixtureId } = useParams();
-    const { upcomingFixtures, liveFixtures, completedFixtures } = useSelector((state) => state.fixtures);
+    const { gameType, status, leagueId, fixtureId } = useParams();
+
+    // Soccer data
+    const { upcomingFixtures, completedFixtures } = useSelector((state) => state.fixtures);
+
+    // American Football data
+    const { AFupcomingFixtures, AFcompletedFixtures } = useSelector((state) => state.fixtures);
+
     const [fixtureData, setFixtureData] = useState(null);
     const [detailsLoading, setDetailsLoading] = useState(false);
 
-    // Determine the correct fixture list
-    const fixtureList = status === "upcoming" ? upcomingFixtures.data :
-        status === "live" ? liveFixtures.data :
-            completedFixtures.data;
+    let game = null;
+    let league = null;
 
-    // Find the correct league
-    const league = fixtureList?.find((league) => league.leagueId.toString() === leagueId);
-    const game = league?.fixtures?.find(fixture => fixture.fixtureId.toString() === fixtureId);
+    // **Handling Soccer Logic (No Changes)**
+    if (gameType === "soccer") {
+        if (status === "live") {
+            game = liveFixtures.data.find(fixture => fixture.fixture.id.toString() === fixtureId);
+            league = game ? game.league : null;
 
+        } else {
+            const fixtureList =
+                status === "upcoming"
+                    ? upcomingFixtures?.data
+                    : status === "completed"
+                        ? completedFixtures?.data
+                        : null;
+            if (fixtureList) {
+                league = fixtureList.find(lg => lg.leagueId.toString() === leagueId);
+                game = league?.fixtures?.find(fixture => fixture.fixtureId.toString() === fixtureId);
+            }
+        }
+        console.log("game", game);
+
+    }
+
+    // **Handling American Football Logic**
+    if (gameType === "american-football") {
+
+        AFcompletedFixtures?.data?.forEach((leagueItem) => {
+            const foundGame = leagueItem.completedGames.find(
+                (gameItem) => gameItem.league.leagueId.toString() === leagueId && gameItem.gameId.toString() === fixtureId
+            );
+            if (foundGame) {
+                game = foundGame;
+                league = foundGame.league;
+            }
+        });
+    }
+
+    // **Fetching Detailed Data for Soccer Completed Games**
     useEffect(() => {
-        if (status === "completed" && fixtureId) {
-            setDetailsLoading(true); // Start loading
-
+        if (status === "completed" && gameType === "soccer" && fixtureId) {
+            setDetailsLoading(true);
             getFixtureById(fixtureId)
                 .then(response => setFixtureData(response.data))
                 .catch(error => console.error("Error fetching fixture data:", error))
-                .finally(() => setDetailsLoading(false)); // Stop loading
+                .finally(() => setDetailsLoading(false));
         }
-    }, [status, fixtureId]);
+    }, [status, fixtureId, gameType]);
 
-
-    if (!game) return <div className="bg-primary min-h-screen text-white p-6 text-center text-white">Game not found</div>;
+    if (!game) return <div className="bg-primary min-h-screen text-white p-6 text-center">Game not found</div>;
 
     return (
         <div className="bg-primary min-h-screen text-white p-6">
             {/* League & Round Info */}
             <div className="flex items-center gap-2 text-sm text-gray-300">
-                {game.league.flag && <img src={game.league.flag} alt={game.league.country} className="w-5 h-5" />}
-                <span className="text-base font-semibold">{game.league.name} - {game.league.round}</span>
+                {league?.country?.flag && <img src={league.country.flag || game.league.flag} alt={league.country.name} className="w-5 h-5" />}
+                <span className="text-base font-semibold">{league?.name} - {game.week || game.league?.round}</span>
             </div>
 
             {/* Match Details */}
             <div className="flex flex-col mb-6 items-center justify-center mt-6">
-                <p className="text-base font-semibold">{formatDateTime(game.date)}</p>
-                {game.venue && <p className="text-sm text-gray-300 mt-1">{game.venue.name} - {game.venue.city}</p>}
+                <p className="text-base font-semibold">{formatDateTime(gameType === 'soccer' ? game.date : game.date?.date || game.fixture?.date)}</p>
+                {game.venue && <p className="text-sm text-gray-300 mt-1">{game.venue.name || "Unknown"} - {game.venue.city || "Unknown"}</p>}
 
                 <div className="flex items-center gap-8 mt-4">
                     <div className="flex flex-col items-center">
@@ -55,9 +91,11 @@ const GameDetails = () => {
                         <p className="font-semibold text-lg mt-2">{game.teams.home.name}</p>
                     </div>
                     <div className="text-xl font-bold">
-                        {game.goals?.home !== null && game.goals?.away !== null
-                            ? `${game.goals.home} - ${game.goals.away}`
-                            : "-"}
+                        {gameType === "soccer"
+                            ? game.goals?.home !== null && game.goals?.away !== null
+                                ? `${game.goals.home} - ${game.goals.away}`
+                                : "-"
+                            : `${game.scores.home.total} - ${game.scores.away.total}`}
                     </div>
                     <div className="flex flex-col items-center">
                         <img src={game.teams.away.logo} alt={game.teams.away.name} className="w-20 h-20" />
@@ -66,21 +104,37 @@ const GameDetails = () => {
                 </div>
             </div>
 
-            {/* Tabs */}
-            {/* <div className="flex justify-center mt-6  border-gray-500">
-                {['SUMMARY', 'ODDS'].map((tab, index) => (
-                    <button key={index} className="px-4 py-2 text-sm font-semibold text-gray-300 hover:text-white border-b-2 border-transparent hover:border-white">
-                        {tab}
-                    </button>
-                ))}
-            </div> */}
+            {/* Match Summary for Completed Games */}
+            {detailsLoading ? (
+                <Loading />
+            ) : (
+                status === "completed" &&
+                (gameType === "soccer"
+                    ? fixtureData && (
+                        <Summary
+                            leagueId={leagueId}
+                            fixtureId={fixtureId}
+                            detailsLoading={detailsLoading}
+                            events={fixtureData.events}
+                            teams={fixtureData.teams}
+                            score={fixtureData.score}
+                            status={fixtureData.status}
+                        />
+                    )
+                    : gameType === "american-football" && (
+                        <Summary
+                            leagueId={leagueId}
+                            fixtureId={fixtureId}
+                            teams={gameType === 'soccer' ? fixtureData.teams : game.teams}
+                            score={gameType === 'soccer' ? fixtureData.score : game.scores}
+                            status={gameType === 'soccer' ? fixtureData.status : game.status}
+                        />
+                    ))
+            )}
 
-            {/* Render Summary if status is completed */}
-            {detailsLoading ? <Loading /> :
-                status === "completed" && fixtureData && !detailsLoading && <Summary detailsLoading={detailsLoading} events={fixtureData.events} teams={fixtureData.teams} score={fixtureData.score} status={fixtureData.status} />}
-            {status === "upcoming" && <Odds leagueId={league} fixtureId={fixtureId} />}
+            {/* Betting Odds for Upcoming Games */}
+            {status === "upcoming" && <Odds leagueId={leagueId} fixtureId={fixtureId} />}
         </div>
-
     );
 };
 

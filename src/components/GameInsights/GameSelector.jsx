@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { fetchAFFixtures, fetchFixtures } from '../../slices/fixturesSlice';
-// import { fetchAFFixtures } from '../../slices/affixturesSlice'; // Add your other fixture fetch functions
+import { useDispatch, useSelector } from 'react-redux';
+import { setGameInsightSelectedGame, fetchFixtures, fetchAFFixtures } from '../../slices/fixturesSlice';
 
-const games = [
-    { id: 1, name: 'Soccer', action: fetchFixtures },
-    // { id: 2, name: 'American Football', action: fetchAFFixtures },
-    // Add more games and their respective actions
-];
 
 export const GameSelector = () => {
+    const games = [
+        { id: 1, game: 'soccer', name: 'Soccer', action: fetchFixtures },
+        { id: 2, game: 'american-football', name: 'American Football', action: fetchAFFixtures },
+    ];
+
+
     const dispatch = useDispatch();
-    const [selectedGame, setSelectedGame] = useState(games[0].id);
+    const gameInsightSelectedGame = useSelector((state) => state.fixtures.gameInsightSelectedGame);
+    const [selectedGame, setSelectedGame] = useState(games[0].game);
 
     const handleGameChange = (id) => {
-        setSelectedGame(id);
         const selected = games.find((game) => game.id === id);
-        if (selected && selected.action) {
-            dispatch(selected.action());
+        if (selected) {
+            setSelectedGame(selected.game);
+            dispatch(setGameInsightSelectedGame(selected.game)); // Update Redux state
+            if (selected.action) {
+                dispatch(selected.action()); // Fetch data based on the selected game
+            }
         }
     };
 
@@ -31,7 +35,7 @@ export const GameSelector = () => {
                     <button
                         key={game.id}
                         onClick={() => handleGameChange(game.id)}
-                        className={`gap-2.5 self-stretch px-6 py-2 my-auto ${selectedGame === game.id ? 'bg-blue-800' : 'bg-sky-950'
+                        className={`gap-2.5 self-stretch px-6 py-2 my-auto ${gameInsightSelectedGame === game.game ? 'bg-blue-800' : 'bg-sky-950'
                             } rounded-[100px] text-white`}
                     >
                         {game.name}

@@ -11,34 +11,81 @@ const MatchCardsList = ({ selectedGame, selectedLeague }) => {
     const containerRef = useRef(null);
     const [filteredMatches, setFilteredMatches] = useState([]);
 
-    console.log("liveFixtures", liveFixtures);
-    console.log("AFliveFixtures", AFliveFixtures);
-
     // Fetch match data from Redux
     const { completedFixtures, AFcompletedFixtures, fixturesLoading } = useSelector((state) => state.fixtures);
 
-    console.log("completedFixtures", completedFixtures);
-    console.log("AFcompletedFixtures", AFcompletedFixtures);
+    // Function to normalize live fixtures
+    const normalizeLiveFixtures = (liveData, isSoccer) => {
+        return isSoccer
+            ? liveData?.data?.map((match) => ({
+                leagueName: match.league.name,
+                season: match.league.season,
+                fixtures: [
+                    {
+                        matchId: match.fixture.id,
+                        date: match.fixture.date,
+                        venue: match.fixture.venue,
+                        status: match.fixture.status,
+                        teams: match.teams,
+                        score: match.goals,
+                        live: true
+                    },
+                ],
+            }))
+            : liveData?.data?.map((league) => ({
+                leagueName: league.leagueName,
+                season: league.season,
+                completedGames: league.liveGames.map((game) => ({
+                    matchId: game.gameId,
+                    date: game.date,
+                    venue: game.venue,
+                    status: game.status,
+                    teams: game.teams,
+                    scores: game.scores,
+                    live: true
+
+                })),
+            }));
+    };
 
     useEffect(() => {
         if (!selectedGame) return;
         const isSoccer = selectedGame === "soccer";
-        const fixturesData = isSoccer ? completedFixtures : AFcompletedFixtures;
+        const completedData = isSoccer ? completedFixtures : AFcompletedFixtures;
+        const liveData = isSoccer ? liveFixtures : AFliveFixtures;
+        console.log("completedData", AFcompletedFixtures);
 
-        const allFixtures = fixturesData?.data?.flatMap((league) =>
-            isSoccer ? league.fixtures : league.completedGames || []
-        ) || [];
+        // Normalize live fixtures
+        const normalizedLiveFixtures = normalizeLiveFixtures(liveData, isSoccer);
+
+        // Merge live and completed fixtures
+        const mergedFixtures = completedData?.data
+            ?.map((league) => {
+                const liveLeague = normalizedLiveFixtures?.find((live) => live.leagueName === league.leagueName);
+                return {
+                    ...league,
+                    fixtures: [...(league.fixtures || []), ...(liveLeague?.fixtures || [])],
+                    completedGames: [...(league.completedGames || []), ...(liveLeague?.completedGames || [])],
+                };
+            })
+            .concat(
+                normalizedLiveFixtures?.filter(
+                    (live) => !completedData?.data?.some((league) => league.leagueName === live.leagueName)
+                ) || []
+            );
+        console.log("mergedFixtures", mergedFixtures);
 
         const selectedFixtures = selectedLeague
-            ? fixturesData?.data?.find((league) => league.leagueName === selectedLeague)
+            ? mergedFixtures?.find((league) => league.leagueName === selectedLeague)
             : null;
+        console.log("selectedFixtures", selectedFixtures);
 
         if (selectedFixtures) {
             setFilteredMatches(isSoccer ? selectedFixtures.fixtures : selectedFixtures.completedGames || []);
         } else {
-            setFilteredMatches(allFixtures);
+            setFilteredMatches(mergedFixtures?.flatMap((league) => (isSoccer ? league.fixtures : league.completedGames)) || []);
         }
-    }, [selectedGame, selectedLeague, completedFixtures, AFcompletedFixtures]);
+    }, [selectedGame, selectedLeague, completedFixtures, AFcompletedFixtures, liveFixtures, AFliveFixtures]);
 
     useEffect(() => {
         const updateVisibleCount = () => {
@@ -88,30 +135,12 @@ const MatchCardsList = ({ selectedGame, selectedLeague }) => {
                 style={{ gridTemplateColumns: `repeat(${visibleCount}, 1fr)` }}
             >
                 {fixturesLoading ? (
-                    // Skeleton Loader for Loading State
                     [...Array(visibleCount)].map((_, index) => (
                         <div
                             key={index}
                             className="bg-secondary animate-pulse p-2 rounded-lg flex flex-col items-start w-full max-w-[200px] h-[80px]"
                         >
-                            {/* if want the more good loading state */}
-                            {/* <div className="bg-gray-500 self-end h-3 w-10 rounded mb-2"></div>
-                            <div className="flex items-center justify-between w-full mb-1">
-                                <div className="flex items-center space-x-2">
-                                    <div className="bg-gray-500 w-5 h-5 rounded-full"></div>
-                                    <div className="bg-gray-500 h-3 w-10 rounded"></div>
-                                </div>
-                                <div className="bg-gray-500 h-3 w-6 rounded"></div>
-                            </div>
-                            <div className="flex items-center justify-between w-full">
-                                <div className="flex items-center space-x-2">
-                                    <div className="bg-gray-500 w-5 h-5 rounded-full"></div>
-                                    <div className="bg-gray-500 h-3 w-10 rounded"></div>
-                                </div>
-                                <div className="bg-gray-500 h-3 w-6 rounded"></div>
-                            </div> */}
-
-                            <div className="flex bg-secondary h-full  rounded-xl  w-full justify-center items-center py-4">
+                            <div className="flex bg-secondary h-full rounded-xl w-full justify-center items-center py-4">
                                 <div className="w-4 h-4 border-4 border-primarySolid border-t-secondary rounded-full animate-spin"></div>
                             </div>
                         </div>

@@ -1,5 +1,6 @@
 export const normalizeMatchData = (match) => {
     return {
+        live: match?.live ?? false, // Use match.live if it exists, otherwise set to false
         homeTeam: {
             name: getShortTeamName(match.teams?.home?.name) || "Unknown Team",
             logo: match.teams?.home?.logo || "",
@@ -15,11 +16,18 @@ export const normalizeMatchData = (match) => {
 
 // Helper function to extract scores based on match type
 const getFinalScore = (match, teamType) => {
+    console.log("match, teamType", match, teamType);
+
     if (match.scores && match.scores[teamType]?.total !== undefined) {
+        console.log("here we are");
+
         return match.scores[teamType].total; // American Football format
     }
     if (match.goals && match.goals[teamType] !== undefined) {
         return match.goals[teamType]; // Soccer format
+    }
+    if (match.score && match.score[teamType] !== undefined) {
+        return match.score[teamType]; // Soccer format
     }
     return "-"; // Fallback if no score found
 };

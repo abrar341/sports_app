@@ -1,11 +1,18 @@
 import PropTypes from "prop-types";
 
 const MatchCard = ({ match }) => {
-    const { homeTeam, awayTeam } = match; // Extract normalized match data
+    const { homeTeam, awayTeam, live } = match; // Extract normalized match data
+    console.log("match", match);
 
     return (
         <div className="bg-secondary cursor-pointer text-white p-2 rounded-lg flex flex-col items-start w-full max-w-[200px]">
-            <div className="text-xs font-semibold w-full text-end mb-2">Result</div>
+            <div className="text-xs w-full text-end mb-2 flex items-center justify-end space-x-1">
+                {live && <span className="blink-dot"></span>}
+                <span className={live ? "text-red-500 font-bold text-xs" : "text-white text-xs"}>{live ? "Live" : "Result"}</span>
+            </div>
+
+
+
             <div className="flex items-center justify-between w-full mb-1">
                 <div className="flex items-center space-x-2">
                     <img loading="lazy" src={homeTeam.logo} alt={homeTeam.name} className="w-5 h-5 rounded-full" />

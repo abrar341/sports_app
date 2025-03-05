@@ -10,7 +10,7 @@ const insights = [
 
 export const Insights = () => {
     return (
-        <section className="flex  py-6 flex-col justify-center self-stretch my-auto min-w-60 h-full">
+        <section className="flex flex-col justify-center self-stretch my-auto min-w-60 h-full">
             <h2 className="text-2xl font-bold  leading-none text-white">
                 Insights
             </h2>

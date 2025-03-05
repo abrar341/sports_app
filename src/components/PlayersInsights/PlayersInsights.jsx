@@ -14,13 +14,14 @@ import { useDispatch, useSelector } from "react-redux";
 import useFetchFavouritePlayers from "../../hooks/useFetchFavouritePlayers";
 import { fetchPlayerData } from "../../slices/selectionSlice";
 import usePlayerActions from "../../hooks/usePlayerActions";
-import { FaSearch, FaSlidersH } from "react-icons/fa";
+import { FaChevronDown, FaSearch, FaSlidersH } from "react-icons/fa";
 import Loading from "../Shared/Loading";
 import { setPlayerStatsLoading } from "../../slices";
 import { section } from "framer-motion/client";
 import { normalizeSelectedPlayerData } from "../../utils/normalizeData";
 import useFetchFavouritePlayersBySelectedSport from "../../hooks/useFetchFavouritePlayersBySelectedSport";
 import { setFavoritePlayersOfSelectedPlayerSport } from "../../slices/favoritesSlice";
+import { EmptyState } from "../Shared/EmptyState";
 
 // addFavoriteTeamsOfSelectedTeamSport
 
@@ -74,15 +75,18 @@ const PlayersInsights = () => {
                         onSelect={sportsName === "soccer" ? handleSelectPlayer : handleSelectAmericanFootballPlayer}
                     />
 
-                    <div className="">
+                    <div className="relative w-1/6 ">
                         <select
                             value={sportsName}
                             onChange={(e) => setSportsName(e.target.value)}
-                            className="bg-primarySolid w-full text-white px-4 py-2 md:py-3 rounded-r-full focus:outline-none h-full shadow-[0px_1px_55px_0px_rgba(84,84,84,0.06)]"
+                            className="bg-[rgba(255,255,255,0.32)] w-full h-full text-white px-4 py-2 md:py-3 
+                                       rounded-r-full focus:outline-none appearance-none pr-10 text-end"
                         >
-                            <option value="soccer">Soccer</option>
-                            <option value="american-football">American Football</option>
+                            <option className="bg-gray-200 text-black" value="soccer">Soccer</option>
+                            <option className="bg-gray-100 text-black" value="american-football">American Football</option>
                         </select>
+                        {/* Dropdown Icon */}
+                        <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white h-3 pointer-events-none" />
                     </div>
                 </div>
                 <div className="col-span-12 md:col-span-1 ">
@@ -99,10 +103,7 @@ const PlayersInsights = () => {
                 {
                     !selectedPlayer && !playerProfileLoading && <div className={`col-span-12`}>
 
-                        <div className="flex flex-col rounded-xl  items-center justify-center p-6 text-gray-400">
-                            <FaSearch className="w-10 h-10 mb-2" />
-                            <p >Search for a player and select it.</p>
-                        </div>
+                        <EmptyState icon={FaSearch} message="Search for a player and select it." />
                     </div>
                 }
 
@@ -140,14 +141,14 @@ const PlayersInsights = () => {
                                         <PlayersAreaChart data={selectedPlayerStats} sportType={selectedPlayerSports} />
                                     </div>
 
-                                    <div className="col-span-12">
+                                    {/* <div className="col-span-12">
                                         <PlayersComparison />
-                                    </div>
+                                    </div> */}
 
                                     {/* Table Section */}
-                                    <div className="col-span-12 xl:col-span-7">
+                                    {/* <div className="col-span-12 xl:col-span-7">
                                         <PlayerTable />
-                                    </div>
+                                    </div> */}
 
                                     {/* Pie Chart Section */}
                                     <div className="col-span-12 xl:col-span-5">

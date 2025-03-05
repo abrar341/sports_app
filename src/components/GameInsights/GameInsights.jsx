@@ -21,19 +21,23 @@ export const GameInsights = () => {
     // Get selected game from Redux store
     const gameInsightSelectedGame = useSelector((state) => state.fixtures.gameInsightSelectedGame);
 
+    const { liveFixtures, upcomingFixtures, AFupcomingFixtures, completedFixtures, fixturesLoading } = useSelector((state) => state.fixtures);
     useEffect(() => {
-        if (gameInsightSelectedGame === 'soccer') {
-            dispatch(fetchFixtures());
-        } else if (gameInsightSelectedGame === 'american-football') {
-            dispatch(fetchAFFixtures());
+        if (!upcomingFixtures.data || !AFupcomingFixtures.data) {
+            if (gameInsightSelectedGame === 'soccer') {
+                dispatch(fetchFixtures());
+            } else if (gameInsightSelectedGame === 'american-football') {
+                dispatch(fetchAFFixtures());
+            }
         }
-    }, [dispatch, gameInsightSelectedGame]);
+    }, [gameInsightSelectedGame]);
+
 
 
     return (
-        <main className="w-full max-md:max-w-full bg-primary p-8">
-            <PlayerInsightSearchBar />
-            <div className="flex flex-col justify-center mt-6 w-full max-md:max-w-full">
+        <main className="w-full max-md:max-w-full bg-primary px-8 py-6">
+            {/* <PlayerInsightSearchBar /> */}
+            <div className="flex flex-col justify-center w-full max-md:max-w-full">
                 <GameSelector />
                 <div className="mt-6 w-full max-md:max-w-full">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 justify-between items-center w-full max-md:max-w-full">
@@ -46,7 +50,7 @@ export const GameInsights = () => {
                     </div>
                 </div>
                 <section className="mt-6 w-full max-md:max-w-full">
-                    <h2 className="text-3xl font-bold leading-none text-white max-md:max-w-full">
+                    <h2 className="text-2xl font-bold leading-none text-white max-md:max-w-full">
                         Trending Insights:
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 gap-6 mt-6 max-md:max-w-full">

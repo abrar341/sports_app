@@ -35,7 +35,11 @@ const usePlayerActions = () => {
     const handleSelectAmericanFootballPlayer = async (player) => {
         console.log("player", player);
         const { playerId, sportName } = player;
+        console.log("sportName1", sportName);
+        console.log("selectedPlayerSports", selectedPlayerSports);
         if (sportName && sportName !== selectedPlayerSports) {
+            console.log("sportName2", sportName);
+
             dispatch(setSelectedPlayerSports(sportName))
             dispatch(setFavoritePlayersOfSelectedPlayerSport([]))
         }
@@ -47,6 +51,7 @@ const usePlayerActions = () => {
         }
         try {
             // Dispatch loading actions from loadingSlice
+            // dispatch(setSelectedPlayerSports(sportName))
             dispatch(setPlayerProfileLoading(true));
             dispatch(setPlayerStatsLoading(true));
             const res = await getAmericanFootballPlayer(playerId);

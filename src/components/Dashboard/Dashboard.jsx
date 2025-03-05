@@ -22,33 +22,28 @@ import useTeamActions from "../../hooks/useTeamActions";
 import TeamInsightSearchBar from "../Shared/TeamInsightSearchBar";
 import { setPlayerOrTeam, setSportsNameDashboard } from "../../slices/selectionSlice";
 import LeagueAreaChart from "../Shared/LeagueAreaChart";
+import { FaChevronDown } from "react-icons/fa";
 
-import { io } from "socket.io-client";
-import { initializeScoreUpdates, setLiveFixtures, setUpcomingFixtures, setUpcomingFixturesOdds } from "../../slices/fixturesSlice";
-
-const socket = io("http://localhost:3000"); // Change to your backend URL
 
 const Dashboard = () => {
 
     const { favoriteLeaguessHighlights } = useSelector((state) => state.favorites); // Get loading states
     const { playerOrTeam, sportsNameDashboard } = useSelector((state) => state.selection); // Access Redux state
     const [sportsName, setSportsName] = useState("soccer");
+    const { favoritePlayers, favoriteTeams } = useSelector(state => state.favorites); // Get from Redux
 
     const dispatch = useDispatch()
 
     useEffect(() => {
         const fetchHighlights = async () => {
-            if (!sportsNameDashboard || favoriteLeaguessHighlights.length > 0) return; // Prevent fetching if data exists
-
+            if (!sportsNameDashboard || (favoriteLeaguessHighlights.length > 0)) return; // Prevent fetching if data exists
             dispatch(setFavoritePlayersHighlightsLoading(true));
             dispatch(setFavoriteTeamsHighlightsLoading(true));
-
             try {
                 const res = await getFavouriteHighlights(sportsNameDashboard);
-                dispatch(setFavoritePlayersHighlights(res?.data.players));
-                dispatch(setFavoriteTeamsHighlights(res?.data.teams));
-                dispatch(setFavoriteLeaguesHighlights(res?.data.leagues));
-
+                dispatch(setFavoritePlayersHighlights(res?.data.players || []));
+                dispatch(setFavoriteTeamsHighlights(res?.data.teams || []));
+                dispatch(setFavoriteLeaguesHighlights(res?.data.leagues || []));
             } catch (err) {
                 console.log("Error Occurred", err);
             } finally {
@@ -57,112 +52,111 @@ const Dashboard = () => {
             }
         };
         fetchHighlights();
-    }, [sportsNameDashboard, dispatch]); // Re-run only if sportsNameDashboard changes OR leagues data is empty
+    }, [sportsNameDashboard, dispatch, favoritePlayers.length, favoriteTeams.length]); // Re-run only if sportsNameDashboard changes OR leagues data is empty
 
-    const { handleSearch, handleSelectPlayer } = usePlayerActions();
+    const { handleSearch, handleSelectPlayer, handleSelectAmericanFootballPlayer } = usePlayerActions();
     const { handleSelectTeam, SearchTeam } = useTeamActions();
-
-    useEffect(() => {
-        dispatch(initializeScoreUpdates())
-    }, [dispatch]);
 
     return (
         <>
-            <main className="flex overflow-hidden min-h-screen bg-primary  p-8 flex-col">
+            <main className="flex grid overflow-hidden min-h-screen bg-primary  px-8 py-6 flex-col">
                 {/* <SearchBar /> */}
-                <div className=" grid grid-cols-1 lg:grid-cols-2 gap-2">
-                    {/* Conditional Rendering */}
-                    {playerOrTeam === "player" ? (
-                        <>
-                            <div className="col-span-12 w-full  flex  ">
-                                {/* <PlayerInsightSearchBar /> */}
-                                <PlayerInsightSearchBar sportsName={sportsName} onSearch={handleSearch} onSelect={handleSelectPlayer} />
-                                <div className="">
-                                    <select
-                                        value={sportsName}
-                                        onChange={(e) => setSportsName(e.target.value)}
-                                        className="bg-primarySolid w-full h-full text-white px-4 py-2 md:py-3 rounded-r-full focus:outline-none h-full shadow-[0px_1px_55px_0px_rgba(84,84,84,0.06)]"
-                                    >
-                                        <option value="soccer">Soccer</option>
-                                        <option value="american-football">American Football</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </>) : (
-                        <div className={`col-span-12 w-full  flex `}>
-                            <TeamInsightSearchBar onSearch={SearchTeam} sportsName={sportsName} onSelect={handleSelectTeam} />
-                            <div className="h-full ">
-                                <select
-                                    value={sportsName}
-                                    onChange={(e) => setSportsName(e.target.value)}
-                                    className="bg-primarySolid w-full h-full text-white px-4 py-3 rounded-r-full focus:outline-none shadow-[0px_1px_55px_0px_rgba(84,84,84,0.06)]"
-                                >
-                                    <option value="soccer">Soccer</option>
-                                    <option value="american-football">American Football</option>
-                                </select>
-                            </div>
-                        </div>
-                    )}
-
-                    <div className="flex w-full col-span-12  gap-2">
-
-                        {/* Player/Team Dropdown */}
-                        <select
-                            value={playerOrTeam}
-                            onChange={(e) => dispatch(setPlayerOrTeam(e.target.value))}
-                            className="bg-primarySolid w-full text-white px-4 py-2 rounded-full focus:outline-none shadow-[0px_1px_55px_0px_rgba(84,84,84,0.06)]"
-                        >
-                            <option value="player">Player</option>
-                            <option value="team">Team</option>
-                        </select>
-
-                        {/* Sport Dropdown */}
-                        <select
-                            value={sportsNameDashboard}
-                            onChange={(e) => {
-                                dispatch(setSportsNameDashboard(e.target.value))
-                                dispatch(resetHighlights())
-
+                {/* Sport Dropdown */}
+                <div className="col-span-6 mb-4 flex gap-2">
+                    {["soccer", "american-football"].map((sport) => (
+                        <button
+                            key={sport}
+                            onClick={() => {
+                                dispatch(setSportsNameDashboard(sport));
+                                dispatch(resetHighlights());
                             }}
-                            className="bg-primarySolid w-full text-white px-4 py-2 rounded-full focus:outline-none shadow-[0px_1px_55px_0px_rgba(84,84,84,0.06)]"
+                            className={`px-4 py-2 rounded-full w-full text-white transition-all 
+                ${sportsNameDashboard === sport ? "bg-primarySolid" : "bg-searchBarBg"}`}
                         >
-                            <option value="soccer">Soccer</option>
-                            <option value="basketball">Basketball</option>
-                            <option value="american-football">American football</option>
-                        </select>
-
-                        {/* Advanced Search Button */}
-                        <button className="bg-primarySolid w-full overflow-auto  px-2 lg:px-4 py-2   rounded-full text-white">
-                            Advanced
+                            {sport === "soccer" ? "Soccer" : sport === "basketball" ? "Basketball" : "American Football"}
                         </button>
+                    ))}
+                </div>
+
+
+                <div className="col-span-8 mr-4">
+                    {/* Conditional Rendering */}
+                    <div className="col-span-8 flex ">
+                        {playerOrTeam === "player" ? (
+                            <PlayerInsightSearchBar
+                                sportsName={sportsName}
+                                onSearch={handleSearch}
+                                onSelect={sportsName === "soccer" ? handleSelectPlayer : handleSelectAmericanFootballPlayer}
+                            />
+                        ) : (
+                            <TeamInsightSearchBar
+                                onSearch={SearchTeam}
+                                sportsName={sportsName}
+                                onSelect={handleSelectTeam}
+                            />
+                        )}
+
+                        <div className="relative lg:w-1/6">
+                            <select
+                                value={sportsName}
+                                onChange={(e) => setSportsName(e.target.value)}
+                                className="bg-[rgba(255,255,255,0.32)] h-full w-full text-white px-4 py-2 md:py-3 
+                    focus:outline-none appearance-none pr-10 text-end"
+                            >
+                                <option className="bg-gray-200 text-black" value="soccer">Soccer</option>
+                                <option className="bg-gray-100 text-black" value="american-football">American Football</option>
+                            </select>
+                            {/* Dropdown Icon */}
+                            <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white h-3 pointer-events-none" />
+                        </div>
+                        <div className="relative lg:w-1/6">
+                            <select
+                                value={playerOrTeam}
+                                onChange={(e) => dispatch(setPlayerOrTeam(e.target.value))}
+                                className="bg-[rgba(255,255,255,0.32)] text-end h-full w-full text-white px-4 py-2 rounded-r-full 
+                   focus:outline-none shadow-[0px_1px_55px_0px_rgba(84,84,84,0.06)] appearance-none pr-10"
+                            >
+                                <option className="text-black" value="player">Player</option>
+                                <option className="text-black" value="team">Team</option>
+                            </select>
+                            {/* Dropdown Icon */}
+                            <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white h-3 pointer-events-none" />
+                        </div>
                     </div>
                 </div>
-                <div className="self-center">
+                <div className="flex w-full col-span-4 gap-2">
+                    {/* Advanced Search Button */}
+                    <button className="bg-primarySolid w-full overflow-auto  px-2 lg:px-4 py-2   rounded-full text-white">
+                        Advanced
+                    </button>
+                </div>
+
+                <div className="self-center col-span-12">
                     <div className="">
                         <div className="">
                             <section className="mt-6 w-full">
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div className="md:col-span-2 ">
-                                        <LeagueAreaChart data={favoriteLeaguessHighlights} />
+                                        <LeagueAreaChart gameType={sportsNameDashboard} data={favoriteLeaguessHighlights} />
                                     </div>
                                     <AlertCard />
                                 </div>
 
                                 <section className="mt-6 w-full max-md:max-w-full">
-                                    <h2 className="text-3xl font-bold leading-none text-white max-md:max-w-full">
+                                    <h2 className="text-2xl font-bold leading-none text-white max-md:max-w-full">
                                         Favourites Highlights
                                     </h2>
                                     <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3  items-start gap-6  mt-6 w-full ">
-                                        <PlayerStatsWidget />
-                                        <TeamStatsWidget />
-                                        <LeagueStatsWidget />
+                                        <PlayerStatsWidget gameType={sportsNameDashboard} />
+                                        <TeamStatsWidget gameType={sportsNameDashboard} />
+                                        <LeagueStatsWidget gameType={sportsNameDashboard} />
                                     </div>
                                 </section>
                             </section>
                         </div>
 
                         <section className="mt-6 w-full max-md:max-w-full">
-                            <h2 className="text-3xl font-bold leading-none text-white max-md:max-w-full">
+                            <h2 className="text-2xl font-bold leading-none text-white max-md:max-w-full">
                                 Today's Recommendations:
                             </h2>
                             <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 gap-6 mt-6 w-full max-md:max-w-full">
@@ -174,8 +168,8 @@ const Dashboard = () => {
                     </div>
 
                     <section className="mt-6 w-full max-md:max-w-full">
-                        <h2 className="text-3xl font-bold leading-none text-white max-md:max-w-full">
-                            Trending Insights:
+                        <h2 className="text-2xl font-bold leading-none text-white max-md:max-w-full">
+                            Trending Insights
                         </h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 gap-6 mt-6 max-md:max-w-full">
                             <TrendingInsightCard

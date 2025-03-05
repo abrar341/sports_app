@@ -7,15 +7,8 @@ import favoritesReducer from "./slices/favoritesSlice";
 import loadingReducer from "./slices/loadingSlice";
 import selectionReducer from "./slices/selectionSlice";
 import fixturesReducer from "./slices/fixturesSlice";
-
-// Persist config for only the fixtures slice
-const fixturesPersistConfig = {
-  key: "fixtures",
-  storage,
-};
-
-// Wrap fixturesReducer with persistReducer
-const persistedFixturesReducer = persistReducer(fixturesPersistConfig, fixturesReducer);
+import eventBarReducer from "./slices/eventBarSlice";
+import { socketMiddleware } from "./middleware/socketMiddleware";
 
 const store = configureStore({
   reducer: {
@@ -24,13 +17,14 @@ const store = configureStore({
     favorites: favoritesReducer,
     loading: loadingReducer,
     selection: selectionReducer,
-    fixtures: persistedFixturesReducer, // Persist only fixtures
+    fixtures: fixturesReducer, // Normal fixtures reducer without persist
+    eventBar: eventBarReducer, // Normal fixtures reducer without persist
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false, // Ignore serialization warnings
       immutableCheck: false, // Disable ImmutableStateInvariantMiddleware
-    }).concat(apiSlice.middleware),
+    }).concat(apiSlice.middleware, socketMiddleware),
   devTools: true,
 });
 

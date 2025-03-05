@@ -1,6 +1,5 @@
 
 const Summary = ({ events, teams, score, status, detailsLoading }) => {
-    console.log("teams, score, status,", teams, score, status);
 
     return (
         <div className="p-6 bg-secondary rounded-lg shadow-lg">

@@ -28,7 +28,7 @@ const PlayerCard = ({ selectedPlayer, playerStats, favoritesLoading }) => {
     const { favoritePlayersSports } = useSelector(state => state.selection); // Get from Redux
 
 
-    const handleAddFavorite = async () => {
+    const handleAddFavorite = async (playerRef, playerId, sportName) => {
         setIsLoading(true);
         try {
             const res = await addFavoritePlayer(playerRef, playerId, sportName);
@@ -106,7 +106,7 @@ const PlayerCard = ({ selectedPlayer, playerStats, favoritesLoading }) => {
                             ) : isFavorite ? (
                                 <MdOutlineFavorite onClick={() => handleRemoveFavoritePlayer(playerId, playerRef, sportName)} className="cursor-pointer w-6 h-6" />
                             ) : (
-                                <MdOutlineFavoriteBorder onClick={handleAddFavorite} className="cursor-pointer w-6 h-6" />
+                                <MdOutlineFavoriteBorder onClick={() => handleAddFavorite(playerRef, playerId, sportName)} className="cursor-pointer w-6 h-6" />
                             )}
                         </div>
 

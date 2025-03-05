@@ -4,10 +4,10 @@ import { FaArrowRight } from "react-icons/fa";
 
 const Subscription = () => {
     return (
-        <div className="min-h-screen text-white py-10 px-6">
-            <h1 className="text-center text-3xl font-bold mb-8">Subscription Plan</h1>
+        <div className="min-h-screen text-white py-4 px-6">
+            <h1 className="text-center text-2xl font-bold mb-4">Subscription Plan</h1>
             {/* Center Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-7xl mx-auto justify-items-center">
+            <div className="grid grid-cols-12 gap-6 w-full mx-auto lg:px-40 ">
                 {SubscriptionData.map((plan, index) => (
                     <SubscriptionCard
                         key={index}

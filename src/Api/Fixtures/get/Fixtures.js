@@ -87,5 +87,14 @@ export const getAFCompletedFixtures = async () => {
 };
 
 
+export const getOddsByFixtureId = async (fixtureId) => {
+    try {
+        const res = await api.get(`/soccer/odds/oddsByFixtureId?fixtureId=${fixtureId}`);
+        return res.data;
+    } catch (error) {
+        console.error("Error fetching odds by fixture ID:", error);
+        return null; // Return null to handle errors gracefully in the UI
+    }
+};
 
 

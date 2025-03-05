@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import Loading from "../Shared/Loading";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { EmptyState } from "../Shared/EmptyState";
+import { FaRegSadTear } from "react-icons/fa";
 // import { AFupcomingFixtures } from "./AFupcomingFixtures";
 
 export const formatDateTime = (isoString) => {
+    if (!isoString) return ""; // Return empty string for falsy values
 
     const date = new Date(isoString);
     const options = {
@@ -27,7 +30,7 @@ export const UpcomingGames = ({ selectedGame }) => {
     const isSoccer = selectedGame === "soccer";
 
     const { upcomingFixtures, fixturesLoading } = useSelector((state) => state.fixtures);
-    const { AFupcomingFixtures, AFfixturesLoading } = useSelector((state) => state.fixtures);
+    const { AFfixturesLoading, AFupcomingFixtures } = useSelector((state) => state.fixtures);
     // const { AFfixturesLoading } = useSelector((state) => state.fixtures);
 
     useEffect(() => {
@@ -158,7 +161,7 @@ export const UpcomingGames = ({ selectedGame }) => {
                         </div>
                     ))
                 ) : (
-                    <p className="text-white mt-4">No upcoming matches to show</p>
+                    <EmptyState icon={FaRegSadTear} message="No upcoming matches to show" />
                 )}
 
                 {/* Pagination Controls */}

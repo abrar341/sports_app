@@ -1,21 +1,80 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { getOddsByFixtureId } from "../../Api/Fixtures/get/fixtures";
+import Loading from "../Shared/Loading";
 import { useSelector } from "react-redux";
-import { ChevronDown, ChevronUp } from "lucide-react"; // Modern icons
+// import { liveFixtures } from "./live";
+import { io } from "socket.io-client";
 
-const Odds = ({ leagueId, fixtureId }) => {
-
-    console.log("leagueId, fixtureId", leagueId, fixtureId);
-
-    const { upcomingFixturesOdds } = useSelector((state) => state.fixtures);
+let socket = io("http://localhost:3000");
+const Odds = () => {
+    const { status, fixtureId } = useParams();
+    const { fixturesLoading, liveFixtures } = useSelector((state) => state.fixtures);
+    const [odds, setOdds] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
     const [selectedBet, setSelectedBet] = useState(null);
-    const [openBookmaker, setOpenBookmaker] = useState(null); // Track open bookmakers
+    const [openBookmaker, setOpenBookmaker] = useState(null);
 
-    // Find the odds for the specific fixture
-    const matchOdds = upcomingFixturesOdds?.data?.find(
-        (item) => item.league.id === Number(leagueId) && item.fixture.id === Number(fixtureId)
-    );
+    useEffect(() => {
+        const fetchOdds = async () => {
+            try {
+                setLoading(true);
+                const data = await getOddsByFixtureId(fixtureId);
+                setOdds(data);
+            } catch (err) {
+                setError("Failed to fetch odds");
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    if (!matchOdds) {
+        if (status === "upcoming") {
+            fetchOdds();
+        } else {
+            // Find live fixture matching the fixtureId
+            const liveFixture = liveFixtures.data.find(f => f.fixture.id === Number(fixtureId));
+            if (liveFixture) {
+                // Transform inPlayOdds to match bookmakers format
+                const transformedOdds = {
+                    data: {
+                        bookmakers: [
+                            {
+                                id: "live",
+                                name: "Live Odds",
+                                bets: liveFixture.inPlayOdds[0]?.odds.map(odds => ({
+                                    name: odds.name,
+                                    values: odds.values
+                                })) || []
+                            }
+                        ]
+                    }
+                };
+                setOdds(transformedOdds);
+            } else {
+                setOdds(null);
+            }
+        }
+    }, [fixtureId, status]);
+
+    //Not tested Yet
+    useEffect(() => {
+        socket.on(`fixture:${fixtureId}`, (data) => {
+            if (data) {
+                setOdds(data);
+            }
+        });
+
+        return () => {
+            socket.off(`fixture:${fixtureId}`);
+        };
+    }, [fixtureId]);
+
+
+    if (loading) return <Loading />;
+    if (error) return <p className="text-red-500">{error}</p>;
+    if (!odds?.data?.bookmakers?.length) {
         return (
             <div className="mt-6 text-center">
                 <h2 className="text-lg font-semibold text-white">Odds</h2>
@@ -24,21 +83,15 @@ const Odds = ({ leagueId, fixtureId }) => {
         );
     }
 
-    // Get all available bet types
-    const betTypes = [...new Set(matchOdds.bookmakers.flatMap((bookmaker) => bookmaker.bets.map((bet) => bet.name)))];
+    // Extract bet types from bookmakers
+    const betTypes = [...new Set(odds.data.bookmakers.flatMap(bookmaker => bookmaker.bets.map(bet => bet.name)))];
 
-    // Set the first bet type as default when the component mounts
-    // useEffect(() => {
-    //     if (betTypes.length > 0) {
-    //         setSelectedBet(betTypes[0]);
-    //     }
-    // }, [betTypes]);
     return (
         <div className="mt-6 text-center">
             <h2 className="text-xl font-semibold text-white mb-4">Odds</h2>
 
             <div className="flex overflow-x-auto scrollbar-hide space-x-4 border-gray-500">
-                {betTypes.map((betType) => (
+                {betTypes.map(betType => (
                     <button
                         key={betType}
                         onClick={() => setSelectedBet(betType)}
@@ -50,18 +103,16 @@ const Odds = ({ leagueId, fixtureId }) => {
                 ))}
             </div>
 
-            {/* Odds Table */}
             {selectedBet && (
                 <div className="mt-4">
-                    {matchOdds.bookmakers.map((bookmaker) => {
-                        const bet = bookmaker.bets.find((b) => b.name === selectedBet);
+                    {odds.data.bookmakers.map(bookmaker => {
+                        const bet = bookmaker.bets.find(b => b.name === selectedBet);
                         if (!bet) return null;
 
                         const isOpen = openBookmaker === bookmaker.id;
 
                         return (
                             <div key={bookmaker.id} className="mb-4">
-                                {/* Bookmaker Name and Toggle Button */}
                                 <div
                                     className={`flex justify-between items-center bg-secondary p-6 cursor-pointer transition ${isOpen ? "rounded-t-xl" : "rounded-xl"
                                         }`}
@@ -71,9 +122,8 @@ const Odds = ({ leagueId, fixtureId }) => {
                                     {isOpen ? <ChevronUp size={20} className="text-white" /> : <ChevronDown size={20} className="text-white" />}
                                 </div>
 
-                                {/* Bet Values Table (Visible if Open) */}
                                 {isOpen && (
-                                    <div className="overflow-hidden  transition-all duration-500 ease-in-out  bg-secondary backdrop-blur-lg  rounded-b-xl p-4">
+                                    <div className="overflow-hidden transition-all duration-500 ease-in-out bg-secondary backdrop-blur-lg rounded-b-xl p-4">
                                         <table className="w-full text-left text-sm">
                                             <thead>
                                                 <tr className="border-b border-gray-600 text-gray-300">
@@ -83,10 +133,7 @@ const Odds = ({ leagueId, fixtureId }) => {
                                             </thead>
                                             <tbody>
                                                 {bet.values.map((val, index) => (
-                                                    <tr
-                                                        key={index}
-                                                        className="border-b border-gray-700 transition-all duration-300"
-                                                    >
+                                                    <tr key={index} className="border-b border-gray-700 transition-all duration-300">
                                                         <td className="p-3 text-white font-medium">{val.value}</td>
                                                         <td className="p-3 text-blue-400 font-bold">{val.odd}</td>
                                                     </tr>

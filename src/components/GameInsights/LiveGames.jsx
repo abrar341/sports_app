@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Loading from "../Shared/Loading";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { EmptyState } from "../Shared/EmptyState";
+import { FaRegSadTear } from "react-icons/fa";
 // import { AFliveFixtures, liveFixtures } from "./live";
 
 export const LiveGames = ({ selectedGame }) => {
@@ -13,7 +15,7 @@ export const LiveGames = ({ selectedGame }) => {
     // Determine if it's soccer or American football
     const isSoccer = selectedGame === "soccer";
 
-    const { liveFixtures, fixturesLoading } = useSelector((state) => state.fixtures);
+    const { fixturesLoading, liveFixtures } = useSelector((state) => state.fixtures);
     const { AFliveFixtures, AFfixturesLoading } = useSelector((state) => state.fixtures);
 
     // Update selectedLeague when the game type changes
@@ -25,7 +27,6 @@ export const LiveGames = ({ selectedGame }) => {
             if (firstLeague) setSelectedLeague(firstLeague);
         }
     }, [selectedGame, liveFixtures, AFliveFixtures]); // Now listens to `selectedGame` changes
-
 
     // Extract unique leagues
     const leagues = isSoccer
@@ -79,9 +80,9 @@ export const LiveGames = ({ selectedGame }) => {
 
 
     return (
-        <section className="self-stretch h-full md:col-span-2 my-auto min-w-60 max-md:max-w-full">
+        <section className="self-stretch  h-full md:col-span-2 my-auto min-w-60 max-md:max-w-full">
             <div className="flex justify-between">
-                <h2 className="text-2xl flex items-center font-bold leading-none max-md:max-w-full text-white">
+                <h2 className="text-2xl flex h-full items-center font-bold leading-none max-md:max-w-full text-white">
                     Live {isSoccer ? "Soccer" : "American Football"} Games
                 </h2>
 
@@ -110,7 +111,7 @@ export const LiveGames = ({ selectedGame }) => {
                     <div className="text-right">Current Score</div>
                 </div>
 
-                {(fixturesLoading || AFfixturesLoading) && paginatedGames.length === 0 ? (
+                {(fixturesLoading || AFfixturesLoading) && (!liveFixtures.data || !AFliveFixtures.data) ? (
                     <Loading />
                 ) : paginatedGames.length > 0 ? (
                     paginatedGames.map((match, index) => (
@@ -148,7 +149,7 @@ export const LiveGames = ({ selectedGame }) => {
                         </div>
                     ))
                 ) : (
-                    <p className="text-white text-center mt-4">No live matches playing yet</p>
+                    <EmptyState icon={FaRegSadTear} message="No live matches playing..." />
                 )}
 
                 {/* Pagination Controls */}

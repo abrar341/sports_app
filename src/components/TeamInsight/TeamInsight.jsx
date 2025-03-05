@@ -14,7 +14,7 @@ import { setTeamProfileLoading, setSelectedTeam, setSelectedTeamStats, setTeamSt
 import useFetchFavouritePlayers from "../../hooks/useFetchFavouritePlayers";
 import useTeamActions from "../../hooks/useTeamActions";
 import Loading from "../Shared/Loading";
-import { FaRegSadTear, FaSearch, FaSlidersH } from "react-icons/fa";
+import { FaChevronDown, FaRegSadTear, FaSearch, FaSlidersH } from "react-icons/fa";
 import { useCallback, useEffect, useState } from "react";
 import { normalizeSelectedTeamData } from "../../utils/normalizeData";
 import TeamInsightSearchBar from "../Shared/TeamInsightSearchBar"
@@ -69,15 +69,18 @@ const TeamInsight = () => {
                         sportsName={sportsName}
                         onSearch={SearchTeam}
                         onSelect={handleSelectTeam} />
-                    <div className=" ">
+                    <div className="relative w-1/6 ">
                         <select
                             value={sportsName}
                             onChange={(e) => setSportsName(e.target.value)}
-                            className="bg-primarySolid w-full  h-full text-white px-4 py-3 rounded-r-full focus:outline-none shadow-[0px_1px_55px_0px_rgba(84,84,84,0.06)]"
+                            className="bg-[rgba(255,255,255,0.32)] h-full w-full text-white px-4 py-2 md:py-3 
+                                                           rounded-r-full focus:outline-none appearance-none pr-10 text-end"
                         >
-                            <option value="soccer">Soccer</option>
-                            <option value="american-football">American Football</option>
+                            <option className="bg-gray-200 text-black" value="soccer">Soccer</option>
+                            <option className="bg-gray-100 text-black" value="american-football">American Football</option>
                         </select>
+                        {/* Dropdown Icon */}
+                        <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white h-3 pointer-events-none" />
                     </div>
                 </div>
                 <div className="col-span-6 md:col-span-1 ">
@@ -105,15 +108,11 @@ const TeamInsight = () => {
                             <TeamCard selectedTeam={normalizeSelectedTeamData(selectedTeam, selectedTeamSports)} favoritesLoading={favoritesLoading} />
                         </div>
 
-                        {/* Header */}
-                        <div className="col-span-12">
-                            <BarcelonaPlayersHeader name={selectedTeam?.name} />
-                        </div>
-
-                        {/* Player Cards
-                        <div className="col-span-12">
-                            <PlayerCardsList />
-                        </div> */}
+                        {
+                            selectedTeam?.players && selectedTeam?.players.length &&
+                            <div className="col-span-12">
+                                <PlayerCardsList sportsName={selectedTeamSports} teamName={selectedTeam?.name} players={selectedTeam?.players} />
+                            </div>}
 
                         {selectedTeamStats.length > 0 &&
                             <>
@@ -132,15 +131,15 @@ const TeamInsight = () => {
                                 </div>
 
                                 {/* Player Table */}
-                                <div className="col-span-12 lg:col-span-6">
+                                {/* <div className="col-span-12 lg:col-span-6">
                                     <PlayerTable
                                         headers={TeamInsightTableData.headers} // Pass headers
                                         rows={TeamInsightTableData.rows} // Pass rows
                                     />
-                                </div>
+                                </div> */}
 
                                 {/* Roster Area Chart */}
-                                <div className="col-span-12 h-full lg:col-span-6">
+                                <div className="col-span-12 h-full lg:col-span-12">
                                     <RosterAreaChart data={selectedTeamStats} />
                                 </div>
 

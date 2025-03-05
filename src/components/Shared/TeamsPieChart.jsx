@@ -20,7 +20,6 @@ const TeamsPieChart = ({ data }) => {
             ? data
             : data.filter(item => String(item.season) === selectedSeason);
 
-    console.log("Filtered Data:", filteredData); // Debugging line
 
     // Aggregate home and away wins
     const totalHomeWins = filteredData.reduce(

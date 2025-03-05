@@ -33,7 +33,6 @@ const TeamInsightSearchBar = ({ onSearch, sportsName, onSelect, placeholder = "S
     // Fetch results when debouncedQuery updates
     useEffect(() => {
         if (debouncedQuery.length > 2) {
-            console.log("hello i am here");
 
             setLoading(true);
             (async () => {

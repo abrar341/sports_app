@@ -1,8 +1,6 @@
 import api from '../api';
 
 export const searchPlayer = async (query, sportsName) => {
-    console.log("sportsName", sportsName);
-
     try {
         const endpoint = sportsName === "soccer"
             ? `/soccer/player/searchPlayer?query=${query}`
@@ -41,8 +39,6 @@ export const addFavoritePlayer = async (playerRef, playerId, sportName) => {
 };
 
 export const removeFavoritePlayer = async (playerRef, playerId, sportName) => {
-    console.log("playerRef, playerId, sportName", playerRef, playerId, sportName);
-
     try {
         const res = await api.delete(`/favourites/removePlayer`, {
             params: { playerRef, playerId, sportName } // Send params in the URL
@@ -67,8 +63,6 @@ export const getPlayerAggregatedStats = async (playerId) => {
 };
 
 export const getFavourites = async (sports) => {
-    console.log("sports1", sports);
-
     try {
         const res = await api.get(`/favourites/getFavourites/?sportName=${sports}`);
         return res.data;

@@ -21,7 +21,6 @@ const favoritesSlice = createSlice({
         },
         removePlayerFromFavorites: (state, action) => {
             state.favoritePlayers = state.favoritePlayers.filter(player => {
-                console.log("Checking player:", action.payload);
                 return player.playerId != action.payload;
             });
         },
@@ -32,7 +31,6 @@ const favoritesSlice = createSlice({
         },
         removeTeamFromFavorites: (state, action) => {
             state.favoriteTeams = state.favoriteTeams.filter(team => {
-                console.log("Checking team:", action.payload);
                 return team.teamId != action.payload;
             });
         },
@@ -58,7 +56,6 @@ const favoritesSlice = createSlice({
 
         removeFavoriteTeamsOfSelectedTeamSport: (state, action) => {
             state.favoriteTeamsOfSelectedTeamSport = state.favoriteTeamsOfSelectedTeamSport.filter(team => {
-                console.log("Checking team:", action.payload);
                 return team.teamId != action.payload;
             });
         },

@@ -80,12 +80,20 @@ const MatchCardsList = ({ selectedGame, selectedLeague }) => {
             : null;
         console.log("selectedFixtures", selectedFixtures);
 
-        if (selectedFixtures) {
-            setFilteredMatches(isSoccer ? selectedFixtures.fixtures : selectedFixtures.completedGames || []);
-        } else {
-            setFilteredMatches(mergedFixtures?.flatMap((league) => (isSoccer ? league.fixtures : league.completedGames)) || []);
-        }
+        let matches = selectedFixtures
+            ? isSoccer
+                ? selectedFixtures.fixtures
+                : selectedFixtures.completedGames || []
+            : mergedFixtures?.flatMap((league) =>
+                isSoccer ? league.fixtures : league.completedGames
+            ) || [];
+
+        // 🔥 Sort matches so that live matches come first
+        matches = matches.sort((a, b) => (b.live === true) - (a.live === true));
+
+        setFilteredMatches(matches);
     }, [selectedGame, selectedLeague, completedFixtures, AFcompletedFixtures, liveFixtures, AFliveFixtures]);
+
 
     useEffect(() => {
         const updateVisibleCount = () => {

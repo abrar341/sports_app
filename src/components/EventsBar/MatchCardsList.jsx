@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import MatchCard from "./MatchCard";
 import { normalizeMatchData } from "./normalizeMatchData";
-import { AFliveFixtures, liveFixtures } from "../GameInsights/live";
+// import { AFliveFixtures, liveFixtures } from "../GameInsights/live";
 
 const MatchCardsList = ({ selectedGame, selectedLeague }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -12,7 +12,7 @@ const MatchCardsList = ({ selectedGame, selectedLeague }) => {
     const [filteredMatches, setFilteredMatches] = useState([]);
 
     // Fetch match data from Redux
-    const { completedFixtures, AFcompletedFixtures, fixturesLoading } = useSelector((state) => state.fixtures);
+    const { completedFixtures, AFcompletedFixtures, fixturesLoading, AFliveFixtures, liveFixtures } = useSelector((state) => state.fixtures);
 
     // Function to normalize live fixtures
     const normalizeLiveFixtures = (liveData, isSoccer) => {

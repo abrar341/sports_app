@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import DropdownMenu from "../Shared/DropDownMenu";
 import { setSelectedLeague, setSelectedSport } from "../../slices/eventBarSlice";
 import EventDropDownData from "./EventDropDownData";
-import { AFliveFixtures, liveFixtures } from "../GameInsights/live";
+// import { AFliveFixtures, liveFixtures } from "../GameInsights/live";
 
 const EventBarDropDown = ({ type, fixturesLoading }) => {
     const dispatch = useDispatch();
@@ -12,7 +12,7 @@ const EventBarDropDown = ({ type, fixturesLoading }) => {
     const { selectedSport, selectedLeague } = useSelector((state) => state.eventBar);
 
     // Fetch fixtures data from Redux store
-    const { completedFixtures } = useSelector((state) => state.fixtures); // Soccer
+    const { completedFixtures, AFliveFixtures, liveFixtures } = useSelector((state) => state.fixtures); // Soccer
     const { AFcompletedFixtures } = useSelector((state) => state.fixtures); // American Football
 
     const dropdownRef = useRef(null);

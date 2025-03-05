@@ -2,8 +2,6 @@ import PropTypes from "prop-types";
 
 const MatchCard = ({ match }) => {
     const { homeTeam, awayTeam, live } = match; // Extract normalized match data
-    console.log("match", match);
-
     return (
         <div className="bg-secondary cursor-pointer text-white p-2 rounded-lg flex flex-col items-start w-full max-w-[200px]">
             <div className="text-xs w-full text-end mb-2 flex items-center justify-end space-x-1">

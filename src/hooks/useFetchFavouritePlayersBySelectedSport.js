@@ -10,7 +10,6 @@ const useFetchFavouritePlayersBySelectedSport = () => {
     const dispatch = useDispatch();
     const favoritePlayersOfSelectedPlayerSport = useSelector(state => state.favorites.favoritePlayersOfSelectedPlayerSport); // Redux
     const { selectedPlayerSport } = useSelector(state => state.selection); // Redux
-    console.log("selectedPlayerSports", selectedPlayerSport);
 
     const [loading, setLoading] = useState(true);
     const [favoritesLoading, setFavoritesLoading] = useState(true);

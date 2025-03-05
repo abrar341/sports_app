@@ -19,16 +19,14 @@ const SocialAuthButtons = () => {
     try {
       const res = await fetch(`${SERVER_URL}/auth/google`, {
         method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: credential }),
       });
+
       const data = await res.json();
       console.log(data);
-      if (data.userInfo) {
-        dispatch(setCredentials(data.userInfo));
+      if (data) {
+        dispatch(setCredentials(data));
         navigate('/dashboard');
       }
     } catch (err) {

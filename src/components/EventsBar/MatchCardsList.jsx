@@ -53,7 +53,6 @@ const MatchCardsList = ({ selectedGame, selectedLeague }) => {
         const isSoccer = selectedGame === "soccer";
         const completedData = isSoccer ? completedFixtures : AFcompletedFixtures;
         const liveData = isSoccer ? liveFixtures : AFliveFixtures;
-        console.log("completedData", AFcompletedFixtures);
 
         // Normalize live fixtures
         const normalizedLiveFixtures = normalizeLiveFixtures(liveData, isSoccer);
@@ -73,12 +72,10 @@ const MatchCardsList = ({ selectedGame, selectedLeague }) => {
                     (live) => !completedData?.data?.some((league) => league.leagueName === live.leagueName)
                 ) || []
             );
-        console.log("mergedFixtures", mergedFixtures);
 
         const selectedFixtures = selectedLeague
             ? mergedFixtures?.find((league) => league.leagueName === selectedLeague)
             : null;
-        console.log("selectedFixtures", selectedFixtures);
 
         let matches = selectedFixtures
             ? isSoccer

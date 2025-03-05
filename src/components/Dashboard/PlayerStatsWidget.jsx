@@ -5,8 +5,6 @@ import { EmptyState } from "../Shared/EmptyState";
 import { FaRegSadTear } from "react-icons/fa";
 
 const PlayerStatsWidget = ({ gameType }) => {
-    console.log("gameType", gameType);
-
     const labelColors = ["text-red-500", "text-green-500", "text-yellow-500", "text-blue-500", "text-purple-500"];
 
     const { favoritePlayersHighlights } = useSelector((state) => state.favorites);

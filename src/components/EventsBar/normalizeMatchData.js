@@ -16,11 +16,7 @@ export const normalizeMatchData = (match) => {
 
 // Helper function to extract scores based on match type
 const getFinalScore = (match, teamType) => {
-    console.log("match, teamType", match, teamType);
-
     if (match.scores && match.scores[teamType]?.total !== undefined) {
-        console.log("here we are");
-
         return match.scores[teamType].total; // American Football format
     }
     if (match.goals && match.goals[teamType] !== undefined) {

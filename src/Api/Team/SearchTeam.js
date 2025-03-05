@@ -28,7 +28,6 @@ export const getTeamProfile = async (teamId, sportsName) => {
 };
 
 export const addFavoriteTeam = async (teamRef, teamId, sportName) => {
-    console.log("teamId, sportName", teamId, sportName);
 
     try {
         const res = await api.post('/favourites/addTeam', {

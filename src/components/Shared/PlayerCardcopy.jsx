@@ -8,15 +8,17 @@ import { addPlayerToFavorites, removePlayerFromFavorites } from "../../slices/fa
 import { useState } from "react";
 import { calculatePlayerStats } from "../../utils/calculateStats";
 import Loading from "./Loading";
+import usePlayerActions from "../../hooks/usePlayerActions";
 
 
-const PlayerCard = ({ playerId, playerStats, playerRef, name, age, profileLoading, nationality, position, image }) => {
+const PlayerCard = ({ sportsName, playerId, playerStats, playerRef, name, profileLoading, group, position, image }) => {
 
     const [isLoading, setIsLoading] = useState(false);
     const isFavorite = useIsPlayerFavorite(playerId);
     const dispatch = useDispatch();
-
+    const player = { playerId, sportName: sportsName };
     const { totalGoals, assists, points } = calculatePlayerStats(playerStats);
+    const { handleSearch, handleSelectPlayer, handleSelectAmericanFootballPlayer } = usePlayerActions();
 
     const handleAddFavorite = async () => {
         setIsLoading(true);
@@ -75,7 +77,9 @@ const PlayerCard = ({ playerId, playerStats, playerRef, name, age, profileLoadin
     const { teamStatsLoading, playerProfileLoading } = useSelector((state) => state.loading);
 
     return teamStatsLoading || playerProfileLoading ? <Loading /> : (
-        <div className="relative bg-secondary p-6 h-[320px] rounded-xl flex flex-col items-center shadow-lg">
+        <div onClick={() => {
+            handleSelectAmericanFootballPlayer(player)
+        }} className="relative cursor-pointer bg-secondary p-6  rounded-xl flex flex-col items-center shadow-lg">
             {
                 profileLoading ? <div className="flex w-full h-full justify-center items-center py-4">
                     <div className="w-6 h-6 border-4 border-primarySolid border-t-secondary rounded-full animate-spin"></div>
@@ -86,9 +90,9 @@ const PlayerCard = ({ playerId, playerStats, playerRef, name, age, profileLoadin
                             src={image || "https://media.api-sports.io/football/players/198360.png"} // Fallback Image
                             loading="lazy"
                             alt={name}
-                            className="w-20 h-20 object-cover rounded-full mb-2 border-4 border-blue-700 shadow-md"
+                            className="w-20 h-20 object-cover rounded-full mb-4 border-4 border-blue-700 shadow-md"
                         />
-                        <div className=" top-5 absolute right-5">
+                        {/* <div className=" top-5 absolute right-5">
                             {isLoading ? (
                                 <div className="w-6 h-6  border-4 border-gray-400 border-t-white rounded-full animate-spin"></div>
                             ) : isFavorite ? (
@@ -96,33 +100,20 @@ const PlayerCard = ({ playerId, playerStats, playerRef, name, age, profileLoadin
                             ) : (
                                 <MdOutlineFavoriteBorder onClick={handleAddFavorite} className="cursor-pointer w-6 h-6" />
                             )}
-                        </div>
+                        </div> */}
 
-                        <h3 className="text-lg font-bold text-white">{name}</h3>
-                        <p className="text-sm text-gray-400 mb-2">{getAge(age) || 0} Years Old</p>
-                        {/* Player Details */}
-                        <div className="flex justify-between w-full text-sm text-gray-300 mb-4">
-                            <p>
-                                Nationality: <span className="text-white font-semibold">{nationality}</span>
+                        <h3 className="text-lg mb-2 font-bold text-white">{name}</h3>
+
+                        <div className="flex justify-between w-full text-sm text-gray-300">
+                            <p className="flex flex-col items-center">
+                                <span className=" text-center font-semibold text-red-500">
+                                    Group</span> <span className="text-white font-semibold">{group}</span>
                             </p>
-                            <p>
-                                Position: <span className="text-white font-semibold">{position}</span>
+                            <div className="shrink-0 self-stretch my-auto w-0 h-9 border border-gray-500" />
+                            <p className="flex flex-col items-center">
+                                <span className=" text-center font-semibold text-green-500">
+                                    Position</span> <span className="text-white font-semibold">{position}</span>
                             </p>
-                        </div>
-                        {/* Player Stats */}
-                        <div className="flex justify-between w-full border-t border-blue-800 pt-4">
-                            <div className="text-center">
-                                <p className="text-sm text-gray-300">Total Goals</p>
-                                <p className="text-lg font-bold text-red-400">{totalGoals || 0}</p>
-                            </div>
-                            <div className="text-center">
-                                <p className="text-sm text-gray-300">Assists</p>
-                                <p className="text-lg font-bold text-green-400">{assists || 0}</p>
-                            </div>
-                            <div className="text-center">
-                                <p className="text-sm text-gray-300">Points</p>
-                                <p className="text-lg font-bold text-blue-400">{points || 0}</p>
-                            </div>
                         </div>
                     </>}
         </div>

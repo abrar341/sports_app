@@ -1,8 +1,8 @@
 const EventDropdownData = [
-    { id: 1, label: "Event 1" },
-    { id: 2, label: "Event 2" },
-    { id: 3, label: "Event 3" },
-    { id: 4, label: "Event 4" },
+    { id: 1, sport: "soccer", label: "soccer" },
+    { id: 2, sport: "american-football", label: "american-football" },
+    // { id: 3, sport: "basketball", label: "Basketball" },
+
 ];
 
 export default EventDropdownData;

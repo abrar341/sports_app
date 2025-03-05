@@ -8,13 +8,11 @@ import playerData from './PlayerData.js'
 
 const LandingPage = () => {
 
-
-
     return (
         <div className="min-h-screen bg-gradient-to-b from-blue-950 to-blue-900">
             <EventsBar />
             <MainHeader />
-            <div className="mt-5">
+            <div className="text-center text-white mt-5">
                 Landing Page
             </div>
         </div>

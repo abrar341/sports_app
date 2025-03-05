@@ -17,6 +17,8 @@ export default {
         // Search Bar & Buttons
         searchBarBg: "rgba(255,255,255,0.32)",  // Search Bar Background
         searchBtnBg: "#0147B9",   // Search Button Background
+        options: "bg-[rgba(255,255,255,0.32)]"
+
 
       },
       backgroundImage: {

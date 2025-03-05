@@ -85,7 +85,7 @@ const renderSoccerStats = (stat) => (
 
 const renderFootballStats = (stat) => (
     <div className="grid grid-cols-2 md:grid-cols-3  gap-6">
-        {stat.statistics.map((category) => (
+        {stat?.statistics.map((category) => (
             <StatCard key={category._id} title={category.category} icon={<FaFootballBall className="text-red-500" />}>
                 {category.stats.slice(0, 5).map((item) => (
                     <StatItem key={item._id} label={item.name} value={item.value} />

@@ -37,8 +37,6 @@ export const fetchPlayerData = createAsyncThunk(
     }
 );
 
-
-
 const initialState = {
     selectedPlayer: null,
     selectedTeam: null,

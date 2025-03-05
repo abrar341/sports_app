@@ -1,13 +1,5 @@
 const MatchCardsData = [
-    {
-        team1: "AUS-W",
-        team1Flag: "/public/assets/australia.png",
-        score1: "298/6",
-        team2: "IND-W",
-        team2Flag: "/public/assets/india.png",
-        score2: "215",
-        overs: "(45.1/50 ov, target 299)",
-    },
+
     {
         team1: "CFC",
         team1Flag: "public/assets/australia.png",

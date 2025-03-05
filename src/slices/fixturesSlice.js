@@ -1,9 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getAFCompletedFixtures, getAFLiveFixtures, getAFUpcomingFixtures, getCompletedFixtures, getLiveFixtures, getUpcomingFixtures, getUpcomingFixturesOdds } from "../Api/Fixtures/get/fixtures";
-// import { setFixturesLoading } from "./index.js";
-import { io } from "socket.io-client";
-
-const socket = io("http://localhost:3000"); // Change to your backend URL
+import { getAFCompletedFixtures, getAFLiveFixtures, getAFUpcomingFixtures, getCompletedFixtures, getLiveFixtures, getUpcomingFixtures } from "../Api/Fixtures/get/fixtures";
 
 export const fetchFixtures = createAsyncThunk(
     "fixtures/fetchFixtures",
@@ -23,12 +19,12 @@ export const fetchFixtures = createAsyncThunk(
                 dispatch(setLiveFixtures(res));
             }).catch((err) => console.error("Error fetching live fixtures:", err));
 
-            const fetchUpcomingOdds = getUpcomingFixturesOdds().then((res) => {
-                dispatch(setUpcomingFixturesOdds(res));
-            }).catch((err) => console.error("Error fetching upcoming fixtures odds:", err));
+            // const fetchUpcomingOdds = getUpcomingFixturesOdds().then((res) => {
+            //     dispatch(setUpcomingFixturesOdds(res));
+            // }).catch((err) => console.error("Error fetching upcoming fixtures odds:", err));
 
             // Wait for all promises to complete (but dispatches happen as each one resolves)
-            await Promise.allSettled([fetchUpcoming, fetchCompleted, fetchLive, fetchUpcomingOdds]);
+            await Promise.allSettled([fetchUpcoming, fetchCompleted, fetchLive]);
 
         } catch (error) {
             console.error("Error fetching fixtures:", error);
@@ -148,18 +144,3 @@ const fixturesSlice = createSlice({
 
 export const { setUpcomingFixtures, setLiveFixtures, setUpcomingFixturesOdds, setFixturesLoading, setCompletedFixtures, resetFixtures, setAFUpcomingFixtures, setAFLiveFixtures, setAFCompletedFixtures, setGameInsightSelectedGame } = fixturesSlice.actions;
 export default fixturesSlice.reducer;
-
-export const initializeScoreUpdates = () => (dispatch) => {
-    socket.on("upcomingFixtures", (data) => {
-        dispatch(setUpcomingFixtures(data));
-    });
-
-    socket.on("liveFixtures", (data) => {
-        dispatch(setLiveFixtures(data));
-    });
-
-    socket.on("soccerupcomingFixtureOdds", (data) => {
-        dispatch(setUpcomingFixturesOdds(data));
-    });
-};
-

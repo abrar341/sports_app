@@ -3,6 +3,7 @@ import { FaRegSadTear, FaSearch, FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import Loading from "./Loading";
+import { EmptyState } from "./EmptyState";
 
 const TeamsCardList = ({ title, favoritesLoading, favoritePlayersSports, onDelete, onSelect, isLoading }) => {
     const items = useSelector((state) => state.favorites.favoriteTeams);
@@ -33,10 +34,7 @@ const TeamsCardList = ({ title, favoritesLoading, favoritePlayersSports, onDelet
 
             {favoritesLoading ? <Loading /> : <div className="space-y-4">
                 {items?.length === 0 ? (
-                    <div className="flex flex-col rounded-xl items-center justify-center p-6 text-gray-400">
-                        <FaRegSadTear className="w-10 h-10 mb-2 rounded-xl" />
-                        <p>No favorite teams added yet.</p>
-                    </div>
+                    <EmptyState icon={FaRegSadTear} message="No favorite teams added yet." />
                 ) : filteredTeams?.length > 0 ? (
                     filteredTeams.map((item) => (
                         <div

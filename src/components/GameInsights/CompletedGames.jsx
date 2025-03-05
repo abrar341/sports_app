@@ -3,6 +3,8 @@ import { formatDateTime } from "./UpcomingGames";
 import Loading from "../Shared/Loading";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { EmptyState } from "../Shared/EmptyState";
+import { FaRegSadTear } from "react-icons/fa";
 
 export const CompletedGames = ({ selectedGame }) => {
     const navigate = useNavigate();
@@ -10,7 +12,10 @@ export const CompletedGames = ({ selectedGame }) => {
     const [selectedLeague, setSelectedLeague] = useState(null);
 
     // Fetch completed fixtures from Redux store
+
+    //soccer
     const { completedFixtures, fixturesLoading } = useSelector((state) => state.fixtures); // Soccer
+    //american-football
     const { AFcompletedFixtures, AFfixturesLoading } = useSelector((state) => state.fixtures); // American Football
 
     const isSoccer = selectedGame === "soccer";
@@ -80,9 +85,9 @@ export const CompletedGames = ({ selectedGame }) => {
                     <div>Score</div>
                     <div>Date</div>
                 </div>
-
-                {loading && paginatedGames.length === 0 ? (
+                {(fixturesLoading || AFfixturesLoading) && (!completedFixtures.data || !AFcompletedFixtures.data) ? (
                     <Loading />
+
                 ) : paginatedGames.length > 0 ? (
                     paginatedGames.map((game, index) => (
                         <div
@@ -119,7 +124,7 @@ export const CompletedGames = ({ selectedGame }) => {
                         </div>
                     ))
                 ) : (
-                    <p className="text-white mt-4">No completed matches to show</p>
+                    <EmptyState icon={FaRegSadTear} message="No completed matches to show" />
                 )}
 
                 {/* Pagination Controls */}

@@ -31,14 +31,14 @@ const SignInComponent = () => {
     };
 
     return (
-        <div className="h-full w-full bg-primary flex flex-col items-center justify-center px-2 py-8 md:px-16 md:py-12 lg:py-16">
-            <div className="text-center mt-6 ">
-                <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Welcome Back!</h1>
-                <p className="text-white/75 text-sm md:text-base">
+        <div className="h-full px-10 col-span-5 md:col-span-5 h-screen w-full bg-primary flex flex-col  items-center justify-center">
+            <div className="text-center mt-4 mb-6 ">
+                <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Nice To See You!</h1>
+                <p className="text-white/75 text-sm ">
                     Please enter your email and password to sign in.
                 </p>
             </div>
-            <div className="w-full 2xl:w-[80%] p-6 md:p-10 rounded-lg">
+            <div className="realtive px-10">
                 <AuthCard>
                     <AuthForm
                         formType="signin"

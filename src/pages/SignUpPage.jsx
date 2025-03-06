@@ -1,10 +1,23 @@
+import { useNavigate } from 'react-router-dom';
 import SignUpComponent from '../components/Auth/SignUpComponent/SignUpComponent';
 
 const SignUpPage = () => {
+    const navigate = useNavigate();
+
     return (
-        <div className="h-screen flex flex-col-reverse lg:grid lg:grid-cols-2 overflow-hidden">
+        <div className=" flex flex-col-reverse md:grid md:grid-cols-12 overflow-hidden">
+            <div
+                className="absolute top-5 left-5 z-50 cursor-pointer"
+                onClick={() => navigate('/')}
+            >
+                <img
+                    src="/assets/shield.png" // Replace with the correct path
+                    alt="Home"
+                    className="w-12 h-12"
+                />
+            </div>
             {/* Left Section */}
-            <div className="relative h-[40vh] lg:h-screen">
+            <div className="relative col-span-7  h-screen">
                 <img
                     src="/assets/sign-up.png" // Updated path
                     alt="Signup"
@@ -16,9 +29,9 @@ const SignUpPage = () => {
             </div>
 
             {/* Right Section */}
-            <div className="flex items-center justify-center bg-gradient-to-b from-blue-800 to-blue-900 h-[60vh] lg:h-screen">
-                <SignUpComponent />
-            </div>
+            {/* <div className="flex items-center justify-center bg-gradient-to-b from-blue-800 to-blue-900 h-[60vh] lg:h-screen"> */}
+            <SignUpComponent />
+            {/* </div> */}
         </div>
     );
 };

@@ -23,9 +23,10 @@ const SocialAuthButtons = () => {
         body: JSON.stringify({ token: credential }),
       });
 
+      console.log("res", res);
       const data = await res.json();
-      console.log(data);
-      if (data) {
+      console.log("res", data);
+      if (data.success === true && data) {
         dispatch(setCredentials(data));
         navigate('/dashboard');
       }

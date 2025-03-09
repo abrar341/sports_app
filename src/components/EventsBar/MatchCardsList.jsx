@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import MatchCard from "./MatchCard";
 import { normalizeMatchData } from "./normalizeMatchData";
-// import { AFliveFixtures, liveFixtures } from "../GameInsights/live";
+// import { AFliveFixtures } from "../GameInsights/live";
 
 const MatchCardsList = ({ selectedGame, selectedLeague }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -12,41 +12,58 @@ const MatchCardsList = ({ selectedGame, selectedLeague }) => {
     const [filteredMatches, setFilteredMatches] = useState([]);
 
     // Fetch match data from Redux
-    const { completedFixtures, AFcompletedFixtures, fixturesLoading, AFliveFixtures, liveFixtures } = useSelector((state) => state.fixtures);
+    const { completedFixtures, AFcompletedFixtures, fixturesLoading, liveFixtures, AFliveFixtures } = useSelector((state) => state.fixtures);
+    console.log("liveFixtures", liveFixtures);
 
-    // Function to normalize live fixtures
     const normalizeLiveFixtures = (liveData, isSoccer) => {
-        return isSoccer
-            ? liveData?.data?.map((match) => ({
-                leagueName: match.league.name,
-                season: match.league.season,
-                fixtures: [
-                    {
-                        matchId: match.fixture.id,
-                        date: match.fixture.date,
-                        venue: match.fixture.venue,
-                        status: match.fixture.status,
-                        teams: match.teams,
-                        score: match.goals,
-                        live: true
-                    },
-                ],
-            }))
-            : liveData?.data?.map((league) => ({
-                leagueName: league.leagueName,
-                season: league.season,
-                completedGames: league.liveGames.map((game) => ({
-                    matchId: game.gameId,
-                    date: game.date,
-                    venue: game.venue,
-                    status: game.status,
-                    teams: game.teams,
-                    scores: game.scores,
-                    live: true
+        if (!liveData?.data) return [];
 
-                })),
-            }));
+        if (isSoccer) {
+            const leagueMap = new Map();
+
+            liveData.data.forEach((match) => {
+                const leagueId = match.league.id;
+
+                if (!leagueMap.has(leagueId)) {
+                    leagueMap.set(leagueId, {
+                        leagueName: match.league.name,
+                        season: match.league.season,
+                        fixtures: [],
+                    });
+                }
+
+                leagueMap.get(leagueId).fixtures.push({
+                    matchId: match.fixture.id,
+                    leagueId: match.league.id,
+                    date: match.fixture.date,
+                    venue: match.fixture.venue,
+                    status: match.fixture.status,
+                    teams: match.teams,
+                    score: match.goals,
+                    live: true,
+                });
+            });
+
+            return Array.from(leagueMap.values());
+        }
+
+        // Keep the non-soccer part unchanged
+        return liveData.data.map((league) => ({
+            leagueName: league.leagueName,
+            season: league.season,
+            completedGames: league.liveGames.map((game) => ({
+                leagueId: game.league.leagueId,
+                matchId: game.gameId,
+                date: game.date,
+                venue: game.venue,
+                status: game.status,
+                teams: game.teams,
+                scores: game.scores,
+                live: true,
+            })),
+        }));
     };
+
 
     useEffect(() => {
         if (!selectedGame) return;
@@ -57,22 +74,27 @@ const MatchCardsList = ({ selectedGame, selectedLeague }) => {
         // Normalize live fixtures
         const normalizedLiveFixtures = normalizeLiveFixtures(liveData, isSoccer);
 
+        console.log("normalizedLiveFixtures", normalizedLiveFixtures);
+
         // Merge live and completed fixtures
-        const mergedFixtures = completedData?.data
-            ?.map((league) => {
+        const mergedFixtures = (completedData?.data || []) // Ensure completedData.data is always an array
+            .map((league) => {
                 const liveLeague = normalizedLiveFixtures?.find((live) => live.leagueName === league.leagueName);
                 return {
                     ...league,
-                    fixtures: [...(league.fixtures || []), ...(liveLeague?.fixtures || [])],
-                    completedGames: [...(league.completedGames || []), ...(liveLeague?.completedGames || [])],
+                    fixtures: [...(league.fixtures ?? []), ...(liveLeague?.fixtures ?? [])],
+                    completedGames: [...(league.completedGames ?? []), ...(liveLeague?.completedGames ?? [])], // Ensure completedGames is always an array
                 };
             })
             .concat(
                 normalizedLiveFixtures?.filter(
-                    (live) => !completedData?.data?.some((league) => league.leagueName === live.leagueName)
+                    (live) => !(completedData?.data || []).some((league) => league.leagueName === live.leagueName)
                 ) || []
             );
 
+
+
+        console.log("mergedFixtures", mergedFixtures);
         const selectedFixtures = selectedLeague
             ? mergedFixtures?.find((league) => league.leagueName === selectedLeague)
             : null;

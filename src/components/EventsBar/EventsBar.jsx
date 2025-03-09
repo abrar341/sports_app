@@ -12,13 +12,17 @@ const EventsBar = () => {
     const { liveFixtures, upcomingFixtures, AFupcomingFixtures, completedFixtures, AFcompletedFixtures, fixturesLoading } = useSelector((state) => state.fixtures);
 
     useEffect(() => {
-        if (!completedFixtures.data || !AFcompletedFixtures.data) {
-            if (selectedSport === 'soccer') {
+
+        if (selectedSport === 'soccer') {
+            if (!upcomingFixtures.data) {
                 dispatch(fetchFixtures());
-            } else if (selectedSport === 'american-football') {
+            }
+        } else if (selectedSport === 'american-football') {
+            if (!AFcompletedFixtures.data) {
                 dispatch(fetchAFFixtures());
             }
         }
+
     }, [selectedSport]);
 
     return (

@@ -6,12 +6,16 @@ const DashboardPage = () => {
     const location = useLocation();
 
     // Define routes where `EventsBar` should be hidden
-    const hiddenRoutes = ["/subscription", "/dashboard/setting", "/dashboard/account-setting", "/dashboard/player-team-favourites"];
+    // const hiddenRoutes = ["/subscription", "/dashboard/setting", "/dashboard/account-setting", "/dashboard/player-team-favourites"];
+    // Hide EventsBar if the path includes "/subscription"
+
+    const shouldHideEventsBar = location.pathname.includes("/subscription") ||
+        ["/dashboard/setting", "/dashboard/account-setting", "/dashboard/player-team-favourites"].includes(location.pathname);
 
     return (
         <div className="overflow-clip">
             {/* Show EventsBar only if the current path is NOT in hiddenRoutes */}
-            {!hiddenRoutes.includes(location.pathname) && <EventsBar />}
+            {!shouldHideEventsBar && <EventsBar />}
             <Header />
             <div>
                 {/* Render nested routes dynamically */}

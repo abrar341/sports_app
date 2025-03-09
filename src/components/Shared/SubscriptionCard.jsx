@@ -1,12 +1,71 @@
 import PropTypes from "prop-types";
-import { FaArrowRight } from "react-icons/fa"; // Importing arrow icon
+import { useSelector } from "react-redux";
+import { useState } from "react";
+import { FaArrowRight, FaCheck, FaTimes } from "react-icons/fa";
+import { cancelSubscription, createCheckoutSession } from "../../Api/Stripe/stripe";
 
-const SubscriptionCard = ({ planName, price, duration, features, buttonText, isActive }) => {
+const ActionButton = ({ onClick, loading, children, icon, disabled, className }) => (
+    <button
+        onClick={onClick}
+        className={`w-full py-2 text-sm rounded-full flex items-center justify-center gap-2 ${className} transition-all`}
+        disabled={loading || disabled}
+    >
+        {loading ? (
+            <div className="flex rounded-xl justify-center items-center">
+                <div className="w-5 h-5 border-4 border-primarySolid border-t-secondary rounded-full animate-spin"></div>
+            </div>
+        ) : (
+            <>
+                {children}
+                {icon}
+            </>
+        )}
+    </button>
+);
+
+const SubscriptionCard = ({ planName, price, duration, features, buttonText, priceId, subscriptionPlan }) => {
+    const { email } = useSelector((state) => state.auth.userInfo.data);
+    const { userInfo } = useSelector((state) => state.auth);
+    const [isCancelLoading, setIsCancelLoading] = useState(false);
+
+    const [loading, setLoading] = useState(false);
+
+    const activePlan = userInfo.data.subscriptionPlan === subscriptionPlan;
+    const isActive = userInfo.data.subscriptionStatus === 'active';
+
+    const handleSubscribe = async () => {
+        if (!email) {
+            console.error("User email not found.");
+            return;
+        }
+        setLoading(true);
+        try {
+            const session = await createCheckoutSession(email, priceId, true, subscriptionPlan);
+            if (session?.data?.sessionUrl) {
+                window.location.href = session.data.sessionUrl;
+            }
+        } catch (error) {
+            console.error("Error creating checkout session", error.response?.data?.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleCancelSubscription = async () => {
+        try {
+            setIsCancelLoading(true);
+            console.log("Cancelling Subscription...");
+            await cancelSubscription(email); // Replace userEmail with actual email
+            console.log("Subscription Cancelled Successfully");
+        } catch (error) {
+            console.error("Error cancelling subscription:", error);
+        } finally {
+            setIsCancelLoading(false);
+        }
+    };
+
     return (
-        <div
-            className={`col-span-12 sm:col-span-6 lg:col-span-4 p-6 rounded-2xl border ${isActive ? "border-blue-400 bg-primarySolid text-white" : "border-gray-400 bg-[#01183A] text-white"
-                } shadow-lg transition-transform transform hover:scale-100`}
-        >
+        <div className={`col-span-12 sm:col-span-6 lg:col-span-4 p-6 rounded-2xl border ${activePlan ? "border-blue-400 bg-primarySolid text-white" : "border-gray-400 bg-[#01183A] text-white"} shadow-lg transition-transform transform hover:scale-100`}>
             <h2 className="text-lg font-semibold mb-2">{planName}</h2>
             <p className="text-2xl font-semibold mb-1">{price}</p>
             <p className="text-lg mb-4">{duration}</p>
@@ -14,31 +73,27 @@ const SubscriptionCard = ({ planName, price, duration, features, buttonText, isA
             <ul className="space-y-2 mb-6">
                 {features.map((feature, index) => (
                     <li key={index} className="flex text-base items-center">
-                        <svg
-                            className="w-5 h-5 mr-2 text-gray-300"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M5 13l4 4L19 7"
-                            />
+                        <svg className="w-5 h-5 mr-2 text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                         <span>{feature}</span>
                     </li>
                 ))}
             </ul>
-            <button
-                className={`w-full py-2 text-sm rounded-full  flex items-center justify-center gap-2 ${isActive ? "bg-black hover:bg-gray-800" : "bg-blue-600 hover:bg-blue-500"
-                    } transition-all`}
-            >
-                {buttonText}
-                <FaArrowRight /> {/* Arrow Icon */}
-            </button>
+            {!activePlan || !isActive ? (
+                <ActionButton onClick={handleSubscribe} isActive={activePlan} loading={loading} icon={<FaArrowRight />} className="bg-blue-600 hover:bg-blue-500">
+                    {buttonText}
+                </ActionButton>
+            ) : (
+                <div className="flex gap-2">
+                    <ActionButton isActive={activePlan} loading={loading} disabled className="bg-black cursor-not-allowed">
+                        Subscribed
+                    </ActionButton>
+                    <ActionButton onClick={handleCancelSubscription} isActive={activePlan} loading={isCancelLoading} icon={<FaTimes />} className="bg-red-600 hover:bg-red-500">
+                        Cancel
+                    </ActionButton>
+                </div>
+            )}
         </div>
     );
 };
@@ -49,7 +104,8 @@ SubscriptionCard.propTypes = {
     duration: PropTypes.string.isRequired,
     features: PropTypes.arrayOf(PropTypes.string).isRequired,
     buttonText: PropTypes.string.isRequired,
-    isActive: PropTypes.bool,
+    activePlan: PropTypes.bool,
+    priceId: PropTypes.string.isRequired,
 };
 
 export default SubscriptionCard;

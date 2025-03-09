@@ -1,5 +1,10 @@
+
 export const normalizeMatchData = (match) => {
+    // console.log("match", match);
+
     return {
+        leagueId: match.leagueId || match.league.leagueId || match.league.id,
+        fixtureId: match.gameId || match.matchId,
         live: match?.live ?? false, // Use match.live if it exists, otherwise set to false
         homeTeam: {
             name: getShortTeamName(match.teams?.home?.name) || "Unknown Team",

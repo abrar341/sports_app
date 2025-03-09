@@ -18,9 +18,9 @@ const ProfileSection = () => {
                     />
                 </div>
             </div>
-            <h2 className="text-xl font-semibold mt-4">{userInfo.data.user.name}</h2>
+            <h2 className="text-xl font-semibold mt-4">{userInfo.data.name}</h2>
             <p className="text-gray-300 hover:underline hover:text-blue-400 cursor-pointer">
-                {userInfo.data.user.email}
+                {userInfo.data.email}
             </p>
         </div>
     );

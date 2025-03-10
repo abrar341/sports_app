@@ -14,7 +14,7 @@ const EventsBar = () => {
     useEffect(() => {
 
         if (selectedSport === 'soccer') {
-            if (!upcomingFixtures.data) {
+            if (!completedFixtures.data) {
                 dispatch(fetchFixtures());
             }
         } else if (selectedSport === 'american-football') {

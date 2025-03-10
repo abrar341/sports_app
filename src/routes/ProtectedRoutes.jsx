@@ -9,12 +9,12 @@ const ProtectedRoute = ({ children }) => {
     const location = useLocation(); // ✅ Define location here
 
     useEffect(() => {
-        if (!userInfo) {
+        if (!userInfo || !userInfo.success || !userInfo.data) {
             navigate('/signin', { state: { from: location.pathname } }); // Redirect with previous location
         }
     }, [userInfo, navigate, location]);
 
-    if (!userInfo) {
+    if (!userInfo || !userInfo.data) {
         return null;
     }
 

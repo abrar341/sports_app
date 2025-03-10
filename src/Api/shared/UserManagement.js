@@ -2,7 +2,7 @@ import api from '../api';
 
 export const changeUsername = async (name, userId) => {
     try {
-        const res = await api.post('/auth/updateUsername', { name: name, userId: userId});
+        const res = await api.post('/auth/updateUsername', { name: name, userId: userId });
         return res.data;
     } catch (error) {
         console.log(error);

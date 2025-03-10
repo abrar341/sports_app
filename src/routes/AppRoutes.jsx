@@ -18,6 +18,8 @@ import { GameInsights } from '../components/GameInsights/GameInsights.jsx';
 import Main from '../components/Test/Main.jsx';
 import GameDetails from '../components/GameInsights/GameDetails.jsx';
 import MatchDetailPage from './MatchDetailPage.jsx';
+import Success from '../components/Subscription/Success.jsx';
+import Cancel from '../components/Subscription/Cancel.jsx';
 
 const AppRoutes = () => {
     const { userInfo } = useSelector((state) => state.auth);
@@ -26,6 +28,7 @@ const AppRoutes = () => {
         <Routes>
             {/* Authentication Routes */}
             <Route path="/" element={<GuestRoute><LandingPage /></GuestRoute>} />
+            <Route path="/news" element={<GuestRoute><LandingPage /></GuestRoute>} />
             <Route path="/signin" element={<GuestRoute><SignInPage /></GuestRoute>} />
             <Route path="/Test_login" element={<GuestRoute><Main /></GuestRoute>} />
             <Route path="/signup" element={<GuestRoute><SignUpPage /></GuestRoute>} />
@@ -44,6 +47,8 @@ const AppRoutes = () => {
                 <Route path="/games-insight" element={<GameInsights />} />
                 <Route path="/games-insight/:gameType/:leagueId/:status/:fixtureId" element={<GameDetails />} />
                 <Route path="/subscription" element={<SubscriptionMain />} />
+                <Route path="/subscription/success/:sessionId" element={<Success />} />
+                <Route path="/subscription/cancel/:sessionId" element={<Cancel />} />
                 <Route path="/betting-odds" element={<BettingOdds />} />
                 <Route path="/dashboard/player-team-favourites" element={<PlayerTeamFavourites />} />
                 <Route path="/dashboard/account-setting" element={<AccountSetting />} />

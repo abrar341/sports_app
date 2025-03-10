@@ -25,7 +25,7 @@ export const socketMiddleware = (store) => (next) => (action) => {
             store.dispatch(setAFLiveFixtures(data));
         });
 
-        console.log("✅ Socket connected and listening for updates...");
+        console.log("Socket connected and listening for updates...");
     }
 
     return next(action);

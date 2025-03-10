@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import MatchCard from "./MatchCard";
 import { normalizeMatchData } from "./normalizeMatchData";
-import { AFliveFixtures, liveFixtures } from "../GameInsights/live";
+// import { AFliveFixtures } from "../GameInsights/live";
 
 const MatchCardsList = ({ selectedGame, selectedLeague }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -11,34 +11,108 @@ const MatchCardsList = ({ selectedGame, selectedLeague }) => {
     const containerRef = useRef(null);
     const [filteredMatches, setFilteredMatches] = useState([]);
 
-    console.log("liveFixtures", liveFixtures);
-    console.log("AFliveFixtures", AFliveFixtures);
-
     // Fetch match data from Redux
-    const { completedFixtures, AFcompletedFixtures, fixturesLoading } = useSelector((state) => state.fixtures);
+    const { completedFixtures, AFcompletedFixtures, fixturesLoading, liveFixtures, AFliveFixtures } = useSelector((state) => state.fixtures);
+    console.log("liveFixtures", liveFixtures);
 
-    console.log("completedFixtures", completedFixtures);
-    console.log("AFcompletedFixtures", AFcompletedFixtures);
+    const normalizeLiveFixtures = (liveData, isSoccer) => {
+        if (!liveData?.data) return [];
+
+        if (isSoccer) {
+            const leagueMap = new Map();
+
+            liveData.data.forEach((match) => {
+                const leagueId = match.league.id;
+
+                if (!leagueMap.has(leagueId)) {
+                    leagueMap.set(leagueId, {
+                        leagueName: match.league.name,
+                        season: match.league.season,
+                        fixtures: [],
+                    });
+                }
+
+                leagueMap.get(leagueId).fixtures.push({
+                    matchId: match.fixture.id,
+                    leagueId: match.league.id,
+                    date: match.fixture.date,
+                    venue: match.fixture.venue,
+                    status: match.fixture.status,
+                    teams: match.teams,
+                    score: match.goals,
+                    live: true,
+                });
+            });
+
+            return Array.from(leagueMap.values());
+        }
+
+        // Keep the non-soccer part unchanged
+        return liveData.data.map((league) => ({
+            leagueName: league.leagueName,
+            season: league.season,
+            completedGames: league.liveGames.map((game) => ({
+                leagueId: game.league.leagueId,
+                matchId: game.gameId,
+                date: game.date,
+                venue: game.venue,
+                status: game.status,
+                teams: game.teams,
+                scores: game.scores,
+                live: true,
+            })),
+        }));
+    };
+
 
     useEffect(() => {
         if (!selectedGame) return;
         const isSoccer = selectedGame === "soccer";
-        const fixturesData = isSoccer ? completedFixtures : AFcompletedFixtures;
+        const completedData = isSoccer ? completedFixtures : AFcompletedFixtures;
+        const liveData = isSoccer ? liveFixtures : AFliveFixtures;
 
-        const allFixtures = fixturesData?.data?.flatMap((league) =>
-            isSoccer ? league.fixtures : league.completedGames || []
-        ) || [];
+        // Normalize live fixtures
+        const normalizedLiveFixtures = normalizeLiveFixtures(liveData, isSoccer);
 
+        console.log("normalizedLiveFixtures", normalizedLiveFixtures);
+
+        // Merge live and completed fixtures
+        const mergedFixtures = (completedData?.data || []) // Ensure completedData.data is always an array
+            .map((league) => {
+                const liveLeague = normalizedLiveFixtures?.find((live) => live.leagueName === league.leagueName);
+                return {
+                    ...league,
+                    fixtures: [...(league.fixtures ?? []), ...(liveLeague?.fixtures ?? [])],
+                    completedGames: [...(league.completedGames ?? []), ...(liveLeague?.completedGames ?? [])], // Ensure completedGames is always an array
+                };
+            })
+            .concat(
+                normalizedLiveFixtures?.filter(
+                    (live) => !(completedData?.data || []).some((league) => league.leagueName === live.leagueName)
+                ) || []
+            );
+
+
+
+        console.log("mergedFixtures", mergedFixtures);
         const selectedFixtures = selectedLeague
-            ? fixturesData?.data?.find((league) => league.leagueName === selectedLeague)
+            ? mergedFixtures?.find((league) => league.leagueName === selectedLeague)
             : null;
 
-        if (selectedFixtures) {
-            setFilteredMatches(isSoccer ? selectedFixtures.fixtures : selectedFixtures.completedGames || []);
-        } else {
-            setFilteredMatches(allFixtures);
-        }
-    }, [selectedGame, selectedLeague, completedFixtures, AFcompletedFixtures]);
+        let matches = selectedFixtures
+            ? isSoccer
+                ? selectedFixtures.fixtures
+                : selectedFixtures.completedGames || []
+            : mergedFixtures?.flatMap((league) =>
+                isSoccer ? league.fixtures : league.completedGames
+            ) || [];
+
+        // 🔥 Sort matches so that live matches come first
+        matches = matches.sort((a, b) => (b.live === true) - (a.live === true));
+
+        setFilteredMatches(matches);
+    }, [selectedGame, selectedLeague, completedFixtures, AFcompletedFixtures, liveFixtures, AFliveFixtures]);
+
 
     useEffect(() => {
         const updateVisibleCount = () => {
@@ -88,30 +162,12 @@ const MatchCardsList = ({ selectedGame, selectedLeague }) => {
                 style={{ gridTemplateColumns: `repeat(${visibleCount}, 1fr)` }}
             >
                 {fixturesLoading ? (
-                    // Skeleton Loader for Loading State
                     [...Array(visibleCount)].map((_, index) => (
                         <div
                             key={index}
                             className="bg-secondary animate-pulse p-2 rounded-lg flex flex-col items-start w-full max-w-[200px] h-[80px]"
                         >
-                            {/* if want the more good loading state */}
-                            {/* <div className="bg-gray-500 self-end h-3 w-10 rounded mb-2"></div>
-                            <div className="flex items-center justify-between w-full mb-1">
-                                <div className="flex items-center space-x-2">
-                                    <div className="bg-gray-500 w-5 h-5 rounded-full"></div>
-                                    <div className="bg-gray-500 h-3 w-10 rounded"></div>
-                                </div>
-                                <div className="bg-gray-500 h-3 w-6 rounded"></div>
-                            </div>
-                            <div className="flex items-center justify-between w-full">
-                                <div className="flex items-center space-x-2">
-                                    <div className="bg-gray-500 w-5 h-5 rounded-full"></div>
-                                    <div className="bg-gray-500 h-3 w-10 rounded"></div>
-                                </div>
-                                <div className="bg-gray-500 h-3 w-6 rounded"></div>
-                            </div> */}
-
-                            <div className="flex bg-secondary h-full  rounded-xl  w-full justify-center items-center py-4">
+                            <div className="flex bg-secondary h-full rounded-xl w-full justify-center items-center py-4">
                                 <div className="w-4 h-4 border-4 border-primarySolid border-t-secondary rounded-full animate-spin"></div>
                             </div>
                         </div>

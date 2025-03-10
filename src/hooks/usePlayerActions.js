@@ -33,13 +33,9 @@ const usePlayerActions = () => {
 
     // Function to fetch and set American football player data
     const handleSelectAmericanFootballPlayer = async (player) => {
-        console.log("player", player);
         const { playerId, sportName } = player;
-        console.log("sportName1", sportName);
-        console.log("selectedPlayerSports", selectedPlayerSports);
-        if (sportName && sportName !== selectedPlayerSports) {
-            console.log("sportName2", sportName);
 
+        if (sportName && sportName !== selectedPlayerSports) {
             dispatch(setSelectedPlayerSports(sportName))
             dispatch(setFavoritePlayersOfSelectedPlayerSport([]))
         }

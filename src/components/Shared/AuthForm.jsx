@@ -2,12 +2,14 @@ import PropTypes from 'prop-types';
 import SocialAuthButtons from './SocialAuthButtons';
 import { useState } from 'react';
 import AuthInput from './AuthInput';
+import { useNavigate } from 'react-router-dom';
 
 const AuthForm = ({ formType, buttonText, footerText, footerLink, onLogin, onSignup, error, isLoading }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [fieldErrors, setFieldErrors] = useState({});
+    const navigate = useNavigate();
 
 
     const validateFields = () => {
@@ -61,10 +63,13 @@ const AuthForm = ({ formType, buttonText, footerText, footerLink, onLogin, onSig
     return (
         <form
             onSubmit={handleSubmit}
-            className="flex flex-col items-center justify-center space-y-4 w-full"
+            className="flex space-y-3 px-5 py-7 pt-9 flex-col items-center justify-center"
         >
+            <p className="self-center text-center text-gray-300 text-sm leading-tight text-center text-white">
+                Register with
+            </p>
             <SocialAuthButtons />
-            <div className="text-center my-2 text-gray-500">or</div>
+            <p className="-w-full text-center text-gray-400">or</p>
 
             {formType === 'signup' && (
                 <>
@@ -73,6 +78,8 @@ const AuthForm = ({ formType, buttonText, footerText, footerLink, onLogin, onSig
                         placeholder="Your full name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
+                        label={"Name"}
+
                     />
                     {fieldErrors.name && (
                         <div className="text-red-500 text-sm">{fieldErrors.name}</div>
@@ -85,6 +92,7 @@ const AuthForm = ({ formType, buttonText, footerText, footerLink, onLogin, onSig
                     placeholder="Your email address"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    label={"Email"}
                 />
                 {fieldErrors.email && (
                     <div className="text-red-500 text-sm">{fieldErrors.email}</div>
@@ -96,6 +104,8 @@ const AuthForm = ({ formType, buttonText, footerText, footerLink, onLogin, onSig
                     placeholder="Your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    label={"Password"}
+
                 />
                 {fieldErrors.password && (
                     <div className="text-red-500 text-sm">{fieldErrors.password}</div>
@@ -121,9 +131,12 @@ const AuthForm = ({ formType, buttonText, footerText, footerLink, onLogin, onSig
 
             <p className="text-center mt-4 text-sm text-gray-500">
                 {footerText}{' '}
-                <a href={footerLink} className="text-blue-500 hover:underline">
+                <span
+                    className="text-blue-500 hover:underline cursor-pointer"
+                    onClick={() => navigate(formType === 'signin' ? '/signup' : '/signin')}
+                >
                     {formType === 'signin' ? 'Sign up' : 'Sign in'}
-                </a>
+                </span>
             </p>
         </form>
     );

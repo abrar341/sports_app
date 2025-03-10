@@ -42,8 +42,6 @@ export const getUpcomingFixturesOdds = async () => {
 };
 
 export const getFixtureById = async (fixtureId) => {
-    console.log("Fetching fixture with ID:", fixtureId);
-
     try {
         const res = await api.get(`/soccer/fixtures/fixtureById`, {
             params: { fixtureId }

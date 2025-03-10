@@ -42,7 +42,6 @@ export const normalizeSearchTeamData = (team, sport) => {
 
 export const normalizeSelectedPlayerData = (playerData, sport) => {
     if (!playerData) return null;
-    console.log("sport", sport);
 
     // Define different field mappings for each sport
     const sportMappings = {

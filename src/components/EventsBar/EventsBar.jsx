@@ -14,10 +14,13 @@ const EventsBar = () => {
         if (!completedFixtures.data || !AFcompletedFixtures.data) {
             if (selectedSport === 'soccer') {
                 dispatch(fetchFixtures());
-            } else if (selectedSport === 'american-football') {
+            }
+        } else if (selectedSport === 'american-football') {
+            if (!AFcompletedFixtures.data) {
                 dispatch(fetchAFFixtures());
             }
         }
+
     }, [selectedSport]);
 
     return (

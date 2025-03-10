@@ -26,8 +26,8 @@ SettingCard.propTypes = {
     iconColor: PropTypes.string,
 };
 
-SettingCard.defaultProps = {
-    iconColor: "white",
-};
+// SettingCard.defaultProps = {
+//     iconColor: "white",
+// };
 
 export default SettingCard;

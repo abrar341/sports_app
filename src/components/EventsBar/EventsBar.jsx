@@ -9,10 +9,10 @@ const EventsBar = () => {
     const dispatch = useDispatch();
 
 
-    const { liveFixtures, upcomingFixtures, AFupcomingFixtures, AFcompletedFixtures, completedFixtures, fixturesLoading } = useSelector((state) => state.fixtures);
+    const { AFcompletedFixtures, completedFixtures, fixturesLoading } = useSelector((state) => state.fixtures);
     useEffect(() => {
-        if (!completedFixtures.data || !AFcompletedFixtures.data) {
-            if (selectedSport === 'soccer') {
+        if (selectedSport === 'soccer') {
+            if (!completedFixtures.data) {
                 dispatch(fetchFixtures());
             }
         } else if (selectedSport === 'american-football') {

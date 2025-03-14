@@ -1,6 +1,6 @@
 
 export const normalizeMatchData = (match) => {
-    console.log("match", match);
+    // console.log("match", match);
 
     return {
         leagueId: match.leagueId || match.league.leagueId || match.league.id,

@@ -6,6 +6,8 @@ import { fetchAFFixtures, fetchFixtures } from "../../slices/fixturesSlice";
 
 const EventsBar = () => {
     const { selectedSport, selectedLeague } = useSelector((state) => state.eventBar);
+    const gameInsightSelectedGame = useSelector((state) => state.fixtures.gameInsightSelectedGame);
+
     const dispatch = useDispatch();
 
 

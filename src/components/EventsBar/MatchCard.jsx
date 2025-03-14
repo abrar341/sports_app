@@ -6,7 +6,6 @@ const MatchCard = ({ match }) => {
     const navigate = useNavigate()
     const { selectedSport } = useSelector((state) => state.eventBar);
     const { homeTeam, fixtureId, leagueId, awayTeam, live } = match; // Extract normalized match data
-    console.log("fixtureId", fixtureId, leagueId);
     const status = live ? "live" : "completed";
     const handleGameClick = (leagueId, fixtureId, status, selectedSport) => {
         navigate(`/games-insight/${selectedSport}/${leagueId}/${status}/${fixtureId}`);

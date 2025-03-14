@@ -21,15 +21,19 @@ export const GameInsights = () => {
     // Get selected game from Redux store
     const gameInsightSelectedGame = useSelector((state) => state.fixtures.gameInsightSelectedGame);
 
-    const { liveFixtures, upcomingFixtures, AFupcomingFixtures, completedFixtures, fixturesLoading } = useSelector((state) => state.fixtures);
+    const { liveFixtures, upcomingFixtures, AFupcomingFixtures, AFcompletedFixtures, completedFixtures, fixturesLoading } = useSelector((state) => state.fixtures);
+
     useEffect(() => {
-        if (!upcomingFixtures.data || !AFupcomingFixtures.data) {
-            if (gameInsightSelectedGame === 'soccer') {
+        if (gameInsightSelectedGame === 'soccer') {
+            if (!completedFixtures.data) {
                 dispatch(fetchFixtures());
-            } else if (gameInsightSelectedGame === 'american-football') {
+            }
+        } else if (gameInsightSelectedGame === 'american-football') {
+            if (!AFcompletedFixtures.data) {
                 dispatch(fetchAFFixtures());
             }
         }
+
     }, [gameInsightSelectedGame]);
 
 

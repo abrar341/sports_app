@@ -4,8 +4,6 @@ import { FaArrowRight } from "react-icons/fa";
 
 const Subscription = () => {
 
-    console.log("SubscriptionData", SubscriptionData);
-
     return (
         <div className="min-h-screen text-white py-4 px-6">
             <h1 className="text-center text-2xl font-bold mb-4">Subscription Plan</h1>

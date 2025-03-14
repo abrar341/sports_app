@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import MatchCard from "./MatchCard";
 import { normalizeMatchData } from "./normalizeMatchData";
-// import { AFliveFixtures } from "../GameInsights/live";
+// import { liveFixtures } from "../GameInsights/live";
 
 const MatchCardsList = ({ selectedGame, selectedLeague }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -12,10 +12,12 @@ const MatchCardsList = ({ selectedGame, selectedLeague }) => {
     const [filteredMatches, setFilteredMatches] = useState([]);
 
     // Fetch match data from Redux
-    const { completedFixtures, AFcompletedFixtures, fixturesLoading, liveFixtures, AFliveFixtures } = useSelector((state) => state.fixtures);
-    console.log("liveFixtures", liveFixtures);
+    const { completedFixtures, AFcompletedFixtures, fixturesLoading, AFliveFixtures, liveFixtures } = useSelector((state) => state.fixtures);
+    // console.log("liveFixtures", liveFixtures);
 
     const normalizeLiveFixtures = (liveData, isSoccer) => {
+
+
         if (!liveData?.data) return [];
 
         if (isSoccer) {
@@ -25,6 +27,7 @@ const MatchCardsList = ({ selectedGame, selectedLeague }) => {
                 const leagueId = match.league.id;
 
                 if (!leagueMap.has(leagueId)) {
+
                     leagueMap.set(leagueId, {
                         leagueName: match.league.name,
                         season: match.league.season,
@@ -74,7 +77,7 @@ const MatchCardsList = ({ selectedGame, selectedLeague }) => {
         // Normalize live fixtures
         const normalizedLiveFixtures = normalizeLiveFixtures(liveData, isSoccer);
 
-        console.log("normalizedLiveFixtures", normalizedLiveFixtures);
+        // console.log("normalizedLiveFixtures", normalizedLiveFixtures);
 
         // Merge live and completed fixtures
         const mergedFixtures = (completedData?.data || []) // Ensure completedData.data is always an array
@@ -94,7 +97,7 @@ const MatchCardsList = ({ selectedGame, selectedLeague }) => {
 
 
 
-        console.log("mergedFixtures", mergedFixtures);
+        // console.log("mergedFixtures", mergedFixtures);
         const selectedFixtures = selectedLeague
             ? mergedFixtures?.find((league) => league.leagueName === selectedLeague)
             : null;
@@ -142,6 +145,7 @@ const MatchCardsList = ({ selectedGame, selectedLeague }) => {
 
     const visibleCards = filteredMatches.slice(currentIndex, currentIndex + visibleCount);
     const normalizedMatches = visibleCards.map((match) => normalizeMatchData(match));
+    // console.log("normalizedMatches", normalizedMatches);
 
     return (
         <div className="relative w-full h-full bg-transparent rounded-lg overflow-hidden flex items-center">

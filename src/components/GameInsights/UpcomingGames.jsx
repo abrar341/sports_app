@@ -36,6 +36,7 @@ export const UpcomingGames = ({ selectedGame }) => {
     useEffect(() => {
         if (isSoccer && upcomingFixtures?.data?.length > 0) {
             setSelectedLeague(upcomingFixtures.data[0].leagueId);
+
         } else if (!isSoccer && AFupcomingFixtures?.data?.length > 0) {
             const firstLeague = AFupcomingFixtures.data
                 .flatMap((league) => league.upcomingGames)

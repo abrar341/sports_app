@@ -1,7 +1,7 @@
 const SubscriptionData = [
     {
         planName: "Standard Plan",
-        price: "$30.00",
+        price: "$100.00",
         duration: "/ 6 months",
         priceId: import.meta.env.VITE_SIXMONTHS_PRICE_ID, // Fetch from .env
         features: [
@@ -34,7 +34,7 @@ const SubscriptionData = [
     },
     {
         planName: "Premium Plan",
-        price: "$40.00",
+        price: "$200.00",
         duration: "/ 1 year",
         priceId: import.meta.env.VITE_YEARLY_PRICE_ID, // Fetch from .env
         features: [

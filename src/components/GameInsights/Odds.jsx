@@ -6,8 +6,10 @@ import Loading from "../Shared/Loading";
 import { useSelector } from "react-redux";
 // import { liveFixtures } from "./live";
 import { io } from "socket.io-client";
+import { SOCKET_URL } from "../../utils/constants";
 
-let socket = io("http://localhost:3000");
+let socket = io(SOCKET_URL);
+
 const Odds = () => {
     const { status, fixtureId } = useParams();
     const { fixturesLoading, liveFixtures } = useSelector((state) => state.fixtures);

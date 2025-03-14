@@ -1,7 +1,6 @@
 import { io } from "socket.io-client";
 import { setAFLiveFixtures, setAFUpcomingFixtures, setLiveFixtures, setUpcomingFixtures } from "../slices/fixturesSlice";
-
-const SOCKET_URL = "http://localhost:3000"; // Replace with your server URL
+import { SOCKET_URL } from "../utils/constants";
 
 let socket = null;
 

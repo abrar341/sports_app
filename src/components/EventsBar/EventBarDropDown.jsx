@@ -39,6 +39,8 @@ const EventBarDropDown = ({ type, fixturesLoading }) => {
             name: league.leagueName,
         })) || [];
 
+    // console.log("liveLeagues", liveLeagues);
+
     // Merge leagues from both completed and live fixtures (removing duplicates)
     const allLeagues = [...completedLeagues, ...liveLeagues].filter(
         (league, index, self) => index === self.findIndex((l) => l.name === league.name)

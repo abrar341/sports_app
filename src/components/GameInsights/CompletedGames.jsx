@@ -10,8 +10,8 @@ export const CompletedGames = ({ selectedGame }) => {
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedLeague, setSelectedLeague] = useState(null);
-
     // Fetch completed fixtures from Redux store
+    // console.log("selectedLeague", selectedLeague);
 
     //soccer
     const { completedFixtures, fixturesLoading } = useSelector((state) => state.fixtures); // Soccer
@@ -28,6 +28,7 @@ export const CompletedGames = ({ selectedGame }) => {
         id: isSoccer ? league.leagueId : league.leagueName, // Different structures
         name: isSoccer ? league.leagueName : league.leagueName,
     })) || [];
+    // console.log("leagues", leagues);
 
     useEffect(() => {
         if (fixturesData?.data?.length > 0) {
@@ -37,8 +38,9 @@ export const CompletedGames = ({ selectedGame }) => {
 
     // Get fixtures based on selected league
     const selectedFixtures = fixturesData?.data?.find((league) =>
-        isSoccer ? league.leagueId === selectedLeague : league.leagueName === selectedLeague
+        isSoccer ? Number(league.leagueId) === Number(selectedLeague) : league.leagueName === selectedLeague
     );
+    // console.log("selectedFixtures", selectedFixtures);
 
     // Extract games properly
     const games = isSoccer ? selectedFixtures?.fixtures || [] : selectedFixtures?.completedGames || [];

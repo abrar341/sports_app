@@ -31,6 +31,7 @@ const SubscriptionCard = ({ planName, price, duration, features, buttonText, pri
     const [loading, setLoading] = useState(false);
 
     const activePlan = userInfo.data.subscriptionPlan === subscriptionPlan;
+    const inTrailMode = userInfo.data.subscriptionPlan === "trial";
     const isActive = userInfo.data.subscriptionStatus === 'active';
 
     const handleSubscribe = async () => {
@@ -81,7 +82,7 @@ const SubscriptionCard = ({ planName, price, duration, features, buttonText, pri
                 ))}
             </ul>
             {!activePlan || !isActive ? (
-                <ActionButton onClick={handleSubscribe} isActive={activePlan} loading={loading} icon={<FaArrowRight />} className="bg-blue-600 hover:bg-blue-500">
+                <ActionButton disabled={inTrailMode} onClick={handleSubscribe} isActive={activePlan} loading={loading} icon={<FaArrowRight />} className="bg-blue-600 hover:bg-blue-500">
                     {buttonText}
                 </ActionButton>
             ) : (

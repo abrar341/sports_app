@@ -31,7 +31,8 @@ const SubscriptionCard = ({ planName, price, duration, features, buttonText, pri
     const [loading, setLoading] = useState(false);
 
     const activePlan = userInfo.data.subscriptionPlan === subscriptionPlan;
-    const inTrailMode = userInfo.data.subscriptionPlan === "trial";
+    // const inTrailMode = userInfo.data.subscriptionPlan === "trial";
+    const inTrailMode = false;
     const isActive = userInfo.data.subscriptionStatus === 'active';
 
     const handleSubscribe = async () => {

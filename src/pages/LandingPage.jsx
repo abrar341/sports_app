@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import EventsBar from '../components/EventsBar/EventsBar'
 import MainHeader from '../components/Header&Footer/MainHeader'
-import News from '../components/News/News.jsx'
-import PlayerStatistics from '../components/PlayersInsights/PlayerStats.jsx'
-import playerData from './PlayerData.js'
+import SportsAnalyticsHero from '../components/LandingPage/SportsAnalyticsHero.jsx'
+import SportsCategorySelector from '../components/LandingPage/SportsCategory/SportsCategorySelector.jsx'
+import TrendingNews from '../components/LandingPage/News/TrendingNews.jsx'
 
 
 const LandingPage = () => {
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-blue-950 to-blue-900">
+        <div className="min-h-screen">
+
             <EventsBar />
             <MainHeader />
-            <div className="text-center text-white mt-5">
-                Landing Page
+            <div className='bg-primary'>
+                <SportsAnalyticsHero />
+                <SportsCategorySelector />
+                <TrendingNews />
             </div>
         </div>
     )

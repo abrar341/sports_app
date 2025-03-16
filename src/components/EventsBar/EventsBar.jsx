@@ -26,7 +26,7 @@ const EventsBar = () => {
     }, [selectedSport]);
 
     return (
-        <div className="bg-[#001745]  text-white py-2 px-4 flex items-center justify-between ">
+        <div className="bg-[#001745] z-50 text-white py-2 px-4 flex items-center justify-between ">
             {/* Left Section */}
             <div className="flex w-[150px] mt-2 flex-col items-center space-y-2">
                 <EventBarDropDown type="sports" /> {/* Sports Dropdown */}
@@ -34,7 +34,7 @@ const EventsBar = () => {
             </div>
 
             {/* Middle Section */}
-            <div className="flex-1 mt-2 px-2 h-full flex items-center overflow-hidden">
+            <div className="flex-1  z-10 mt-2 px-2 w-full h-full flex items-center overflow-hidden">
                 <MatchCardsList selectedGame={selectedSport} selectedLeague={selectedLeague} />
             </div>
         </div>

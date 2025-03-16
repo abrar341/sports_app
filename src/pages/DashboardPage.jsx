@@ -16,6 +16,7 @@ const DashboardPage = () => {
         <div className="overflow-clip">
             {/* Show EventsBar only if the current path is NOT in hiddenRoutes */}
             {!shouldHideEventsBar && <EventsBar />}
+
             <Header />
             <div>
                 {/* Render nested routes dynamically */}

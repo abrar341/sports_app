@@ -132,7 +132,7 @@ export const UpcomingGames = ({ selectedGame }) => {
                         >
                             {/* Teams Section */}
                             <div className="flex items-center justify-center gap-4 w-full max-md:flex-col">
-                                <div className="flex items-center justify-center gap-2 w-1/3 text-center max-md:w-full">
+                                <div className="flex items-center justify-center md:justify-start gap-2 w-1/3 text-center max-md:w-full">
                                     <img
                                         src={isSoccer ? game.teams.home.logo : game.teams.home.logo}
                                         alt={isSoccer ? game.teams.home.name : game.teams.home.name}
@@ -143,7 +143,7 @@ export const UpcomingGames = ({ selectedGame }) => {
                                     </span>
                                 </div>
                                 <div className="text-sm font-semibold w-1/3 text-center max-md:w-full">VS</div>
-                                <div className="flex items-center justify-center gap-2 w-1/3 text-center max-md:w-full">
+                                <div className="flex items-center justify-center md:justify-start gap-2 w-1/3 text-center max-md:w-full">
                                     <img
                                         src={isSoccer ? game.teams.away.logo : game.teams.away.logo}
                                         alt={isSoccer ? game.teams.away.name : game.teams.away.name}

@@ -47,7 +47,7 @@ const AppRoutes = () => {
                 <Route path="/games-insight" element={<GameInsights />} />
                 <Route path="/games-insight/:gameType/:leagueId/:status/:fixtureId" element={<GameDetails />} />
                 <Route path="/subscription" element={<SubscriptionMain />} />
-                <Route path="/subscription/success/:sessionId" element={<Success />} />
+                <Route path="/subscription/success/:subcribtionPlan" element={<Success />} />
                 <Route path="/subscription/cancel/:sessionId" element={<Cancel />} />
                 <Route path="/betting-odds" element={<BettingOdds />} />
                 <Route path="/dashboard/player-team-favourites" element={<PlayerTeamFavourites />} />

@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import { FaArrowRight, FaCheck, FaTimes } from "react-icons/fa";
 import { cancelSubscription, createCheckoutSession } from "../../Api/Stripe/stripe";
+import { plans } from "../Subscription/adjustedDates";
 
 const ActionButton = ({ onClick, loading, children, icon, disabled, className }) => (
     <button
@@ -23,7 +24,7 @@ const ActionButton = ({ onClick, loading, children, icon, disabled, className })
     </button>
 );
 
-const SubscriptionCard = ({ planName, price, duration, features, buttonText, priceId, subscriptionPlan }) => {
+const SubscriptionCard = ({ planName, price, duration, timeLeft, features, buttonText, priceId, subscriptionPlan }) => {
     const { email } = useSelector((state) => state.auth.userInfo.data);
     const { userInfo } = useSelector((state) => state.auth);
     const [isCancelLoading, setIsCancelLoading] = useState(false);
@@ -31,9 +32,9 @@ const SubscriptionCard = ({ planName, price, duration, features, buttonText, pri
     const [loading, setLoading] = useState(false);
 
     const activePlan = userInfo.data.subscriptionPlan === subscriptionPlan;
-    // const inTrailMode = userInfo.data.subscriptionPlan === "trial";
-    const inTrailMode = false;
+    const inTrailMode = userInfo.data.subscriptionPlan === "trial";
     const isActive = userInfo.data.subscriptionStatus === 'active';
+    const isTrailPlan = subscriptionPlan === 'trial';
 
     const handleSubscribe = async () => {
         if (!email) {
@@ -52,13 +53,10 @@ const SubscriptionCard = ({ planName, price, duration, features, buttonText, pri
             setLoading(false);
         }
     };
-
     const handleCancelSubscription = async () => {
         try {
             setIsCancelLoading(true);
-            console.log("Cancelling Subscription...");
             await cancelSubscription(email); // Replace userEmail with actual email
-            console.log("Subscription Cancelled Successfully");
         } catch (error) {
             console.error("Error cancelling subscription:", error);
         } finally {
@@ -68,7 +66,12 @@ const SubscriptionCard = ({ planName, price, duration, features, buttonText, pri
 
     return (
         <div className={`col-span-12 sm:col-span-6 lg:col-span-4 p-6 rounded-2xl border ${activePlan ? "border-blue-400 bg-primarySolid text-white" : "border-gray-400 bg-[#01183A] text-white"} shadow-lg transition-transform transform hover:scale-100`}>
-            <h2 className="text-lg font-semibold mb-2">{planName}</h2>
+            <h2 className="text-lg font-semibold mb-1">{planName}</h2>
+            {activePlan && timeLeft && !/NaN/.test(timeLeft) && (
+                <p className="text-sm  text-white  rounded inline-block mb-1">
+                    {timeLeft} left
+                </p>
+            )}
             <p className="text-2xl font-semibold mb-1">{price}</p>
             <p className="text-lg mb-4">{duration}</p>
             <h3 className="text-base font-semibold mb-2">What You’ll Get</h3>
@@ -83,17 +86,17 @@ const SubscriptionCard = ({ planName, price, duration, features, buttonText, pri
                 ))}
             </ul>
             {!activePlan || !isActive ? (
-                <ActionButton disabled={inTrailMode} onClick={handleSubscribe} isActive={activePlan} loading={loading} icon={<FaArrowRight />} className="bg-blue-600 hover:bg-blue-500">
+                <ActionButton disabled={isTrailPlan} onClick={handleSubscribe} isActive={activePlan} loading={loading} icon={<FaArrowRight />} className="bg-blue-600 hover:bg-blue-500">
                     {buttonText}
                 </ActionButton>
             ) : (
                 <div className="flex gap-2">
                     <ActionButton isActive={activePlan} loading={loading} disabled className="bg-black cursor-not-allowed">
-                        Subscribed
+                        Activated
                     </ActionButton>
-                    <ActionButton onClick={handleCancelSubscription} isActive={activePlan} loading={isCancelLoading} icon={<FaTimes />} className="bg-red-600 hover:bg-red-500">
+                    {!inTrailMode && <ActionButton onClick={handleCancelSubscription} isActive={activePlan} loading={isCancelLoading} icon={<FaTimes />} className="bg-red-600 hover:bg-red-500">
                         Cancel
-                    </ActionButton>
+                    </ActionButton>}
                 </div>
             )}
         </div>

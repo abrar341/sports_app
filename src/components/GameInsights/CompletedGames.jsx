@@ -99,7 +99,7 @@ export const CompletedGames = ({ selectedGame }) => {
                         >
                             {/* Teams Section */}
                             <div className="flex items-center gap-4 w-1/3 max-md:w-full">
-                                <div className="flex items-center gap-2 text-right w-full justify-end max-md:justify-center">
+                                <div className="flex items-center  gap-2 text-right w-full  max-md:justify-center">
                                     <img src={game.teams.home.logo} alt={game.teams.home.name} className="w-7 h-7 rounded-full" />
                                     <span className="text-base font-semibold truncate">{game.teams.home.name}</span>
                                 </div>

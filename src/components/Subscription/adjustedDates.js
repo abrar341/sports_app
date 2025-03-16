@@ -10,5 +10,3 @@ export const plans = {
     monthly: getAdjustedDate(30),       // 1 month (approx 30 days)
 };
 
-console.log(plans); // Example usage
-

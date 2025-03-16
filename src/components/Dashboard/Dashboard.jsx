@@ -59,10 +59,10 @@ const Dashboard = () => {
 
     return (
         <>
-            <main className="flex grid overflow-hidden min-h-screen bg-primary  px-8 py-6 flex-col">
+            <main className="flex grid grid-cols-12 overflow-hidden min-h-screen bg-primary  px-8 py-6 flex-col">
                 {/* <SearchBar /> */}
                 {/* Sport Dropdown */}
-                <div className="col-span-6 mb-4 flex gap-2">
+                <div className="col-span-12 md:col-span-6 mb-4 flex gap-2">
                     {["soccer", "american-football"].map((sport) => (
                         <button
                             key={sport}
@@ -70,7 +70,7 @@ const Dashboard = () => {
                                 dispatch(setSportsNameDashboard(sport));
                                 dispatch(resetHighlights());
                             }}
-                            className={`px-4 py-2 rounded-full w-full text-white transition-all 
+                            className={`px-4 py-2 rounded-full whitespace-nowrap w-full text-white transition-all 
                 ${sportsNameDashboard === sport ? "bg-primarySolid" : "bg-searchBarBg"}`}
                         >
                             {sport === "soccer" ? "Soccer" : sport === "basketball" ? "Basketball" : "American Football"}
@@ -79,9 +79,9 @@ const Dashboard = () => {
                 </div>
 
 
-                <div className="col-span-8 mr-4">
+                <div className="col-span-12 md:col-span-8 w-full md:w-auto mr-4">
                     {/* Conditional Rendering */}
-                    <div className="col-span-8 flex ">
+                    <div className=" flex ">
                         {playerOrTeam === "player" ? (
                             <PlayerInsightSearchBar
                                 sportsName={sportsName}
@@ -96,7 +96,7 @@ const Dashboard = () => {
                             />
                         )}
 
-                        <div className="relative lg:w-1/6">
+                        <div className="hidden md:block relative lg:w-1/6">
                             <select
                                 value={sportsName}
                                 onChange={(e) => setSportsName(e.target.value)}
@@ -124,7 +124,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>
-                <div className="flex w-full col-span-4 gap-2">
+                <div className="flex w-full col-span-12 md:col-span-4 mt-3  md:mt-0">
                     {/* Advanced Search Button */}
                     <button className="bg-primarySolid w-full overflow-auto  px-2 lg:px-4 py-2   rounded-full text-white">
                         Advanced

@@ -37,6 +37,7 @@ const SignUpComponent = () => {
                         footerText="Already have an account?"
                         footerLink="/signin"
                         onSignup={handleSignup}
+                        isLoading={isLoading}
                     />
                 </AuthCard>
             </div>

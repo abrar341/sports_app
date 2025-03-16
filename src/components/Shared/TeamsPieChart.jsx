@@ -5,38 +5,35 @@ import { useSelector } from "react-redux";
 import Loading from "./Loading";
 
 const TeamsPieChart = ({ data }) => {
+    console.log("data", data);
+
     const [selectedSeason, setSelectedSeason] = useState("All");
 
-    if (!data || data.length === 0) {
+    if (!data?.length) {
         return <div className="text-white">No stats found</div>;
     }
 
-    // Extract unique seasons from the data
-    const seasons = ["All", ...new Set(data.map(item => String(item.season)))];
+    // Extract unique seasons and sort them in descending order
+    const seasons = ["All", ...new Set(data.map(({ season }) => String(season)))].sort((a, b) => b.localeCompare(a));
+    console.log("seasons", seasons);
 
     // Filter data based on selected season
-    const filteredData =
-        selectedSeason === "All"
-            ? data
-            : data.filter(item => String(item.season) === selectedSeason);
-
+    const filteredData = selectedSeason === "All"
+        ? data
+        : data.filter(({ season }) => String(season) === selectedSeason);
 
     // Aggregate home and away wins
-    const totalHomeWins = filteredData.reduce(
-        (acc, item) => acc + (item.fixtures?.wins?.home || 0),
-        0
-    );
-    const totalAwayWins = filteredData.reduce(
-        (acc, item) => acc + (item.fixtures?.wins?.away || 0),
-        0
-    );
+    const totalWins = filteredData.reduce((acc, { fixtures }) => ({
+        home: acc.home + (fixtures?.wins?.home || 0),
+        away: acc.away + (fixtures?.wins?.away || 0),
+    }), { home: 0, away: 0 });
 
     const aggregatedData = [
-        { name: "Home Wins", value: totalHomeWins },
-        { name: "Away Wins", value: totalAwayWins }
+        { name: "Home Wins", value: totalWins.home },
+        { name: "Away Wins", value: totalWins.away }
     ];
 
-    const hasData = aggregatedData.some(({ value }) => value > 0);
+    const hasData = totalWins.home > 0 || totalWins.away > 0;
     const colorScheme = ["#3B82F6", "#22C55E"];
     const { teamStatsLoading } = useSelector((state) => state.loading);
 
@@ -45,7 +42,7 @@ const TeamsPieChart = ({ data }) => {
             {/* Season Dropdown */}
             <div className="h-full w-full flex justify-end items-center">
                 <select
-                    className="mb-4 outline-none px-4 py-2 text-white bg-gray-600  border-gray-600 rounded outline-none hover:bg-gray-700 transition-all"
+                    className="px-3 py-2 outline-none bg-[#07234B] text-white rounded"
                     value={selectedSeason}
                     onChange={(e) => setSelectedSeason(e.target.value)}
                 >
@@ -56,7 +53,6 @@ const TeamsPieChart = ({ data }) => {
                     ))}
                 </select>
             </div>
-
 
             {/* Pie Chart */}
             {hasData ? (
@@ -75,11 +71,11 @@ const TeamsPieChart = ({ data }) => {
                         {aggregatedData.map((entry, index) => (
                             <Cell
                                 key={`cell-${index}`}
-                                fill={colorScheme[index % colorScheme.length]}
+                                fill={colorScheme[index]}
                             />
                         ))}
                     </Pie>
-                    <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "none", color: "#fff" }} />
+                    <Tooltip contentStyle={{ backgroundColor: "white", border: "none", color: "#fff" }} />
                     <Legend
                         align="center"
                         verticalAlign="bottom"

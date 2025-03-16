@@ -92,7 +92,6 @@ const PlayersInsights = () => {
                 <div className="col-span-12 md:col-span-1 ">
                     <button className="bg-primarySolid  h-full w-full flex justify-center items-center text-white px-2 py-2 md:py-3 rounded-full hover:bg-blue-700 focus:outline-none text-2xl">
                         <FaSlidersH />
-
                     </button>
                 </div>
 

@@ -84,7 +84,7 @@ const LeagueAreaChart = ({ gameType }) => {
                 {/* League Dropdown */}
                 <div>
                     <select
-                        className="bg-blue-700 text-white px-3 py-2 rounded outline-none cursor-pointer"
+                        className="bg-blue-700 w-[100px] md:w-full text-white px-3 py-2 rounded outline-none cursor-pointer"
                         value={selectedLeague || ""}
                         onChange={(e) => setSelectedLeague(e.target.value)}
                         disabled={uniqueLeagues.length === 0} // Disable if no data

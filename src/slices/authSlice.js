@@ -20,10 +20,21 @@ const authSlice = createSlice({
       state.userInfo = null;
       localStorage.removeItem('userInfo');
     },
+    updateSubscription: (state, action) => {
+
+      // ✅ Update local storage
+      if (state.userInfo && state.userInfo.data) {
+        state.userInfo.data.subscriptionPlan = action.payload.subscriptionPlan;
+        state.userInfo.data.subscriptionStatus = action.payload.subscriptionStatus;
+        state.userInfo.data.subscriptionPlanExpiry = action.payload.subcribtionExipry;
+        // ✅ Update local storage
+        localStorage.setItem('userInfo', JSON.stringify(state.userInfo));
+      }
+    },
   },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, logout, updateSubscription } = authSlice.actions;
 
 // 🔹 Thunk action to clear other slices on logout
 export const logoutUser = () => (dispatch) => {

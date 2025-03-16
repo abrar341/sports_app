@@ -1,5 +1,21 @@
 const SubscriptionData = [
     {
+        planName: "Trial Plan",
+        price: "Free",
+        duration: "/ 7 days", // Adjust duration as needed
+        priceId: null, // No price ID for a free trial
+        features: [
+            "Thousands of Props & Games",
+            "Trending Insights",
+            "Shareable Betslips",
+            "Sharp Book Odds",
+            "Advanced Data & Visuals",
+        ],
+        buttonText: "Start Trial",
+        isActive: true, // Set active to true for trial mode
+        subscriptionPlan: "trial"
+    },
+    {
         planName: "Standard Plan",
         price: "$100.00",
         duration: "/ 6 months",

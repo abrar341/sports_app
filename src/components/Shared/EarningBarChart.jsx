@@ -16,12 +16,30 @@ const EarningBarChart = ({ data }) => {
         return <div className="text-white">No stats found</div>;
     }
 
-    // Prepare data for the bar chart
-    const chartData = data.map((item) => ({
-        season: String(item.season),
-        "Home Wins": item.fixtures?.wins?.home || 0,
-        "Away Wins": item.fixtures?.wins?.away || 0,
-    }));
+    const mergeSeasonWins = (data) => {
+        const mergedStats = {};
+
+        data.forEach((item) => {
+            const { season } = item;
+
+            if (!mergedStats[season]) {
+                mergedStats[season] = {
+                    season: String(season),
+                    "Home Wins": 0,
+                    "Away Wins": 0,
+                };
+            }
+
+            mergedStats[season]["Home Wins"] += item.fixtures?.wins?.home || 0;
+            mergedStats[season]["Away Wins"] += item.fixtures?.wins?.away || 0;
+        });
+
+        return Object.values(mergedStats);
+    };
+
+    // Use this function to process your data
+    const chartData = mergeSeasonWins(data);
+
 
     const { teamStatsLoading } = useSelector((state) => state.loading);
 

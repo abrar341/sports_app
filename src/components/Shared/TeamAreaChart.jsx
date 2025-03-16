@@ -22,13 +22,32 @@ const TeamAreaChart = ({ data }) => {
         return <div className="text-center text-white">No stats to show on chart</div>;
     }
 
-    // Format data to include wins, draws, and loses for each season
-    const formattedData = data.map((item) => ({
-        season: item.season || "Unknown Season",
-        wins: item.fixtures?.wins?.total || 0,
-        draws: item.fixtures?.draws?.total || 0,
-        loses: item.fixtures?.loses?.total || 0,
-    }));
+    const mergeSeasonStats = (data) => {
+        const mergedStats = {};
+
+        data.forEach((item) => {
+            const { season } = item;
+
+            if (!mergedStats[season]) {
+                mergedStats[season] = {
+                    season,
+                    wins: 0,
+                    draws: 0,
+                    loses: 0,
+                };
+            }
+
+            mergedStats[season].wins += item.fixtures?.wins?.total || 0;
+            mergedStats[season].draws += item.fixtures?.draws?.total || 0;
+            mergedStats[season].loses += item.fixtures?.loses?.total || 0;
+        });
+
+        return Object.values(mergedStats);
+    };
+
+    // Use this function to process your data
+    const formattedData = mergeSeasonStats(data);
+
 
     const { teamStatsLoading } = useSelector((state) => state.loading);
 

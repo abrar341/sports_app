@@ -5,7 +5,7 @@ import Loading from "./Loading";
 import { useSelector } from "react-redux";
 
 const PlayersPieChart = ({ stats, sport }) => {
-    const seasons = [...new Set(stats?.map(season => season.season))];
+    const seasons = [...new Set(stats?.map(season => season.season))].sort((a, b) => b - a);
 
     const [selectedSeason, setSelectedSeason] = useState(seasons[0]);
     useEffect(() => {
@@ -57,16 +57,20 @@ const PlayersPieChart = ({ stats, sport }) => {
         <div className="bg-secondary rounded-lg p-4 flex flex-col items-center h-full">
             {stats ? (
                 <>
-                    <div className="mb-4 w-full flex justify-end space-x-2">
-                        {seasons?.map(season => (
-                            <button
-                                key={season}
-                                onClick={() => setSelectedSeason(season)}
-                                className={`px-3 py-1 rounded ${selectedSeason === season ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-300"}`}>
-                                {season}
-                            </button>
-                        ))}
+                    <div className="mb-4 w-full flex justify-end">
+                        <select
+                            value={selectedSeason}
+                            onChange={(e) => setSelectedSeason(e.target.value)}
+                            className="px-3 py-1 rounded bg-[#07234B] text-gray-300"
+                        >
+                            {seasons?.map((season) => (
+                                <option key={season} value={season}>
+                                    {season}
+                                </option>
+                            ))}
+                        </select>
                     </div>
+
                     <PieChart width={450} height={380}>
                         <Pie
                             data={aggregatedData}

@@ -15,6 +15,7 @@ import Loading from "./Loading";
 
 
 const RosterAreaChart = ({ data }) => {
+
     const [filter, setFilter] = useState("goals"); // Toggle between goals and penalties
     const { teamStatsLoading } = useSelector((state) => state.loading);
 
@@ -22,14 +23,35 @@ const RosterAreaChart = ({ data }) => {
         return <div className="text-center text-white">No stats to show on chart</div>;
     }
 
-    // Format data with actual season names and include new goals format
-    const formattedData = data.map((item) => ({
-        season: item.season || "Unknown Season",
-        homeGoals: item.goals?.for?.total?.home || 0,
-        awayGoals: item.goals?.for?.total?.away || 0,
-        scoredPenalties: item.penalty?.scored?.total || 0,
-        missedPenalties: item.penalty?.missed?.total || 0,
-    }));
+    // Function to merge stats of same seasons
+    const mergeSeasonStats = (data) => {
+        const mergedStats = {};
+
+        data.forEach((item) => {
+            const { season } = item;
+
+            if (!mergedStats[season]) {
+                mergedStats[season] = {
+                    season,
+                    homeGoals: 0,
+                    awayGoals: 0,
+                    scoredPenalties: 0,
+                    missedPenalties: 0,
+                };
+            }
+
+            mergedStats[season].homeGoals += item.goals?.for?.total?.home || 0;
+            mergedStats[season].awayGoals += item.goals?.for?.total?.away || 0;
+            mergedStats[season].scoredPenalties += item.penalty?.scored?.total || 0;
+            mergedStats[season].missedPenalties += item.penalty?.missed?.total || 0;
+        });
+
+        return Object.values(mergedStats);
+    };
+
+    // Use this function to process your data
+    const formattedData = mergeSeasonStats(data);
+
 
     return teamStatsLoading ? <Loading /> : (
         <div className="bg-secondary h-full rounded-xl p-4">

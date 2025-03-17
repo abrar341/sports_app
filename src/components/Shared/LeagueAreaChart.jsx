@@ -68,7 +68,7 @@ const LeagueAreaChart = ({ gameType }) => {
                 {/* Season Dropdown */}
                 <div>
                     <select
-                        className="bg-blue-700 text-white px-3 py-2 rounded outline-none cursor-pointer"
+                        className=" bg-[#07234B]  text-white px-3 py-2 rounded outline-none cursor-pointer"
                         value={selectedSeason || ""}
                         onChange={(e) => setSelectedSeason(Number(e.target.value))}
                         disabled={uniqueSeasons.length === 0} // Disable if no data
@@ -84,7 +84,7 @@ const LeagueAreaChart = ({ gameType }) => {
                 {/* League Dropdown */}
                 <div>
                     <select
-                        className="bg-blue-700 w-[100px] md:w-full text-white px-3 py-2 rounded outline-none cursor-pointer"
+                        className="bg-[#07234B] w-[100px] md:w-full text-white px-3 py-2 rounded outline-none cursor-pointer"
                         value={selectedLeague || ""}
                         onChange={(e) => setSelectedLeague(e.target.value)}
                         disabled={uniqueLeagues.length === 0} // Disable if no data

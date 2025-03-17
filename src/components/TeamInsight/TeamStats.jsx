@@ -63,10 +63,9 @@ const TeamStatistics = ({ statsData }) => {
 
     return teamStatsLoading ? <Loading /> : (
         <div className="p-6 bg-secondary rounded-xl py-8">
-            <div className="mb-6 flex justify-end gap-3 items-center">
+            <div className="mb-6 flex flex-col sm:flex-row justify-end gap-3 items-center">
                 {/* League Selection */}
                 <div className="flex flex-col sm:flex-row items-center gap-2">
-
                     <label className="text-white font-semibold">Select League</label>
                     <select
                         className="px-3 py-2 outline-none bg-[#07234B] text-white rounded"
@@ -103,7 +102,6 @@ const TeamStatistics = ({ statsData }) => {
             {filteredStats ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <StatCard title="League" icon="🏆">
-                        <StatItem label="League" value={filteredStats.league || "N/A"} />
                         <StatItem label="Form" value={filteredStats.form || "N/A"} />
                     </StatCard>
                     <StatCard title="Fixtures" icon="📅">

@@ -5,12 +5,9 @@ import { FaArrowRight } from "react-icons/fa";
 import { differenceInSeconds, formatDistanceStrict, formatDistanceToNow } from "date-fns";
 import { useEffect, useState } from "react";
 
-
-
 const Subscription = () => {
     const { userInfo } = useSelector((state) => state.auth);
     const { subscriptionPlanExpiry } = userInfo.data;
-
 
     const [timeLeft, setTimeLeft] = useState("");
 

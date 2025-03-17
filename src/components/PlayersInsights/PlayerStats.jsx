@@ -26,7 +26,7 @@ const PlayerStatistics = ({ data, sportType }) => {
                 {data.map((stat, index) => (
                     <div
                         key={index}
-                        className={`cursor-pointer px-4 py-2 rounded-lg shadow-md ${selectedStat === index ? 'bg-blue-900' : ''}`}
+                        className={`cursor-pointer px-4 py-2 rounded-lg shadow-md ${selectedStat === index ? 'bg-[#07234B]' : ''}`}
                         onClick={() => handleStatClick(index)}
                     >
                         <div className="flex items-center space-x-2">

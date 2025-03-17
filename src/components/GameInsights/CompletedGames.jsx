@@ -29,7 +29,6 @@ export const CompletedGames = ({ selectedGame }) => {
         name: isSoccer ? league.leagueName : league.leagueName,
     })) || [];
     // console.log("leagues", leagues);
-    console.log("leagues", leagues);
 
     useEffect(() => {
         if (fixturesData?.data?.length > 0) {

@@ -3,7 +3,6 @@ import React from "react";
 import FeatureButton from "./FeatureButton";
 import PlayButton from "./PlayButton";
 import DevicePreview from "./DevicePreview";
-import BackgroundSVG from "./BackgroundSVG";
 
 function HeroSection() {
     return (

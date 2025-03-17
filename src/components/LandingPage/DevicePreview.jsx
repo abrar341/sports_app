@@ -1,6 +1,4 @@
 import React from "react";
-import myDesktopImage from "./Background2.png"; // Tablet/Desktop Preview Image
-import myMobileImage from "./Background1.png";  // Mobile Application Preview Image
 
 function DevicePreview() {
     return (
@@ -8,7 +6,7 @@ function DevicePreview() {
             {/* Desktop/Tablet Preview */}
             <div className="relative w-[450px] ">
                 <img
-                    src={myDesktopImage}
+                    src="/assets/Background2.png"
                     alt="Desktop Application Preview"
                     className="w-full h-full object-contain rounded-[13px] "
                 />
@@ -17,7 +15,7 @@ function DevicePreview() {
             {/* Mobile Preview (Overlapping Tablet) */}
             <div className=" relative -top-[25px] -left-[40px]  w-[200px]  flex justify-center items-center">
                 <img
-                    src={myMobileImage}
+                    src="/assets/Background1.png"
                     alt="Mobile Application Preview"
                     className="  object-contain "
                 />

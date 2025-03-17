@@ -32,7 +32,7 @@ const AppRoutes = () => {
             <Route path="/signin" element={<GuestRoute><SignInPage /></GuestRoute>} />
             <Route path="/Test_login" element={<GuestRoute><Main /></GuestRoute>} />
             <Route path="/signup" element={<GuestRoute><SignUpPage /></GuestRoute>} />
-            <Route path="/pricing" element={<GuestRoute><SubscriptionMain /></GuestRoute>} />
+            <Route path="/pricing" element={<GuestRoute><LandingPage /></GuestRoute>} />
 
             {/* Dashboard and Protected Routes */}
             {/* <Route element={userInfo ? (<ProtectedRoute />) : <Navigate to="/signin" replace />} > */}

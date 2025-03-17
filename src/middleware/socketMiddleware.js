@@ -17,6 +17,8 @@ export const socketMiddleware = (store) => (next) => (action) => {
         });
 
         socket.on("liveFixtures", (data) => {
+            console.log("data", data);
+
             store.dispatch(setLiveFixtures(data));
         });
 

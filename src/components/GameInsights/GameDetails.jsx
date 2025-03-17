@@ -13,7 +13,7 @@ const GameDetails = () => {
     const { gameType, status, leagueId, fixtureId } = useParams();
 
     // Soccer data
-    const { liveFixtures, upcomingFixtures, completedFixtures } = useSelector((state) => state.fixtures);
+    const { liveFixtures, upcomingFixtures, completedFixtures, fixturesLoading, AFfixturesLoading } = useSelector((state) => state.fixtures);
 
     // American Football data
     const { AFliveFixtures, AFcompletedFixtures } = useSelector((state) => state.fixtures);
@@ -24,12 +24,11 @@ const GameDetails = () => {
     let game = null;
     let league = null;
 
-    // **Handling Soccer Logic (No Changes)**
+    // **Handling Soccer Logic 
     if (gameType === "soccer") {
         if (status === "live") {
-            game = liveFixtures.data.find(fixture => fixture.fixture.id.toString() === fixtureId);
-            league = game ? game.league : null;
-
+            game = liveFixtures?.data?.find(fixture => fixture.fixture.id.toString() === fixtureId);
+            league = game?.league || null;  // Avoid crash if game is undefined
         } else {
             const fixtureList =
                 status === "upcoming"
@@ -93,6 +92,9 @@ const GameDetails = () => {
         }
     }, [status, fixtureId, gameType]);
 
+    if (fixturesLoading || AFfixturesLoading) return <div className="min-h-screen p-6 bg-primary">
+        <Loading />
+    </div>;
     if (!game) return <div className="bg-primary min-h-screen text-white p-6 text-center">Game not found</div>;
     return (
         <div className="bg-primary min-h-screen text-white p-6">

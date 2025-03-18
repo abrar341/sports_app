@@ -22,7 +22,6 @@ import Success from '../components/Subscription/Success.jsx';
 import Cancel from '../components/Subscription/Cancel.jsx';
 
 const AppRoutes = () => {
-    const { userInfo } = useSelector((state) => state.auth);
 
     return (
         <Routes>

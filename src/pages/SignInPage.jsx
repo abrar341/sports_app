@@ -17,7 +17,7 @@ const SignInPage = () => {
             </div>
             {/* Left Section */}
 
-            <div className="relative col-span-7  h-screen">
+            <div className="relative col-span-7 hidden md:block  h-screen">
                 <img
                     src="/assets/sign-in.png" // Updated path
                     alt="Login"

@@ -23,7 +23,7 @@ const SocialAuthButtons = () => {
         body: JSON.stringify({ token: credential }),
       });
 
-      console.log("res", res);
+      console.log("resonse", res);
       const data = await res.json();
       console.log("res", data);
       if (data.success === true && data) {

@@ -4,20 +4,21 @@ import MainHeader from '../components/Header&Footer/MainHeader'
 import SportsAnalyticsHero from '../components/LandingPage/SportsAnalyticsHero.jsx'
 import SportsCategorySelector from '../components/LandingPage/SportsCategory/SportsCategorySelector.jsx'
 import TrendingNews from '../components/LandingPage/News/TrendingNews.jsx'
+import MainFooter from '../components/Header&Footer/Footer/MainFooter.jsx'
 
 
 const LandingPage = () => {
 
     return (
-        <div className="min-h-screen">
-
+        <div className="min-h-screen bg-primary">
             <EventsBar />
             <MainHeader />
-            <div className='bg-primary'>
+            <div className=''>
                 <SportsAnalyticsHero />
                 <SportsCategorySelector />
                 <TrendingNews />
             </div>
+            <MainFooter />
         </div>
     )
 }

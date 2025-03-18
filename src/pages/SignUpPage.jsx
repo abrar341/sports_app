@@ -7,7 +7,7 @@ const SignUpPage = () => {
     return (
         <div className=" flex flex-col-reverse md:grid md:grid-cols-12 overflow-hidden">
             <div
-                className="absolute top-5 left-5 z-50 cursor-pointer"
+                className="absolute top-5 left-5 z-50  cursor-pointer"
                 onClick={() => navigate('/')}
             >
                 <img
@@ -17,7 +17,7 @@ const SignUpPage = () => {
                 />
             </div>
             {/* Left Section */}
-            <div className="relative col-span-7  h-screen">
+            <div className="relative col-span-7 hidden md:block  h-screen">
                 <img
                     src="/assets/sign-up.png" // Updated path
                     alt="Signup"

@@ -7,7 +7,7 @@ function NewsItem({ image, category, author, date, title }) {
                 <img
                     src={image}
                     alt={category}
-                    className="w-[70px] h-[70px] rounded-full"
+                    className="w-[60px] h-[60px] rounded-full"
                 />
                 <div className="flex flex-col flex-1 gap-3">
                     <p className="text-xs leading-3 text-white">

@@ -1,18 +1,19 @@
 import React from 'react'
 import EventsBar from '../components/EventsBar/EventsBar'
-import Header from '../components/Header&Footer/Header'
 import { Outlet } from 'react-router-dom'
+import MainHeader from '../components/Header&Footer/MainHeader'
+import MainFooter from '../components/Header&Footer/Footer/MainFooter'
 
 const MainLayout = () => {
     return (
-        <div>
+        <div className='bg-primary'>
             <EventsBar />
-            <Header />
-            <div className=''>
+            <MainHeader />
+            <div className='pt-6'>
                 {/* Render nested routes dynamically */}
                 <Outlet />
-                {/* <Dashboard /> */}
             </div>
+            <MainFooter />
         </div>
     )
 }

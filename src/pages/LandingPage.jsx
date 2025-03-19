@@ -11,16 +11,11 @@ import ContactForm from '../components/LandingPage/ContactUs/ContactForm.jsx'
 const LandingPage = () => {
 
     return (
-        <div className="min-h-screen bg-primary">
-            <EventsBar />
-            <MainHeader />
-            <div className='flex flex-col gap-6'>
-                <SportsAnalyticsHero />
-                <SportsCategorySelector />
-                <TrendingNews />
-                <ContactForm />
-            </div>
-            <MainFooter />
+        <div className='min-h-screen flex flex-col gap-6'>
+            <SportsAnalyticsHero />
+            <SportsCategorySelector />
+            <TrendingNews />
+            <ContactForm />
         </div>
     )
 }

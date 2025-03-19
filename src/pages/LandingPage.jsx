@@ -5,6 +5,7 @@ import SportsAnalyticsHero from '../components/LandingPage/SportsAnalyticsHero.j
 import SportsCategorySelector from '../components/LandingPage/SportsCategory/SportsCategorySelector.jsx'
 import TrendingNews from '../components/LandingPage/News/TrendingNews.jsx'
 import MainFooter from '../components/Header&Footer/Footer/MainFooter.jsx'
+import ContactForm from '../components/LandingPage/ContactUs/ContactForm.jsx'
 
 
 const LandingPage = () => {
@@ -13,10 +14,11 @@ const LandingPage = () => {
         <div className="min-h-screen bg-primary">
             <EventsBar />
             <MainHeader />
-            <div className=''>
+            <div className='flex flex-col gap-6'>
                 <SportsAnalyticsHero />
                 <SportsCategorySelector />
                 <TrendingNews />
+                <ContactForm />
             </div>
             <MainFooter />
         </div>

@@ -28,7 +28,7 @@ const ContactInfoCard = () => {
             </h1>
             <div className="flex flex-col gap-4">
                 <header className="flex flex-col gap-2 items-center text-center">
-                    <h2 className="text-xl font-bold text-white capitalize">
+                    <h2 className="text-lg font-bold text-white capitalize">
                         We'd Love to Hear From You!
                     </h2>
                     <p className="text-xs tracking-wide leading-5 text-white capitalize">

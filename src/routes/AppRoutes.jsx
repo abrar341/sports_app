@@ -20,18 +20,27 @@ import GameDetails from '../components/GameInsights/GameDetails.jsx';
 import MatchDetailPage from './MatchDetailPage.jsx';
 import Success from '../components/Subscription/Success.jsx';
 import Cancel from '../components/Subscription/Cancel.jsx';
+import TrendingNews from '../components/LandingPage/News/TrendingNews.jsx';
+import MainLayout from '../pages/MainLayout.jsx';
+import ContactForm from '../components/LandingPage/ContactUs/ContactForm.jsx';
 
 const AppRoutes = () => {
 
     return (
         <Routes>
             {/* Authentication Routes */}
-            <Route path="/" element={<GuestRoute><LandingPage /></GuestRoute>} />
-            <Route path="/news" element={<GuestRoute><LandingPage /></GuestRoute>} />
+            <Route element={<MainLayout />}>
+                <Route path="/" element={<GuestRoute><LandingPage /></GuestRoute>} />
+                <Route path="/news" element={<GuestRoute><TrendingNews /></GuestRoute>} />
+                <Route path="/pricing" element={<GuestRoute><LandingPage /></GuestRoute>} />
+                <Route path="/games" element={<GuestRoute><LandingPage /></GuestRoute>} />
+                <Route path="/betting-odds" element={<GuestRoute><LandingPage /></GuestRoute>} />
+                <Route path="/education" element={<GuestRoute><LandingPage /></GuestRoute>} />
+                <Route path="/contact" element={<GuestRoute><ContactForm /></GuestRoute>} />
+            </Route>
             <Route path="/signin" element={<GuestRoute><SignInPage /></GuestRoute>} />
             <Route path="/Test_login" element={<GuestRoute><Main /></GuestRoute>} />
             <Route path="/signup" element={<GuestRoute><SignUpPage /></GuestRoute>} />
-            <Route path="/pricing" element={<GuestRoute><LandingPage /></GuestRoute>} />
 
             {/* Dashboard and Protected Routes */}
             {/* <Route element={userInfo ? (<ProtectedRoute />) : <Navigate to="/signin" replace />} > */}

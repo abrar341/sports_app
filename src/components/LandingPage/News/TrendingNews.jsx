@@ -42,13 +42,13 @@ function TrendingNews() {
                 className="w-[1135px] h-[540px] transform rotate-[8.109deg] absolute left-[-457px] top-[-83px]"
             />
 
-            <div className="flex justify-between items-center px-16 py-12 max-md:px-8 max-sm:flex-col max-sm:gap-8 max-sm:px-4">
-                <div className="flex flex-col gap-3 items-start max-w-[422px] max-sm:max-w-full">
-                    <h1 className="text-3xl  font-bold leading-normal text-white capitalize max-md:text-xl max-sm:text-2xl">
+            <div className="flex justify-between gap-5 items-center px-16 py-12 max-md:px-8 max-sm:flex-col max-sm:gap-8 max-sm:px-4">
+                <div className=" w-full flex flex-col gap-5 items-start max-w-[422px] max-sm:max-w-full">
+                    <h1 className="text-3xl px-3  w-full font-bold leading-normal text-white capitalize max-md:text-xl max-sm:text-2xl">
                         trending news
-                    </h1>2
+                    </h1>
 
-                    <div className="flex flex-col gap-3 items-start w-full">
+                    <div className="flex flex-col gap-6 items-start w-full">
                         {newsItems.map((item) => (
                             <NewsItem
                                 key={item.id}
@@ -61,7 +61,7 @@ function TrendingNews() {
                         ))}
                     </div>
 
-                    <button className="h-12 text-lg leading-normal text-center text-white capitalize bg-blue-800 cursor-pointer rounded-[100px] w-[345px] max-sm:w-full">
+                    <button className="h-12 text-lg mt-4 leading-normal text-center text-white capitalize bg-blue-800 cursor-pointer rounded-[100px] w-[345px] max-sm:w-full">
                         see all
                     </button>
                 </div>

@@ -5,10 +5,10 @@ import { getOddsByFixtureId } from "../../Api/Fixtures/get/fixtures";
 import Loading from "../Shared/Loading";
 import { useSelector } from "react-redux";
 // import { liveFixtures } from "./live";
-import { io } from "socket.io-client";
-import { SOCKET_URL } from "../../utils/constants";
+// import { io } from "socket.io-client";
+// import { SOCKET_URL } from "../../utils/constants";
 
-let socket = io(SOCKET_URL);
+// let socket = io(SOCKET_URL);
 
 const Odds = () => {
     const { status, fixtureId } = useParams();
@@ -61,17 +61,17 @@ const Odds = () => {
     }, [fixtureId, status]);
 
     //Not tested Yet
-    useEffect(() => {
-        socket.on(`fixture:${fixtureId}`, (data) => {
-            if (data) {
-                setOdds(data);
-            }
-        });
+    // useEffect(() => {
+    //     socket.on(`fixture:${fixtureId}`, (data) => {
+    //         if (data) {
+    //             setOdds(data);
+    //         }
+    //     });
 
-        return () => {
-            socket.off(`fixture:${fixtureId}`);
-        };
-    }, [fixtureId]);
+    //     return () => {
+    //         socket.off(`fixture:${fixtureId}`);
+    //     };
+    // }, [fixtureId]);
 
 
     if (loading) return <Loading />;

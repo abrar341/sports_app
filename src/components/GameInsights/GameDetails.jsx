@@ -108,7 +108,7 @@ const GameDetails = () => {
             <div className="flex flex-col mb-6 items-center justify-center mt-6">
                 <p className="text-base font-semibold">{formatDateTime(gameType === 'soccer' ? game.date : game.date?.date || game.fixture?.date) || ""}</p>
                 {game.venue && <p className="text-sm text-gray-300 mt-1">{game.venue.name || "Unknown"} - {game.venue.city || "Unknown"}</p>}
-                {status === "live" && <p className="className=" text-base font-semibold>{gameType === 'soccer' && game.fixture.status.elapsed + " min"}</p>}
+                {status === "live" && <p className="text-base font-semibold" >{gameType === 'soccer' && game.fixture.status.elapsed + " min"}</p>}
                 <div className="flex items-center gap-8 mt-4">
                     <div className="flex flex-col items-center">
                         <img src={game.teams.home.logo} alt={game.teams.home.name} className="w-20 h-20" />

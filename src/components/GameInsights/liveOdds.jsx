@@ -4,15 +4,15 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { getOddsByFixtureId } from "../../Api/Fixtures/get/fixtures";
 import Loading from "../Shared/Loading";
 import { useSelector } from "react-redux";
-// import { liveFixtures } from "./live";
+import { liveFixtures } from "./live";
 import { io } from "socket.io-client";
 // import { SOCKET_URL } from "../../utils/constants";
 
 // let socket = io(SOCKET_URL);
 
-const Odds = () => {
+const liveOdds = () => {
     const { status, fixtureId } = useParams();
-    const { fixturesLoading, liveFixtures } = useSelector((state) => state.fixtures);
+    const { fixturesLoading } = useSelector((state) => state.fixtures);
     const [odds, setOdds] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -153,4 +153,4 @@ const Odds = () => {
     );
 };
 
-export default Odds;
+export default liveOdds;

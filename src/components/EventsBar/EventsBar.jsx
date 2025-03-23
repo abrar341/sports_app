@@ -3,13 +3,13 @@ import EventBarDropDown from "./EventBarDropDown";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchAFFixtures, fetchFixtures } from "../../slices/fixturesSlice";
+import { socket } from "../../middleware/socketMiddleware";
 
 const EventsBar = () => {
     const { selectedSport, selectedLeague } = useSelector((state) => state.eventBar);
     const gameInsightSelectedGame = useSelector((state) => state.fixtures.gameInsightSelectedGame);
 
     const dispatch = useDispatch();
-
 
     const { AFcompletedFixtures, completedFixtures, fixturesLoading } = useSelector((state) => state.fixtures);
     useEffect(() => {

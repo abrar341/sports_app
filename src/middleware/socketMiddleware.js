@@ -8,6 +8,12 @@ export const socketMiddleware = (store) => (next) => (action) => {
     if (!socket) {
         socket = io(SOCKET_URL);
 
+
+        socket.on("connect", () => {
+            console.log("Connected:", socket.connected);
+
+        });
+
         socket.on("upcomingFixtures", (data) => {
             store.dispatch(setUpcomingFixtures(data));
         });

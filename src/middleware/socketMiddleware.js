@@ -8,7 +8,12 @@ export const socketMiddleware = (store) => (next) => (action) => {
     if (!socket) {
         socket = io(SOCKET_URL);
 
-        socket.on("connect", () => console.log("SocketConnected:", socket.connected));
+        console.log("Socket Connected", socket.connected);
+
+        socket.on("connect", () => {
+            console.log("Socket Connected", socket.connected)
+            console.log("Socket connected and listening for updates...");
+        });
 
         socket.on("connect_error", (err) => {
             console.log("Socket Connection Error");
@@ -34,8 +39,6 @@ export const socketMiddleware = (store) => (next) => (action) => {
             store.dispatch(setAFLiveFixtures(data));
         });
 
-        console.log("Socket connected and listening for updates...");
-        // console.log("Socket Connected", socket.connected);
     }
 
     return next(action);

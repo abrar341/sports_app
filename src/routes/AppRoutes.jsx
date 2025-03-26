@@ -23,6 +23,7 @@ import Cancel from '../components/Subscription/Cancel.jsx';
 import TrendingNews from '../components/LandingPage/News/TrendingNews.jsx';
 import MainLayout from '../pages/MainLayout.jsx';
 import ContactForm from '../components/LandingPage/ContactUs/ContactForm.jsx';
+import SoccerMatchPrediction from '../components/GameInsights/SoccerMatchPrediction.jsx';
 
 const AppRoutes = () => {
 

@@ -9,10 +9,24 @@ export const socketMiddleware = (store) => (next) => (action) => {
         socket = io(SOCKET_URL);
 
 
-        socket.on("connect", () => {
-            console.log("Connected:", socket.connected);
+        console.log("Socket Connected", socket.connected);
 
+        socket.on("connect", () => {
+            console.log("Socket Connected", socket.connected)
+            console.log("Socket connected and listening for updates...");
         });
+
+        socket.on("connect_error", (err) => {
+            console.log("Socket Connection Error");
+        });
+
+        socket.on("disconnect", (reason) => {
+            console.log("Socket Disconnected");
+        });
+
+        // socket.on("testEvent", (data) => {
+        //     console.log("testEvent", data);
+        // });
 
         socket.on("upcomingFixtures", (data) => {
             store.dispatch(setUpcomingFixtures(data));
@@ -31,9 +45,6 @@ export const socketMiddleware = (store) => (next) => (action) => {
         socket.on("americanFootballLiveGames", (data) => {
             store.dispatch(setAFLiveFixtures(data));
         });
-
-        console.log("Socket connected and listening for updates...");
-        console.log("socket Connected", socket.connected);
 
     }
 

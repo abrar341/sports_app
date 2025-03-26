@@ -67,7 +67,6 @@ const Odds = () => {
     //             setOdds(data);
     //         }
     //     });
-
     //     return () => {
     //         socket.off(`fixture:${fixtureId}`);
     //     };

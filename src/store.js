@@ -8,6 +8,7 @@ import loadingReducer from "./slices/loadingSlice";
 import selectionReducer from "./slices/selectionSlice";
 import fixturesReducer from "./slices/fixturesSlice";
 import eventBarReducer from "./slices/eventBarSlice";
+import predictionReducer from "./slices/predictionSlice";
 import { socketMiddleware } from "./middleware/socketMiddleware";
 
 const store = configureStore({
@@ -19,6 +20,7 @@ const store = configureStore({
     selection: selectionReducer,
     fixtures: fixturesReducer, // Normal fixtures reducer without persist
     eventBar: eventBarReducer, // Normal fixtures reducer without persist
+    prediction: predictionReducer, // Normal fixtures reducer without persist
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

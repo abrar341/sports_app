@@ -1,20 +1,21 @@
+import { useOutletContext } from "react-router-dom";
+import Loading from "../Shared/Loading";
 
-const Summary = ({ events, teams, score, status, detailsLoading }) => {
+const Summary = () => {
+    const { leagueId, fixtureId, detailsLoading, events, teams, score, status, goals } = useOutletContext();
 
-    return (
-        <div className="p-6 bg-secondary rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-5 text-white text-center">Match Summary</h2>
-
+    return detailsLoading ? <Loading /> : (
+        <div className="p-6 bg-secondary rounded-xl">
             {/* Match Status */}
             <div className="flex justify-center items-center mb-5">
                 <span className={`px-4 py-1 text-sm font-semibold rounded-full ${status?.short === "FT" ? "bg-green-500 text-white" : "bg-yellow-500 text-black"}`}>
-                    {status?.long?.toUpperCase() || "UNKNOWN"}
+                    {status?.long?.toUpperCase() || "LIVE"}
                 </span>
             </div>
 
             {/* Teams & Scores */}
             {teams && score && (
-                <div className="p-6 mb-6 rounded-lg  shadow-md">
+                <div className="p-6 mb-4">
                     {/* Team Names & Final Score */}
                     <div className="flex justify-between items-center pb-4 border-b border-gray-600">
                         <div className="flex items-center gap-4">
@@ -23,7 +24,7 @@ const Summary = ({ events, teams, score, status, detailsLoading }) => {
                         </div>
                         <div className="text-2xl md:text-4xl font-extrabold text-white">
                             {score.fulltime?.home !== undefined && score.fulltime?.away !== undefined
-                                ? `${score.fulltime.home} - ${score.fulltime.away}` // Soccer format
+                                ? `${goals.home} - ${goals.away}` // Soccer format
                                 : `${score.home.total} - ${score.away.total}`}
                             {/* American football format */}
                         </div>
@@ -89,8 +90,6 @@ const Summary = ({ events, teams, score, status, detailsLoading }) => {
                     </div>
                 </div>
             )}
-
-
 
             {/* Match Events */}
             {events &&

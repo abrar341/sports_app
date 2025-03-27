@@ -45,8 +45,8 @@ export const UpcomingGames = ({ selectedGame }) => {
         }
     }, [isSoccer, upcomingFixtures, AFupcomingFixtures]);
 
-    const handleGameClick = (leagueId, fixtureId, status) => {
-        navigate(`/games-insight/${selectedGame}/${leagueId}/${status}/${fixtureId}`);
+    const handleGameClick = (leagueId, fixtureId, status, goto) => {
+        navigate(`/games-insight/${selectedGame}/${leagueId}/${status}/${fixtureId}/${goto}`);
     };
 
     const leagues = isSoccer
@@ -124,7 +124,8 @@ export const UpcomingGames = ({ selectedGame }) => {
                                 handleGameClick(
                                     selectedLeague,
                                     isSoccer ? game.fixtureId : game.gameId,
-                                    "upcoming"
+                                    "upcoming",
+                                    "odds"
                                 )
                             }
                             key={index}
@@ -155,12 +156,47 @@ export const UpcomingGames = ({ selectedGame }) => {
                                 </div>
                             </div>
 
+                            {/* Links for Odds & Prediction */}
+                            <div className="flex gap-4">
+                                <span
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleGameClick(
+                                            selectedLeague,
+                                            isSoccer ? game.fixtureId : game.gameId,
+                                            "upcoming",
+                                            "odds"
+                                        );
+                                    }}
+                                    className="text-xs  py-1 border-b border-gray-500 cursor-pointe"
+                                >
+                                    Odds
+                                </span>
+                                <span
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleGameClick(
+                                            selectedLeague,
+                                            isSoccer ? game.fixtureId : game.gameId,
+                                            "upcoming",
+                                            "prediction"
+                                        );
+                                    }}
+                                    className="text-xs  py-1 border-b border-gray-500 cursor-pointer"
+                                >
+                                    Prediction
+                                </span>
+                            </div>
+
                             {/* Match DateTime */}
                             <div className="text-sm opacity-80 text-right w-1/3 max-md:w-full max-md:text-center">
                                 {isSoccer ? formatDateTime(game.date) : formatDateTime(game.date.date)}
                             </div>
+
+
                         </div>
                     ))
+
                 ) : (
                     <EmptyState icon={FaRegSadTear} message="No upcoming matches to show" />
                 )}

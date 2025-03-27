@@ -27,9 +27,9 @@ export const data = {
     "predictions": {
         "matchOutcome": {
             "win": {
-                "home": 40,
-                "away": 35,
-                "draw": 25
+                "home": 50,
+                "away": 30,
+                "draw": 20
             },
             "correctScore": {
                 "home": 2,

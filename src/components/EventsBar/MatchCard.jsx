@@ -8,7 +8,9 @@ const MatchCard = ({ match }) => {
     const { homeTeam, fixtureId, leagueId, awayTeam, live } = match; // Extract normalized match data
     const status = live ? "live" : "completed";
     const handleGameClick = (leagueId, fixtureId, status, selectedSport) => {
-        navigate(`/games-insight/${selectedSport}/${leagueId}/${status}/${fixtureId}`);
+        let goto;
+        goto = status === "completed" ? "summary" : "odds"
+        navigate(`/games-insight/${selectedSport}/${leagueId}/${status}/${fixtureId}/${goto}`);
     };
     return (
         <div onClick={() => handleGameClick(leagueId, fixtureId, status, selectedSport)} className="bg-secondary cursor-pointer text-white p-2 rounded-lg flex flex-col items-start w-full max-w-[200px]">

@@ -50,7 +50,7 @@ export const CompletedGames = ({ selectedGame }) => {
     const paginatedGames = games.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
     const handleGameClick = (leagueId, fixtureId, status) => {
-        navigate(`/games-insight/${selectedGame}/${leagueId}/${status}/${fixtureId}`);
+        navigate(`/games-insight/${selectedGame}/${leagueId}/${status}/${fixtureId}/summary`);
     };
 
     const handleLeagueChange = (e) => {

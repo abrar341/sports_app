@@ -44,7 +44,7 @@ export const GameInsights = () => {
             <div className="flex flex-col justify-center w-full max-md:max-w-full">
                 <GameSelector />
                 <div className="mt-6 w-full max-md:max-w-full">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 justify-between items-center w-full max-md:max-w-full">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 justify-between items-center w-full max-md:max-w-full">
                         <LiveGames selectedGame={gameInsightSelectedGame} />
                         <Insights />
                     </div>

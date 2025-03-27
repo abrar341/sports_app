@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { EmptyState } from "../Shared/EmptyState";
 import { FaRegSadTear } from "react-icons/fa";
-// import { AFliveFixtures, liveFixtures } from "./live";
+// import { liveFixtures } from "./live";
 
 export const LiveGames = ({ selectedGame }) => {
     const navigate = useNavigate();
@@ -74,8 +74,8 @@ export const LiveGames = ({ selectedGame }) => {
             setCurrentPage(1);
         }
     };
-    const handleGameClick = (leagueId, fixtureId, status) => {
-        navigate(`/games-insight/${selectedGame}/${leagueId}/${status}/${fixtureId}`);
+    const handleGameClick = (leagueId, fixtureId, status, goto) => {
+        navigate(`/games-insight/${selectedGame}/${leagueId}/${status}/${fixtureId}/${goto}`);
     };
 
 
@@ -117,11 +117,11 @@ export const LiveGames = ({ selectedGame }) => {
                     paginatedGames.map((match, index) => (
                         <div
                             key={index}
-                            onClick={() => handleGameClick(selectedLeague, isSoccer ? match.fixture.id : match.gameId, "live")}
-                            className="flex overflow-hidden gap-5 justify-between px-4 py-3 mt-2 w-full text-center rounded-lg border border-solid bg-secondary border-white border-opacity-15 max-md:max-w-full text-white cursor-pointer"
+                            onClick={() => handleGameClick(selectedLeague, isSoccer ? match.fixture.id : match.gameId, "live", "summary")}
+                            className="flex flex-col md:flex-row overflow-hidden gap-2 md:gap-5 justify-between  px-4 py-3 mt-2 w-full text-center rounded-lg border border-solid bg-secondary border-white border-opacity-15 max-md:max-w-full text-white cursor-pointer"
                         >
                             {/* Teams Section */}
-                            <div className="flex items-center gap-4 w-1/3 max-md:w-full">
+                            <div className="flex w-full items-center gap-4  max-md:w-full">
                                 <div className="flex items-center gap-2 text-right w-full max-md:justify-center">
                                     <img src={match.teams.home.logo} alt={match.teams.home.name} className="w-7 h-7 rounded-full" />
                                     <span className="text-base font-semibold truncate">{match.teams.home.name}</span>
@@ -136,16 +136,55 @@ export const LiveGames = ({ selectedGame }) => {
                             </div>
 
                             {/* Time Left */}
-                            <div className="text-base font-semibold w-1/3 text-center max-md:w-full">
+                            <div className="text-base w-full  font-semibold w-1/3 text-center max-md:w-full">
                                 {isSoccer ? match.fixture.status.elapsed + " min" : match.status.short}
                             </div>
 
+                            {/* Links for Odds & Prediction */}
+                            <div className=" md:hidden flex w-full justify-center gap-4">
+                                <span
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleGameClick(
+                                            selectedLeague, isSoccer ? match.fixture.id : match.gameId, "live", "odds"
+                                        );
+                                    }}
+                                    className="text-xs  py-1 border-b border-gray-500 cursor-pointe"
+                                >
+                                    Odds
+                                </span>
+                                <span
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleGameClick(
+                                            selectedLeague, isSoccer ? match.fixture.id : match.gameId, "live", "prediction"
+                                        );
+                                    }}
+                                    className="text-xs  py-1 border-b border-gray-500 cursor-pointer"
+                                >
+                                    Prediction
+                                </span>
+                                <span
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleGameClick(
+                                            selectedLeague, isSoccer ? match.fixture.id : match.gameId, "live", "summary"
+                                        );
+                                    }}
+                                    className="text-xs  py-1 border-b border-gray-500 cursor-pointer"
+                                >
+                                    Live
+                                </span>
+                            </div>
+
                             {/* Current Score */}
-                            <div className="text-base font-semibold w-1/3 text-right max-md:w-full">
+                            <div className="text-base text-center font-semibold w-1/3 max-md:w-full">
                                 {isSoccer
                                     ? `${match.goals.home ?? 0} - ${match.goals.away ?? 0}`
                                     : `${match.scores.home.total ?? 0} - ${match.scores.away.total ?? 0}`}
                             </div>
+
+
                         </div>
                     ))
                 ) : (

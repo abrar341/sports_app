@@ -7,7 +7,6 @@ import AccountSetting from '../components/AccountSettingComponent/AccountSetting
 import SettingsPage from '../pages/SettingsPage';
 import ProtectedRoute from './ProtectedRoutes.jsx';
 import GuestRoute from './GuestRoutes.jsx';
-import { useSelector } from 'react-redux';
 import PlayersInsightsMain from '../components/PlayersInsights/PlayersInsightsMain.jsx';
 import TeamInsightMain from '../components/TeamInsight/TeamInsightMain.jsx';
 import SubscriptionMain from '../components/Subscription/SubscriptionMain';
@@ -24,6 +23,9 @@ import TrendingNews from '../components/LandingPage/News/TrendingNews.jsx';
 import MainLayout from '../pages/MainLayout.jsx';
 import ContactForm from '../components/LandingPage/ContactUs/ContactForm.jsx';
 import SoccerMatchPrediction from '../components/GameInsights/SoccerMatchPrediction.jsx';
+import Summary from '../components/GameInsights/Summary.jsx';
+import Odds from '../components/GameInsights/Odds.jsx';
+import MatchStatistics from '../components/GameInsights/MatchStatistics.jsx';
 
 const AppRoutes = () => {
 
@@ -32,6 +34,7 @@ const AppRoutes = () => {
             {/* Authentication Routes */}
             <Route element={<MainLayout />}>
                 <Route path="/" element={<GuestRoute><LandingPage /></GuestRoute>} />
+                <Route path="/ai" element={<GuestRoute><SoccerMatchPrediction /></GuestRoute>} />
                 <Route path="/news" element={<GuestRoute><TrendingNews /></GuestRoute>} />
                 <Route path="/pricing" element={<GuestRoute><LandingPage /></GuestRoute>} />
                 <Route path="/games" element={<GuestRoute><LandingPage /></GuestRoute>} />
@@ -54,7 +57,12 @@ const AppRoutes = () => {
                 <Route path="/player-insight" element={<PlayersInsightsMain />} />
                 <Route path="/team-insight" element={<TeamInsightMain />} />
                 <Route path="/games-insight" element={<GameInsights />} />
-                <Route path="/games-insight/:gameType/:leagueId/:status/:fixtureId" element={<GameDetails />} />
+                <Route path="/games-insight/:gameType/:leagueId/:status/:fixtureId" element={<GameDetails />}>
+                    <Route path="summary" element={<Summary />} />
+                    <Route path="odds" element={<Odds />} />
+                    <Route path="prediction" element={<SoccerMatchPrediction />} />
+                    <Route path="stats" element={<MatchStatistics />} />
+                </Route>
                 <Route path="/subscription" element={<SubscriptionMain />} />
                 <Route path="/subscription/success/:subcribtionPlan" element={<Success />} />
                 <Route path="/subscription/cancel/:sessionId" element={<Cancel />} />

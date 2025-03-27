@@ -10,7 +10,6 @@ const EventsBar = () => {
 
     const dispatch = useDispatch();
 
-
     const { AFcompletedFixtures, completedFixtures, fixturesLoading } = useSelector((state) => state.fixtures);
     useEffect(() => {
         if (selectedSport === 'soccer') {

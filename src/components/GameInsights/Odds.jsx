@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 // let socket = io(SOCKET_URL);
 
 const Odds = () => {
+
     const { status, fixtureId } = useParams();
     const { fixturesLoading, liveFixtures } = useSelector((state) => state.fixtures);
     const [odds, setOdds] = useState(null);
@@ -78,7 +79,6 @@ const Odds = () => {
     if (!odds?.data?.bookmakers?.length) {
         return (
             <div className="mt-6 text-center">
-                <h2 className="text-lg font-semibold text-white">Odds</h2>
                 <p className="text-gray-400">No odds available for this match.</p>
             </div>
         );
@@ -88,8 +88,7 @@ const Odds = () => {
     const betTypes = [...new Set(odds.data.bookmakers.flatMap(bookmaker => bookmaker.bets.map(bet => bet.name)))];
 
     return (
-        <div className="mt-6 text-center">
-            <h2 className="text-xl font-semibold text-white mb-4">Odds</h2>
+        <div className="text-center">
 
             <div className="flex overflow-x-auto scrollbar-hide space-x-4 border-gray-500">
                 {betTypes.map(betType => (

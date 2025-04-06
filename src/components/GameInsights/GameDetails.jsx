@@ -20,7 +20,6 @@ const GameDetails = () => {
     const [detailsLoading, setDetailsLoading] = useState(false);
     const dispatch = useDispatch()
 
-    // console.log("fixtureData", fixtureData);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -60,7 +59,6 @@ const GameDetails = () => {
                 )?.find(
                     (gameItem) => gameItem.league.leagueId.toString() === leagueId && gameItem.gameId.toString() === fixtureId
                 );
-                console.log("foundGame", foundGame);
 
                 if (foundGame) {
                     game = foundGame;
@@ -101,6 +99,7 @@ const GameDetails = () => {
     if (!game) return <div className="bg-primary min-h-screen text-white p-6 text-center">Game not found</div>;
 
     // console.log("Socket Connected", socket.connected)
+    // console.log("game.score", fixtureData?.score);
 
     return (
         <div className="bg-primary min-h-screen text-white px-5 py-6 sm:p-6">
@@ -169,9 +168,7 @@ const GameDetails = () => {
                     </NavLink>
                 )}
 
-
-
-                {status !== "completed" && status !== "live" && (
+                {status !== "completed" && (
                     <NavLink
                         to="prediction"
                         className={({ isActive }) =>
@@ -190,10 +187,10 @@ const GameDetails = () => {
                 leagueId,
                 fixtureId,
                 detailsLoading,
-                events: fixtureData?.events || game.events,
-                teams: fixtureData?.teams || game.teams,
-                score: fixtureData?.score || game.scores || game.score,
-                goals: fixtureData?.goals || game.goals || game.goals,
+                events: gameType === "soccer" && (game.events || fixtureData?.events),
+                teams: game.teams || fixtureData?.teams,
+                score: gameType !== 'soccer' ? game.scores : (game.score || fixtureData?.score),
+                goals: game.goals || fixtureData?.goals,
                 status: fixtureData?.status || game.status,
                 statistics: game.statistics
             }} />

@@ -87,7 +87,7 @@ const PlayerCard = ({ selectedPlayer, playerStats, favoritesLoading }) => {
     const { teamStatsLoading, playerProfileLoading } = useSelector((state) => state.loading);
 
     return teamStatsLoading || playerProfileLoading ? <Loading /> : (
-        <div className="relative bg-secondary p-6 h-[320px] rounded-xl flex flex-col items-center shadow-lg">
+        <div className="relative bg-secondary p-6  rounded-xl flex flex-col items-center shadow-lg">
             {
                 playerProfileLoading ? <div className="flex w-full h-full justify-center items-center py-4">
                     <div className="w-6 h-6 border-4 border-primarySolid border-t-secondary rounded-full animate-spin"></div>

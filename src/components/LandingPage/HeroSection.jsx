@@ -16,7 +16,7 @@ function HeroSection() {
                             AI-Powered Sports Analytics for Smarter Bets.
                         </h1>
                         <p className="text-lg text-center max-w-[854px] text-zinc-300 max-md:text-xl max-sm:text-base">
-                            marter Predictions. Better Bets. Winning Insights.
+                            Smarter Predictions. Better Bets. Winning Insights.
                         </p>
                     </div>
                     <div className="flex gap-4 md:gap-10 justify-center items-center max-sm:flex-col">

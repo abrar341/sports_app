@@ -1,8 +1,9 @@
 export const getStatsConfig = (sport, playerStatsData) => {
+
     if (sport === "soccer") {
         return [
             { label: "Total Goals", value: playerStatsData.totalGoals || 0, color: "text-red-400" },
-            { label: "Assists", value: playerStatsData.assists || 0, color: "text-green-400" },
+            { label: "Passes", value: playerStatsData.passes || 0, color: "text-green-400" },
             { label: "Points", value: playerStatsData.points || 0, color: "text-blue-400" },
         ];
     } else if (sport === "american-football") {

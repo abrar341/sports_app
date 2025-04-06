@@ -127,12 +127,10 @@ const SubscriptionCard = ({ planName, price, duration, timeLeft, features, butto
 
 SubscriptionCard.propTypes = {
     planName: PropTypes.string.isRequired,
-    price: PropTypes.string.isRequired,
     duration: PropTypes.string.isRequired,
     features: PropTypes.arrayOf(PropTypes.string).isRequired,
     buttonText: PropTypes.string.isRequired,
     activePlan: PropTypes.bool,
-    priceId: PropTypes.string.isRequired,
 };
 
 export default SubscriptionCard;

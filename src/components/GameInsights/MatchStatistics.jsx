@@ -3,7 +3,6 @@ import { useOutletContext } from "react-router-dom";
 
 const MatchStatistics = () => {
     const { statistics } = useOutletContext();
-    console.log("statistics", statistics);
 
     if (!statistics || statistics.length !== 2) return <p className="text-center text-lg font-semibold text-gray-300">No data available</p>;
 

@@ -1,6 +1,6 @@
 export const sportsData = [
     {
-        name: "American Football",
+        name: "Football",
         imageUrl:
             "https://file.aiquickdraw.com/imgcompressed/img/compressed_aa9f0b097d9139822a5a58337a056e51.webp",
         altText: "AF",

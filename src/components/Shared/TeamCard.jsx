@@ -70,7 +70,7 @@ const TeamCard = ({ selectedTeam, favoritesLoading }) => {
     };
 
     return teamProfileLoading ? <Loading /> : (
-        <div className={`relative bg-secondary p-6  min-h-[19rem]  rounded-xl flex flex-col items-center ${teamProfileLoading && "justify-center"} shadow-lg`}>
+        <div className={`relative bg-secondary p-6   rounded-xl flex flex-col items-center ${teamProfileLoading && "justify-center"} shadow-lg`}>
             {teamProfileLoading ? <Loading /> : <>
                 <img
                     src={logo || "https://via.placeholder.com/100"} // Fallback Image

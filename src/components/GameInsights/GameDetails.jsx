@@ -4,20 +4,28 @@ import { useParams, NavLink, Outlet } from "react-router-dom";
 import { formatDateTime } from "./UpcomingGames";
 import { getFixtureById } from "../../Api/Fixtures/get/fixtures";
 import Loading from "../Shared/Loading";
-import { fetchUpcomingFixturesPredictions } from "../../slices/predictionSlice";
-// import { liveFixtures } from "./live";
+import { fetchUpcomingAFFixturesPredictions, fetchUpcomingFixturesPredictions } from "../../slices/predictionSlice";
+// import { socket } from "../../middleware/socketMiddleware";
+// import { AFliveFixtures } from "./live";
 
 const GameDetails = () => {
     const { gameType, status, leagueId, fixtureId } = useParams();
-    const { upcomingFixtures, liveFixtures, completedFixtures, fixturesLoading, AFfixturesLoading } = useSelector((state) => state.fixtures);
-    const { AFliveFixtures, AFcompletedFixtures } = useSelector((state) => state.fixtures);
+    const { upcomingFixtures, completedFixtures, fixturesLoading, AFfixturesLoading } = useSelector((state) => state.fixtures);
+    const { AFcompletedFixtures, liveFixtures, AFliveFixtures } = useSelector((state) => state.fixtures);
+    const upcomingFixturesPredictions = useSelector((state) => state.prediction.upcomingFixturesPredictions);
+    const AFupcomingFixturesPredictions = useSelector((state) => state.prediction.AFupcomingFixturesPredictions);
+    const { predictionLoading } = useSelector((state) => state.prediction);
 
     const [fixtureData, setFixtureData] = useState(null);
     const [detailsLoading, setDetailsLoading] = useState(false);
     const dispatch = useDispatch()
+
+    // console.log("fixtureData", fixtureData);
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [fixtureId]);
+
     let game = null;
     let league = null;
 
@@ -26,7 +34,6 @@ const GameDetails = () => {
         if (status === "live") {
             game = liveFixtures?.data?.find(fixture => fixture.fixture.id.toString() === fixtureId);
             league = game?.league || null;
-            console.log("game", game);
 
         } else {
             const fixtureList =
@@ -46,9 +53,15 @@ const GameDetails = () => {
     if (gameType === "american-football") {
         const findGame = (fixtureList) => {
             fixtureList?.data?.forEach((leagueItem) => {
-                const foundGame = leagueItem?.completedGames?.find(
+                const foundGame = (status === "live"
+                    ? leagueItem?.liveGames
+                    : status === "completed" ? leagueItem?.completedGames
+                        : leagueItem?.upcomingGames
+                )?.find(
                     (gameItem) => gameItem.league.leagueId.toString() === leagueId && gameItem.gameId.toString() === fixtureId
                 );
+                console.log("foundGame", foundGame);
+
                 if (foundGame) {
                     game = foundGame;
                     league = foundGame.league;
@@ -75,14 +88,22 @@ const GameDetails = () => {
     }, [status, fixtureId, gameType]);
 
     useEffect(() => {
-        dispatch(fetchUpcomingFixturesPredictions())
-    }, [])
+        if (gameType === "soccer") {
+            if (upcomingFixturesPredictions.length) return;
+            dispatch(fetchUpcomingFixturesPredictions());
+        } else {
+            if (AFupcomingFixturesPredictions.length) return;
+            dispatch(fetchUpcomingAFFixturesPredictions());
+        }
+    }, [status, fixtureId, gameType]);
 
-    if (fixturesLoading || AFfixturesLoading) return <div className="min-h-screen p-6 bg-primary"><Loading /></div>;
+    if (fixturesLoading || AFfixturesLoading || predictionLoading) return <div className="min-h-screen p-6 bg-primary"><Loading /></div>;
     if (!game) return <div className="bg-primary min-h-screen text-white p-6 text-center">Game not found</div>;
 
+    // console.log("Socket Connected", socket.connected)
+
     return (
-        <div className="bg-primary min-h-screen text-white p-6">
+        <div className="bg-primary min-h-screen text-white px-5 py-6 sm:p-6">
             {/* League & Round Info */}
             <div className="flex items-center gap-2 text-sm text-gray-300">
                 {league?.country && <img src={league.country.flag || game.league.flag} alt={league.country.name || league} className="w-5 h-5" />}
@@ -118,7 +139,7 @@ const GameDetails = () => {
                 {(status === "completed" || status === "live") && <NavLink
                     to="summary"
                     className={({ isActive }) =>
-                        `px-1 pb-2 text-base text-white ${isActive ? "border-b-2 font-semibold border-secondary" : "bg-searchBarB"}`
+                        `px-1 pb-2 text-base text-white ${isActive ? "border-b-2 font-semibold border-white" : "bg-searchBarB"}`
                     }
                 >
                     {status === "live" ? "Live Score" : "Match Summary"}
@@ -129,7 +150,7 @@ const GameDetails = () => {
                     <NavLink
                         to="stats"
                         className={({ isActive }) =>
-                            `px-1 pb-2 text-base text-white ${isActive ? "border-b-2 font-semibold border-secondary" : "bg-searchBarB"}`
+                            `px-1 pb-2 text-base text-white ${isActive ? "border-b-2 font-semibold border-white" : "bg-searchBarB"}`
                         }
                     >
                         Stats
@@ -141,7 +162,7 @@ const GameDetails = () => {
                     <NavLink
                         to="odds"
                         className={({ isActive }) =>
-                            `px-1 pb-2 text-base text-white ${isActive ? "border-b-2 font-semibold border-secondary" : "bg-searchBarB"}`
+                            `px-1 pb-2 text-base text-white ${isActive ? "border-b-2 font-semibold border-white" : "bg-searchBarB"}`
                         }
                     >
                         Betting Odds
@@ -154,7 +175,7 @@ const GameDetails = () => {
                     <NavLink
                         to="prediction"
                         className={({ isActive }) =>
-                            `px-1 pb-2 text-base text-white ${isActive ? "border-b-2 font-semibold border-secondary" : "bg-searchBarB"}`
+                            `px-1 pb-2 text-base text-white ${isActive ? "border-b-2 font-semibold border-white" : "bg-searchBarB"}`
                         }
                     >
                         Prediction

@@ -62,7 +62,7 @@ const LeagueAreaChart = ({ gameType }) => {
     return favoritePlayersHighlightsLoading ? (
         <Loading />
     ) : (
-        <div className="bg-secondary h-full rounded-xl p-4">
+        <div className="bg-secondary h-full rounded-xl p-4 min-h-[260px]">
             {/* Dropdown Selectors */}
             <div className="mb-4 flex justify-end gap-4">
                 {/* Season Dropdown */}
@@ -186,7 +186,9 @@ const LeagueAreaChart = ({ gameType }) => {
                     </AreaChart>
                 </ResponsiveContainer>
             ) : (
-                <EmptyState icon={FaRegSadTear} message="No league to show for now." />
+                <div className="">
+                    <EmptyState icon={FaRegSadTear} message="No league to show for now." />
+                </div>
             )}
         </div>
     );

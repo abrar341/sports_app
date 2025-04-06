@@ -31,7 +31,11 @@ const PlayerStatsWidget = ({ gameType }) => {
     }, [favoritePlayersHighlights, hovered]);
 
     if (!favoritePlayersHighlights || (favoritePlayersHighlights.length === 0 && !favoritePlayersHighlightsLoading))
-        return <EmptyState icon={FaRegSadTear} message="No favorite players added yet." />;
+        return (
+            <div className="rounded-xl bg-secondary h-full">
+                <EmptyState icon={FaRegSadTear} message="No favorite players added yet." />
+            </div>
+        );
 
     const currentPlayer = favoritePlayersHighlights[currentIndex];
 

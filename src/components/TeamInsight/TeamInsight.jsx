@@ -60,7 +60,7 @@ const TeamInsight = () => {
     }, [fetchFavouriteTeams, selectedTeamSports]);
 
     return (
-        <div className="text-white min-h-screen overflow-clip p-8">
+        <div className="text-white min-h-screen overflow-clip px-5 py-8 sm:px-8 sm:py-8">
             <div className=" grid  grid-cols-12 gap-3 md:gap-6">
 
                 {/* Player Insight Search Bar */}

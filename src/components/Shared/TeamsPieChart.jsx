@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import Loading from "./Loading";
 
 const TeamsPieChart = ({ data }) => {
-    console.log("data", data);
 
     const [selectedSeason, setSelectedSeason] = useState("All");
 
@@ -15,7 +14,6 @@ const TeamsPieChart = ({ data }) => {
 
     // Extract unique seasons and sort them in descending order
     const seasons = ["All", ...new Set(data.map(({ season }) => String(season)))].sort((a, b) => b.localeCompare(a));
-    console.log("seasons", seasons);
 
     // Filter data based on selected season
     const filteredData = selectedSeason === "All"

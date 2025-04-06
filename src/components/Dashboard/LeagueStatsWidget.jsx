@@ -26,7 +26,11 @@ const LeagueStatsWidget = ({ gameType }) => {
     }, [favoriteLeaguessHighlights.length, hovered]);
 
     if (!favoriteLeaguessHighlights.length && !favoriteTeamsHighlightsLoading) {
-        return <EmptyState icon={FaRegSadTear} message="No league to show for now." />;
+        return (
+            <div className="rounded-xl bg-secondary h-full">
+                <EmptyState icon={FaRegSadTear} message="No league to show for now." />;
+            </div>
+        )
     }
 
     const league = favoriteLeaguessHighlights[index];
@@ -134,7 +138,7 @@ const LeagueStatsWidget = ({ gameType }) => {
                     <p className="mt-3 gap-2 flex justify-center items-center">
                         <span className="text-base font-semibold text-center text-white">Top Scorer: </span>
                         <span className="text-base font-semibold text-center text-[#0147B9]">
-                            {league.topScorers?.players?.[0]?.player?.name || ""}.
+                            {league?.topScorers?.players?.[0]?.player?.name || ""}.
                         </span>
                     </p>
                 )}

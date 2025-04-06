@@ -15,8 +15,8 @@ export const LiveGames = ({ selectedGame }) => {
     // Determine if it's soccer or American football
     const isSoccer = selectedGame === "soccer";
 
-    const { fixturesLoading, liveFixtures } = useSelector((state) => state.fixtures);
-    const { AFliveFixtures, AFfixturesLoading } = useSelector((state) => state.fixtures);
+    const { fixturesLoading } = useSelector((state) => state.fixtures);
+    const { AFliveFixtures, AFfixturesLoading, liveFixtures } = useSelector((state) => state.fixtures);
 
     // Update selectedLeague when the game type changes
     useEffect(() => {
@@ -141,7 +141,7 @@ export const LiveGames = ({ selectedGame }) => {
                             </div>
 
                             {/* Links for Odds & Prediction */}
-                            <div className=" md:hidden flex w-full justify-center gap-4">
+                            <div className="flex w-full justify-center gap-4">
                                 <span
                                     onClick={(e) => {
                                         e.stopPropagation();
@@ -153,7 +153,7 @@ export const LiveGames = ({ selectedGame }) => {
                                 >
                                     Odds
                                 </span>
-                                <span
+                                {/* <span
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         handleGameClick(
@@ -163,7 +163,7 @@ export const LiveGames = ({ selectedGame }) => {
                                     className="text-xs  py-1 border-b border-gray-500 cursor-pointer"
                                 >
                                     Prediction
-                                </span>
+                                </span> */}
                                 <span
                                     onClick={(e) => {
                                         e.stopPropagation();

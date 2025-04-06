@@ -39,21 +39,22 @@ export const GameInsights = () => {
 
 
     return (
-        <main className="w-full max-md:max-w-full bg-primary px-8 py-6">
+        <main className="w-full max-md:max-w-full bg-primary px-5 sm:px-8 py-6">
             {/* <PlayerInsightSearchBar /> */}
             <div className="flex flex-col justify-center w-full max-md:max-w-full">
                 <GameSelector />
                 <div className="mt-6 w-full max-md:max-w-full">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 justify-between items-center w-full max-md:max-w-full">
+                    <div className="grid grid-cols-1  gap-6 justify-between items-center w-full max-md:max-w-full">
+                        {/* lg:grid-cols-3 */}
                         <LiveGames selectedGame={gameInsightSelectedGame} />
-                        <Insights />
+                        {/* <Insights /> */}
                     </div>
                     <div className="flex flex-col justify-center mt-6 w-full max-md:max-w-full">
                         <UpcomingGames selectedGame={gameInsightSelectedGame} />
                         <CompletedGames selectedGame={gameInsightSelectedGame} />
                     </div>
                 </div>
-                <section className="mt-6 w-full max-md:max-w-full">
+                {/* <section className="mt-6 w-full max-md:max-w-full">
                     <h2 className="text-2xl font-bold leading-none text-white max-md:max-w-full">
                         Trending Insights:
                     </h2>
@@ -74,15 +75,15 @@ export const GameInsights = () => {
                             imageSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/278a81500da920107d8996957c4e7a38761c3258d25882979167edb045671b9f?placeholderIfAbsent=true&apiKey=4f9147a08e6749d1ab75f2ad160393ea"
                         />
                     </div>
-                </section>
-                <PastResults />
-                <PerformanceTrends />
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-center items-center mt-6 w-full max-md:max-w-full">
+                </section> */}
+                {/* <PastResults />
+                <PerformanceTrends /> */}
+                {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-center items-center mt-6 w-full max-md:max-w-full">
                     <div className='md:col-span-2 h-full'>
                         <Statistics />
                     </div>
                     <WinLossTrends />
-                </div>
+                </div> */}
             </div>
         </main>
     );

@@ -1,13 +1,13 @@
 import { io } from "socket.io-client";
 import { setAFLiveFixtures, setAFUpcomingFixtures, setLiveFixtures, setUpcomingFixtures } from "../slices/fixturesSlice";
 import { SOCKET_URL } from "../utils/constants";
+import { setUpcomingFixturesPredictions } from "../slices/predictionSlice";
 
-let socket = null;
+export let socket = null;
 
 export const socketMiddleware = (store) => (next) => (action) => {
     if (!socket) {
         socket = io(SOCKET_URL);
-
 
         console.log("Socket Connected", socket.connected);
 
@@ -24,26 +24,29 @@ export const socketMiddleware = (store) => (next) => (action) => {
             console.log("Socket Disconnected");
         });
 
-        // socket.on("testEvent", (data) => {
-        //     console.log("testEvent", data);
-        // });
-
         socket.on("upcomingFixtures", (data) => {
+            console.log("upcomingFixtures", data);
             store.dispatch(setUpcomingFixtures(data));
         });
 
         socket.on("americanFootballUpcomingGames", (data) => {
+            console.log("americanFootballUpcomingGames", data);
             store.dispatch(setAFUpcomingFixtures(data));
         });
 
         socket.on("liveFixtures", (data) => {
-            console.log("data", data);
-
+            console.log("liveFixtures", data);
             store.dispatch(setLiveFixtures(data));
         });
 
         socket.on("americanFootballLiveGames", (data) => {
+            console.log("americanFootballLiveGames", data);
             store.dispatch(setAFLiveFixtures(data));
+        });
+
+        socket.on("SoccerUpcomingFixturesAIPredictions", (data) => {
+            console.log("prediction data", data);
+            store.dispatch(setUpcomingFixturesPredictions(data.data));
         });
 
     }

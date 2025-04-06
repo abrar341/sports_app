@@ -27,7 +27,11 @@ const TeamStatsWidget = ({ gameType }) => {
     }, [favoriteTeamsHighlights.length, hovered]);
 
     if (!favoriteTeamsHighlights.length && !favoriteTeamsHighlightsLoading)
-        return <EmptyState icon={FaRegSadTear} message="No favorite teams added yet." />;
+        return (
+            <div className="rounded-xl bg-secondary h-full">
+                <EmptyState icon={FaRegSadTear} message="No favorite teams added yet." />
+            </div>
+        )
 
     const currentTeam = favoriteTeamsHighlights[index];
     const isSoccer = gameType === "soccer";
@@ -69,20 +73,31 @@ const TeamStatsWidget = ({ gameType }) => {
                                 <div className="w-full rounded bg-stone-50">
                                     <div className="flex bg-sky-400 rounded overflow-hidden">
                                         {(() => {
-                                            const form = stats.form?.slice(0, 5) || "";
-                                            const total = form.length || 1;
+                                            const form = stats?.form?.slice(0, 5) || "";
+                                            const total = form.length;
+
+                                            if (total === 0) {
+                                                // No form data, show neutral bar
+                                                return <div className="h-2.5 bg-gray-300 flex-1" />;
+                                            }
+
                                             const wCount = form.match(/W/g)?.length || 0;
                                             const lCount = form.match(/L/g)?.length || 0;
+                                            const otherCount = total - (wCount + lCount);
 
                                             return (
                                                 <>
-                                                    <div className="h-2.5 bg-green-400" style={{ flex: wCount / total }} />
-                                                    <div className="h-2.5 bg-red-400" style={{ flex: lCount / total }} />
+                                                    <div className="h-2.5 bg-green-400" style={{ flex: wCount }} />
+                                                    <div className="h-2.5 bg-red-400" style={{ flex: lCount }} />
+                                                    {otherCount > 0 && (
+                                                        <div className="h-2.5 bg-yellow-400" style={{ flex: otherCount }} />
+                                                    )}
                                                 </>
                                             );
                                         })()}
                                     </div>
                                 </div>
+
                                 <div className="flex gap-5 justify-between self-center mt-1 max-w-full text-xs font-semibold tracking-normal text-white whitespace-nowrap w-[362px]">
                                     {stats.form?.slice(0, 5).split('').map((char, i) => (
                                         <span key={i} className={char === "W" ? "text-green-500" : "text-red-500"}>

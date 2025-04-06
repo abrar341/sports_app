@@ -12,9 +12,7 @@ const SocialAuthButtons = () => {
   const navigate = useNavigate();
 
   const handleGoogleAuth = async (credentialResponse) => {
-    console.log('here');
     const { credential } = credentialResponse;
-    console.log("Google sign-in response:", credential);
 
     try {
       const res = await fetch(`${SERVER_URL}/auth/google`, {
@@ -23,9 +21,7 @@ const SocialAuthButtons = () => {
         body: JSON.stringify({ token: credential }),
       });
 
-      console.log("resonse", res);
       const data = await res.json();
-      console.log("res", data);
       if (data.success === true && data) {
         dispatch(setCredentials(data));
         navigate('/dashboard');

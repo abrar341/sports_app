@@ -55,7 +55,7 @@ const Header = () => {
                         { to: "/team-insight", label: "Teams Insights" },
                         { to: "/games-insight", label: "Games Insights" },
                         { to: "/subscription", label: "Subscription" },
-                        { to: "/betting-odds", label: "Betting Odds" }
+                        // { to: "/betting-odds", label: "Betting Odds" }
                     ].map(({ to, label }) => (
                         <NavLink
                             key={to}
@@ -93,7 +93,7 @@ const Header = () => {
                             { to: "/team-insight", label: "Teams Insights" },
                             { to: "/games-insight", label: "Games Insights" },
                             { to: "/subscription", label: "Subscription" },
-                            { to: "/betting-odds", label: "Betting Odds" }
+                            // { to: "/betting-odds", label: "Betting Odds" }
                         ].map(({ to, label }) => (
                             <li key={to}>
                                 <NavLink

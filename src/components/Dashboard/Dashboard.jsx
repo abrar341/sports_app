@@ -59,7 +59,7 @@ const Dashboard = () => {
 
     return (
         <>
-            <main className="flex grid grid-cols-12 overflow-hidden min-h-screen bg-primary  px-8 py-6 flex-col">
+            <main className="flex grid grid-cols-12 overflow-hidden  bg-primary  px-5 sm:px-8 py-6 flex-col">
                 {/* <SearchBar /> */}
                 {/* Sport Dropdown */}
                 <div className="col-span-12 md:col-span-6 mb-4 flex gap-2">
@@ -131,19 +131,20 @@ const Dashboard = () => {
                     </button>
                 </div>
 
-                <div className="self-center col-span-12">
+                <div className="self-center min-h-screen col-span-12">
                     <div className="">
                         <div className="">
                             <section className="mt-6 w-full">
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div className="grid grid-cols-1  gap-4">
+                                    {/* md:grid-cols-3 */}
                                     <div className="md:col-span-2 ">
                                         <LeagueAreaChart gameType={sportsNameDashboard} data={favoriteLeaguessHighlights} />
                                     </div>
-                                    <AlertCard />
+                                    {/* <AlertCard /> */}
                                 </div>
 
                                 <section className="mt-6 w-full max-md:max-w-full">
-                                    <h2 className="text-2xl font-bold leading-none text-white max-md:max-w-full">
+                                    <h2 className="text-2xl px-1 font-bold leading-none text-white max-md:max-w-full">
                                         Favourites Highlights
                                     </h2>
                                     <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3  items-start gap-6  mt-6 w-full ">
@@ -155,7 +156,7 @@ const Dashboard = () => {
                             </section>
                         </div>
 
-                        <section className="mt-6 w-full max-md:max-w-full">
+                        {/* <section className="mt-6 w-full max-md:max-w-full">
                             <h2 className="text-2xl font-bold leading-none text-white max-md:max-w-full">
                                 Today's Recommendations:
                             </h2>
@@ -164,10 +165,10 @@ const Dashboard = () => {
                                 <PlayerPredictionWidget />
                                 <BetPredictionWidget />
                             </div>
-                        </section>
+                        </section> */}
                     </div>
 
-                    <section className="mt-6 w-full max-md:max-w-full">
+                    {/* <section className="mt-6 w-full max-md:max-w-full">
                         <h2 className="text-2xl font-bold leading-none text-white max-md:max-w-full">
                             Trending Insights
                         </h2>
@@ -188,7 +189,7 @@ const Dashboard = () => {
                                 imageSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/278a81500da920107d8996957c4e7a38761c3258d25882979167edb045671b9f?placeholderIfAbsent=true&apiKey=4f9147a08e6749d1ab75f2ad160393ea"
                             />
                         </div>
-                    </section>
+                    </section> */}
                 </div>
             </main>
         </>

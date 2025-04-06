@@ -4,6 +4,8 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { getOddsByFixtureId } from "../../Api/Fixtures/get/fixtures";
 import Loading from "../Shared/Loading";
 import { useSelector } from "react-redux";
+import { EmptyState } from "../Shared/EmptyState";
+import { FaRegSadTear } from "react-icons/fa";
 // import { liveFixtures } from "./live";
 // import { io } from "socket.io-client";
 // import { SOCKET_URL } from "../../utils/constants";
@@ -74,18 +76,26 @@ const Odds = () => {
     // }, [fixtureId]);
 
 
+    // Set default selected bet when odds are loaded
+    useEffect(() => {
+        if (odds?.data?.bookmakers?.length) {
+            const betTypes = [...new Set(odds.data.bookmakers.flatMap(bookmaker => bookmaker.bets.map(bet => bet.name)))];
+            if (betTypes.length > 0) {
+                setSelectedBet(betTypes[0]); // Set first bet type as default
+            }
+        }
+    }, [odds]);
+
     if (loading) return <Loading />;
     if (error) return <p className="text-red-500">{error}</p>;
-    if (!odds?.data?.bookmakers?.length) {
-        return (
-            <div className="mt-6 text-center">
-                <p className="text-gray-400">No odds available for this match.</p>
-            </div>
-        );
+    if (!odds?.data?.bookmakers?.length || !odds?.data?.bookmakers?.[0]?.bets.length) {
+        return <EmptyState icon={FaRegSadTear} message="No Betting Odds yet for this match." />
     }
 
     // Extract bet types from bookmakers
     const betTypes = [...new Set(odds.data.bookmakers.flatMap(bookmaker => bookmaker.bets.map(bet => bet.name)))];
+
+
 
     return (
         <div className="text-center">

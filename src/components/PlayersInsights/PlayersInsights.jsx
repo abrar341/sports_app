@@ -63,7 +63,7 @@ const PlayersInsights = () => {
 
 
     return (
-        <div className="text-white min-h-screen overflow-clip p-8">
+        <div className="text-white min-h-screen overflow-clip px-5 py-8 sm:px-8 sm:py-8">
             {/* Grid Section */}
             <div className=" grid grid-cols-12 gap-3 md:gap-6">
                 {/* Player Insight Search Bar */}
@@ -111,7 +111,8 @@ const PlayersInsights = () => {
                     selectedPlayer &&
                     <>
 
-                        <div className="col-span-12 sm:col-span-6 lg:col-span-4">
+                        <div className="col-span-12 ">
+                            {/* sm:col-span-6 lg:col-span-4 */}
                             <PlayerCard
                                 selectedPlayer={normalizeSelectedPlayerData(selectedPlayer, selectedPlayerSports)}
                                 playerStats={selectedPlayerStats}
@@ -120,9 +121,9 @@ const PlayersInsights = () => {
                         </div>
 
                         {/* Alerts Section */}
-                        <div className="col-span-12 sm:col-span-6 lg:col-span-8">
+                        {/* <div className="col-span-12 sm:col-span-6 lg:col-span-8">
                             <AlertCard />
-                        </div>
+                        </div> */}
 
 
                         {

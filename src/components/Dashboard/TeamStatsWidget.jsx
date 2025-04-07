@@ -75,7 +75,7 @@ const TeamStatsWidget = ({ gameType }) => {
                             </div>
 
                             {/* Form Representation */}
-                            <div className="flex mt-4 flex-col w-full rounded max-w-[406px]">
+                            {stats?.form && <div className="flex mt-4 flex-col w-full rounded max-w-[406px]">
                                 <div className="w-full rounded bg-stone-50">
                                     <div className="flex bg-sky-400 rounded overflow-hidden">
                                         {(() => {
@@ -111,7 +111,7 @@ const TeamStatsWidget = ({ gameType }) => {
                                         </span>
                                     ))}
                                 </div>
-                            </div>
+                            </div>}
                         </div>
 
                         <hr className="mt-5 w-full border border-gray-400" />

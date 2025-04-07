@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import Loading from "../Shared/Loading";
 import { EmptyState } from "../Shared/EmptyState";
 import { FaRegSadTear } from "react-icons/fa";
+import usePlayerActions from "../../hooks/usePlayerActions";
 
 const PlayerStatsWidget = ({ gameType }) => {
     const labelColors = ["text-red-500", "text-green-500", "text-yellow-500", "text-blue-500", "text-purple-500"];
@@ -12,6 +13,8 @@ const PlayerStatsWidget = ({ gameType }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [fade, setFade] = useState(true);
     const [hovered, setHovered] = useState(false);
+    const { handleSelectPlayer, handleSelectAmericanFootballPlayer } = usePlayerActions();
+
 
     useEffect(() => {
         if (!favoritePlayersHighlights || favoritePlayersHighlights.length <= 1 || hovered) return;
@@ -39,6 +42,9 @@ const PlayerStatsWidget = ({ gameType }) => {
 
     const currentPlayer = favoritePlayersHighlights[currentIndex];
 
+    // console.log("currentPlayer", currentPlayer);
+
+
     // Function to extract relevant American football stats
     const getAmericanFootballStats = (category, statName) => {
         const categoryData = currentPlayer?.statsSummary?.statistics?.find(stat => stat.category === category);
@@ -64,10 +70,19 @@ const PlayerStatsWidget = ({ gameType }) => {
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
         >
-            <div className={`transition-opacity duration-500 ${fade ? 'opacity-100' : 'opacity-0'}`}>
+            <div
+
+                className={`transition-opacity  duration-500 ${fade ? 'opacity-100' : 'opacity-0'}`}>
                 <div className="w-full min-h-[140px]">
                     <div className="flex flex-col justify-center w-full">
-                        <div className="flex gap-10 justify-between items-center w-full min-h-[53px]">
+                        <div
+                            onClick={() => {
+                                const playerWithSport = { ...currentPlayer, sportName: gameType };
+                                gameType === "soccer"
+                                    ? handleSelectPlayer(playerWithSport)
+                                    : handleSelectAmericanFootballPlayer(playerWithSport);
+                            }}
+                            className="flex gap-10 cursor-pointer justify-between items-center w-full min-h-[53px]">
                             <div className="flex gap-2 justify-center w-full items-center self-stretch my-auto">
                                 <img
                                     loading="lazy"
@@ -113,7 +128,7 @@ const PlayerStatsWidget = ({ gameType }) => {
 
                 </div>
             </div>
-        </section>
+        </section >
     );
 };
 

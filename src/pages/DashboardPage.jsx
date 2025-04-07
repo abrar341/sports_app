@@ -18,7 +18,7 @@ const DashboardPage = () => {
             {!shouldHideEventsBar && <EventsBar />}
 
             <Header />
-            <div>
+            <div className="min-h-screen">
                 {/* Render nested routes dynamically */}
                 <Outlet />
             </div>

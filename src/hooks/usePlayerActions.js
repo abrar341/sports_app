@@ -33,6 +33,8 @@ const usePlayerActions = () => {
 
     // Function to fetch and set American football player data
     const handleSelectAmericanFootballPlayer = async (player) => {
+        console.log("player", player);
+
         const { playerId, sportName } = player;
 
         if (sportName && sportName !== selectedPlayerSports) {

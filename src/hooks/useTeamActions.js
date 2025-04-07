@@ -18,6 +18,7 @@ const useTeamActions = () => {
 
     // Function to select a team and fetch team details
     const handleSelectTeam = async (team, sportsName) => {
+
         if (sportsName && sportsName !== selectedTeamSports) {
             dispatch(setSelectedTeamSports(sportsName))
             dispatch(setFavoriteTeamsOfSelectedTeamSport([]))

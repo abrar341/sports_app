@@ -59,7 +59,7 @@ const Dashboard = () => {
 
     return (
         <>
-            <main className="flex grid grid-cols-12 overflow-hidden  bg-primary  px-5 sm:px-8 py-6 flex-col">
+            <main className="flex grid grid-cols-12 overflow-hidden min-h-screen bg-primary  px-5 sm:px-8 py-6 flex-col">
                 {/* <SearchBar /> */}
                 {/* Sport Dropdown */}
                 <div className="col-span-12 md:col-span-6 mb-4 flex gap-2">
@@ -132,8 +132,8 @@ const Dashboard = () => {
                 </div>
 
                 <div className="self-center min-h-screen col-span-12">
-                    <div className="">
-                        <div className="">
+                    <div>
+                        <div>
                             <section className="mt-6 w-full">
                                 <div className="grid grid-cols-1  gap-4">
                                     {/* md:grid-cols-3 */}

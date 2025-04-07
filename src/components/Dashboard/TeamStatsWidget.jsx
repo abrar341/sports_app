@@ -3,10 +3,12 @@ import { useSelector } from "react-redux";
 import Loading from "../Shared/Loading";
 import { EmptyState } from "../Shared/EmptyState";
 import { FaRegSadTear } from "react-icons/fa";
+import useTeamActions from "../../hooks/useTeamActions";
 
 const TeamStatsWidget = ({ gameType }) => {
     const { favoriteTeamsHighlights } = useSelector((state) => state.favorites);
     const { favoriteTeamsHighlightsLoading } = useSelector((state) => state.loading);
+    const { handleSelectTeam } = useTeamActions();
 
     const [index, setIndex] = useState(0);
     const [hovered, setHovered] = useState(false);
@@ -53,7 +55,11 @@ const TeamStatsWidget = ({ gameType }) => {
             >
                 <div className="w-full min-h-[140px]">
                     <div className="w-full">
-                        <div className="flex flex-col justify-center w-full">
+                        <div
+                            onClick={() => {
+                                handleSelectTeam(currentTeam, gameType)
+                            }}
+                            className="flex cursor-pointer flex-col justify-center w-full">
                             <div className="flex gap-2 items-center justify-center w-full self-start text-sm font-bold tracking-tight text-neutral-50">
                                 {isSoccer && currentTeam?.logo ? (
                                     <img

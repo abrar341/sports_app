@@ -21,7 +21,6 @@ const authSlice = createSlice({
       localStorage.removeItem('userInfo');
     },
     updateSubscription: (state, action) => {
-
       // ✅ Update local storage
       if (state.userInfo && state.userInfo.data) {
         state.userInfo.data.subscriptionPlan = action.payload.subscriptionPlan;
@@ -31,10 +30,36 @@ const authSlice = createSlice({
         localStorage.setItem('userInfo', JSON.stringify(state.userInfo));
       }
     },
+    updateProfileInfo: (state, action) => {
+      if (state.userInfo && state.userInfo.data) {
+        const updatedData = action.payload;
+
+        // Preserve the existing token
+        const token = state.userInfo.token;
+
+        // Update fields from the payload
+        // state.userInfo.data = {
+        //   ...state.userInfo.data,
+        //   ...updatedData,
+        // };
+        state.userInfo.data = {
+          ...state.userInfo.data,
+          ...updatedData,
+        };
+
+
+        // Reassign the token back if it was overwritten
+        state.userInfo.token = token;
+
+        // ✅ Update local storage
+        localStorage.setItem('userInfo', JSON.stringify(state.userInfo));
+      }
+    }
+
   },
 });
 
-export const { setCredentials, logout, updateSubscription } = authSlice.actions;
+export const { setCredentials, logout, updateSubscription, updateProfileInfo } = authSlice.actions;
 
 // 🔹 Thunk action to clear other slices on logout
 export const logoutUser = () => (dispatch) => {

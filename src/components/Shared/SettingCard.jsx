@@ -19,12 +19,12 @@ const SettingCard = ({ icon, title, onClick, iconColor }) => {
     );
 };
 
-SettingCard.propTypes = {
-    icon: PropTypes.element.isRequired,
-    title: PropTypes.string.isRequired,
-    onClick: PropTypes.func.isRequired, // onClick is required to ensure it's handled properly
-    iconColor: PropTypes.string,
-};
+// SettingCard.propTypes = {
+//     icon: PropTypes.element.isRequired,
+//     title: PropTypes.string.isRequired,
+//     onClick: PropTypes.func.isRequired, // onClick is required to ensure it's handled properly
+//     iconColor: PropTypes.string,
+// };
 
 // SettingCard.defaultProps = {
 //     iconColor: "white",

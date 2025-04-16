@@ -8,7 +8,7 @@ const AccountSection = () => {
     const { userInfo } = useSelector(state => state.auth);
 
     return (
-        <div className="w-[90vw] mx-auto">
+        <div className=" mx-auto">
             <h2 className="text-lg font-bold mb-4 text-left">Account</h2>
             <div className="space-y-4">
                 <EditProfileModal />

@@ -5,12 +5,9 @@ import useEditProfile from "../hooks/useEditProfile";
 
 const SettingsPage = () => {
     const {
-        error,
-        isSubmitting,
         profileImage,
         formDataRef,
         setProfileImage,
-        handleSubmit,
     } = useEditProfile();
     return (
         <div className="min-h-screen bg-primary text-white p-6">

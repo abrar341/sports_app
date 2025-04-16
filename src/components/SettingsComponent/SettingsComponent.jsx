@@ -1,8 +1,17 @@
 import ProfileSection from "../Shared/ProfileSection";
 import AccountSection from "../SettingsComponent/AccountSection";
 import PreferencesSection from "../SettingsComponent/PreferencesSection";
+import useEditProfile from "../../hooks/useEditProfile";
 
 const SettingsComponent = () => {
+    const {
+        error,
+        isSubmitting,
+        profileImage,
+        formDataRef,
+        setProfileImage,
+        handleSubmit,
+    } = useEditProfile();
     return (
         <div className="min-h-screen bg-gradient-to-b from-blue-800 to-blue-900 text-white p-6">
             {/* Title */}
@@ -11,7 +20,15 @@ const SettingsComponent = () => {
             </div>
 
             {/* Profile Section */}
-            <ProfileSection />
+            <>
+                <ProfileSection
+                    profileImage={profileImage}
+                    setProfileImage={setProfileImage}
+                    formData={formDataRef}
+                    isModal={true}
+
+                />
+            </>
 
             {/* Centered Account and Preferences Sections */}
             <div className="flex flex-col items-center gap-12 mt-12">

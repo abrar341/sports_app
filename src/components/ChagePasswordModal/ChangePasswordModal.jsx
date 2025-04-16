@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 const ChangePasswordModal = () => {
 
     const { userInfo } = useSelector((state) => state.auth);
-    
+
     const [isOpen, setIsOpen] = useState(false);
     const [error, setError] = useState(null); // Handle errors
     const [isSubmitting, setIsSubmitting] = useState(false); // Submission state

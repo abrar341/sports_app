@@ -6,7 +6,7 @@ const AccountSetting = () => {
         <div className=" min-h-screen bg-gradient-to-b from-blue-800 to-blue-900 text-white p-6">
             {/* Title */}
             <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold text-start">Account Setting</h1>
+                <h1 className="text-3xl font-bold text-start">Account Settings</h1>
             </div>
 
             {/* Profile Section */}

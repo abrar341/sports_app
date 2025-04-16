@@ -4,9 +4,11 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import DropDown from "../DropDown";
 import dropdownItems from "../DropDownItems";
 import { logoutUser } from "../../slices/authSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Header = () => {
+    const { userInfo } = useSelector((state) => state.auth);
+
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
@@ -70,7 +72,7 @@ const Header = () => {
                 </nav>
                 <div>
                     <div className="flex items-center cursor-pointer" onClick={toggleDropdown}>
-                        <img src="/assets/accountsetting.jpg" alt="Profile" className="w-10 h-10 rounded-full border-2 border-white object-cover" />
+                        <img src={userInfo?.data?.profilePictureURL || "/assets/accountsetting.jpg"} alt="Profile" className="w-10 h-10 rounded-full border-2 border-white object-cover" loading="lazy" />
                     </div>
                     <DropDown items={dropdownItems} onItemClick={handleItemClick} isOpen={dropdownVisible} onClose={() => setDropdownVisible(false)} />
                 </div>

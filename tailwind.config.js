@@ -6,6 +6,7 @@ export default {
   ],
   theme: {
     extend: {
+
       boxShadow: {
         '3xl': 'rgb(38, 57, 77) 0px 20px 30px -10px;', // Spread shadow more visibly
       },
@@ -32,6 +33,21 @@ export default {
       },
       strokeWidth: {
         2: '2px',
+      },
+
+      keyframes: {
+        scrollX: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        scrollXReverse: {
+          '0%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+      },
+      animation: {
+        scrollX: 'scrollX 60s linear infinite',
+        scrollXReverse: 'scrollXReverse 60s linear infinite',
       },
     },
   },

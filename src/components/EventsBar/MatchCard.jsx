@@ -13,7 +13,7 @@ const MatchCard = ({ match }) => {
         navigate(`/games-insight/${selectedSport}/${leagueId}/${status}/${fixtureId}/${goto}`);
     };
     return (
-        <div onClick={() => handleGameClick(leagueId, fixtureId, status, selectedSport)} className="bg-secondary cursor-pointer text-white p-2 rounded-lg flex flex-col items-start w-full max-w-[200px]">
+        <div onClick={() => handleGameClick(leagueId, fixtureId, status, selectedSport)} className="bg-secondary cursor-pointer text-white p-2 rounded-lg flex flex-col items-start w-[180px] max-w-[400px]">
             <div className="text-xs w-full text-end mb-2 flex items-center justify-end space-x-1">
                 {live && <span className="blink-dot"></span>}
                 <span className={live ? "text-red-500 font-bold text-xs" : "text-white text-xs"}>{live ? "Live" : "Result"}</span>

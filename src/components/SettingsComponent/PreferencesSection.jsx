@@ -2,7 +2,7 @@ import SettingCard from "../Shared/SettingCard";
 import { FaLanguage, FaSignOutAlt } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom';
-import { logout, logoutUser } from "../../slices/authSlice";
+import { logoutUser } from "../../slices/authSlice";
 
 const PreferencesSection = () => {
     const dispatch = useDispatch();

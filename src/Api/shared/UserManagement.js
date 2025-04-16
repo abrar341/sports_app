@@ -9,15 +9,15 @@ export const changeUsername = async (name, userId) => {
     }
 }
 
-export const changePassword = async (userId, currentPassword, newPassword) => {
-    console.log(userId, currentPassword, newPassword);
-    try {
-        const res = await api.post('/auth/changePassword', { userId: userId, currentPassword: currentPassword, newPassword: newPassword });
-        return res.data;
-    } catch (error) {
-        console.log(error);
-    }
-}
+// export const changePassword = async (userId, currentPassword, newPassword) => {
+//     console.log(userId, currentPassword, newPassword);
+//     try {
+//         const res = await api.post('/auth/changePassword', { userId: userId, currentPassword: currentPassword, newPassword: newPassword });
+//         return res.data;
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
 
 
 // export const updateProfilePicture = async (userId, profilePicture) => {
@@ -30,7 +30,6 @@ export const changePassword = async (userId, currentPassword, newPassword) => {
 // }
 
 export const updateProfile = async (formData) => {
-    console.log("formData2", formData);
     try {
         const res = await api.patch('/auth/update-profile', formData, {
             headers: {
@@ -44,28 +43,24 @@ export const updateProfile = async (formData) => {
     }
 };
 
-// export const updateProfile = async (formData) => {
-//     console.log("formData2", formData);
-//     try {
-//         const res = await fetch('http://localhost:3000/api/v1/auth/update-profile', {
-//             method: 'PATCH',
-//             body: formData,
-//             headers: {
-//                 // Don't set Content-Type explicitly when using FormData
-//                 // 'Content-Type': 'multipart/form-data' will be automatically set including boundary
-//             },
-//             credentials: 'include', // if you're using cookies for auth
-//         });
 
-//         if (!res.ok) {
-//             const errorData = await res.json();
-//             throw new Error(errorData.message || 'Failed to update profile');
-//         }
+export const changePassword = async (currentPassword, newPassword) => {
+    try {
 
-//         const data = await res.json();
-//         return data;
-//     } catch (error) {
-//         console.error('Error updating profile:', error.message);
-//         throw error;
-//     }
-// };
+        const res = await api.post('/auth/changePassword', {
+            currentPassword,
+            newPassword
+        });
+        return res.data;
+    } catch (error) {
+        console.error("Error changing password:", error);
+
+        // Extract the error message from Axios response if it exists
+        const message =
+            error.response?.data?.message ||
+            error.response?.data?.error ||
+            "An unexpected error occurred";
+
+        return { error: message };
+    }
+};

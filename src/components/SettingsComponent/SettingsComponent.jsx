@@ -5,13 +5,11 @@ import useEditProfile from "../../hooks/useEditProfile";
 
 const SettingsComponent = () => {
     const {
-        error,
-        isSubmitting,
         profileImage,
         formDataRef,
         setProfileImage,
-        handleSubmit,
     } = useEditProfile();
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-blue-800 to-blue-900 text-white p-6">
             {/* Title */}

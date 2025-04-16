@@ -23,23 +23,39 @@ const ChangePasswordModal = () => {
     const handleSubmit = async (formData) => {
         setIsSubmitting(true);
         setError(null);
-        console.log(formData);
-        console.log(userInfo);
+
+        // Format and log form data
+        const formattedData = {
+            currentPassword: formData["current password"],
+            newPassword: formData["new password"],
+            confirmPassword: formData["confirm password"],
+        };
+
+        // Optional: check if new and confirm passwords match
+        if (formattedData.newPassword !== formattedData.confirmPassword) {
+            setError("New password and confirm password do not match.");
+            setIsSubmitting(false);
+            return;
+        }
+
         try {
-            const res = await changePassword(userInfo.user._id, formData['current password'], formData['new password']);
-            console.log(res);
+            const res = await changePassword(formattedData.currentPassword, formattedData.newPassword);
+
+            // Check if the backend sent an error
             if (res && res.error) {
                 setError(res.error);
-                return;
+            } else {
+                // Only close if no error
+                handleClose();
             }
-            handleClose();
         } catch (error) {
-            console.log(error);
-            setError("Something went wrong. Please try again later.");
+            console.error("Change password error:", error);
+
         } finally {
             setIsSubmitting(false);
         }
     };
+
 
     return (
         <>

@@ -5,7 +5,6 @@ import { updateProfile } from "../../Api/shared/UserManagement.js";
 import { updateProfileInfo } from "../../slices/authSlice";
 
 const ProfileSection = ({ profileImage, setProfileImage, formData, isModal }) => {
-    console.log("isModal:", isModal);
 
     const { userInfo } = useSelector((state) => state.auth);
     const fileInputRef = useRef(null);

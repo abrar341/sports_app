@@ -26,7 +26,7 @@ const ModalForm = ({ fields, onClose, onSubmit, isSubmitting, error }) => {
 
         // Example validations for passwords
         if (fields.some((field) => field.type === "password")) {
-            if (!formData["current password"]) { 
+            if (!formData["current password"]) {
                 errors["current password"] = "Current password is required.";
             }
             if (!formData["new password"]) {
@@ -53,13 +53,11 @@ const ModalForm = ({ fields, onClose, onSubmit, isSubmitting, error }) => {
                 errors["confirm password"] = "Passwords do not match.";
             }
         }
-        
-        if (formData["name"] && formData["name"].length < 1) { 
+
+        if (formData["name"] && formData["name"].length < 1) {
             errors["name"] = "Name is required.";
         }
 
-        console.log(formData);
-        console.log("errors: ",errors);
 
         return errors;
     };
@@ -118,7 +116,7 @@ const ModalForm = ({ fields, onClose, onSubmit, isSubmitting, error }) => {
             {/* Backend error message */}
             {error && (
                 <div className="mt-4 text-red-500 text-sm">
-                    <strong>Error:</strong> {error}
+                    <strong></strong> {error}
                 </div>
             )}
 
@@ -133,9 +131,8 @@ const ModalForm = ({ fields, onClose, onSubmit, isSubmitting, error }) => {
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className={`px-4 py-2 rounded-md text-white ${
-                        isSubmitting ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
-                    }`}
+                    className={`px-4 py-2 rounded-md text-white ${isSubmitting ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
+                        }`}
                 >
                     {isSubmitting ? "Saving..." : "Save Changes"}
                 </button>

@@ -27,7 +27,7 @@ const useEditProfile = () => {
             }
 
 
-            // const res = await updateProfile(formDataRef.current);
+            const res = await updateProfile(formDataRef.current);
 
             if (res?.error) {
                 setError(res.message);

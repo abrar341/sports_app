@@ -7,12 +7,9 @@ import useEditProfile from "../../hooks/useEditProfile";
 const AccountSettingComponent = () => {
     const navigate = useNavigate();
     const {
-        error,
-        isSubmitting,
         profileImage,
         formDataRef,
         setProfileImage,
-        handleSubmit,
     } = useEditProfile();
     return (
         <div className="min-h-screen bg-primary text-white p-6">

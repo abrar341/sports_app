@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 
 const Subscription = () => {
     const { userInfo } = useSelector((state) => state.auth);
-    const { subscriptionPlanExpiry } = userInfo.data;
+    const subscriptionPlanExpiry = userInfo?.data?.subscriptionPlanExpiry;
 
     const [timeLeft, setTimeLeft] = useState("");
 

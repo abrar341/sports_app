@@ -12,7 +12,6 @@ import TeamInsightMain from '../components/TeamInsight/TeamInsightMain.jsx';
 import SubscriptionMain from '../components/Subscription/SubscriptionMain';
 import LandingPage from '../pages/LandingPage.jsx';
 import Dashboard from '../components/Dashboard/Dashboard.jsx';
-import BettingOdds from '../components/BettingOdds/BettingOdds.jsx';
 import { GameInsights } from '../components/GameInsights/GameInsights.jsx';
 import Main from '../components/Test/Main.jsx';
 import GameDetails from '../components/GameInsights/GameDetails.jsx';
@@ -26,6 +25,7 @@ import Summary from '../components/GameInsights/Summary.jsx';
 import Odds from '../components/GameInsights/Odds.jsx';
 import MatchStatistics from '../components/GameInsights/MatchStatistics.jsx';
 import Prediction from '../components/GameInsights/Prediction.jsx';
+import SportsCategorySelector from '../components/LandingPage/SportsCategory/SportsCategorySelector.jsx';
 
 const AppRoutes = () => {
 
@@ -35,8 +35,8 @@ const AppRoutes = () => {
             <Route element={<MainLayout />}>
                 <Route path="/" element={<GuestRoute><LandingPage /></GuestRoute>} />
                 <Route path="/news" element={<GuestRoute><TrendingNews /></GuestRoute>} />
-                <Route path="/pricing" element={<GuestRoute><LandingPage /></GuestRoute>} />
-                <Route path="/games" element={<GuestRoute><LandingPage /></GuestRoute>} />
+                <Route path="/pricing" element={<GuestRoute><SubscriptionMain /></GuestRoute>} />
+                <Route path="/games" element={<GuestRoute><SportsCategorySelector /></GuestRoute>} />
                 {/* <Route path="/betting-odds" element={<GuestRoute><LandingPage /></GuestRoute>} /> */}
                 <Route path="/education" element={<GuestRoute><LandingPage /></GuestRoute>} />
                 <Route path="/contact" element={<GuestRoute><ContactForm /></GuestRoute>} />

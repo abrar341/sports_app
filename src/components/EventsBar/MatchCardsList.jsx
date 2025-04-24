@@ -126,7 +126,7 @@ const MatchCardsList = ({ selectedGame, selectedLeague }) => {
 
     useEffect(() => {
         const container = containerRef.current;
-        if (!container) return;
+        if (!container || fixturesLoading) return;
 
         const scrollStep = 1;
         const interval = 30;
@@ -142,7 +142,8 @@ const MatchCardsList = ({ selectedGame, selectedLeague }) => {
         }, interval);
 
         return () => clearInterval(autoScroll);
-    }, [isHovered]);
+    }, [isHovered, fixturesLoading]);
+
 
     return (
         <div

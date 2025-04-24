@@ -21,7 +21,7 @@ function SportsCategorySelector() {
                     <h2 className="mb-6 text-2xl font-bold text-center text-white">
                         Category
                     </h2>
-                    <div className="grid gap-6  mx-auto my-0 grid-cols-3 max-w-[1076px]  max-sm:grid-cols-2">
+                    <div className="flex items-center justify-center gap-6 mx-auto my-0 grid-cols-4  max-w-[1076px]  ">
                         {sportsData.map((sport, index) => (
                             <SportCard
                                 key={index}

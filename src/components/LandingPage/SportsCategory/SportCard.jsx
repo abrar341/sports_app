@@ -2,7 +2,7 @@ import React from "react";
 
 function SportCard({ name, imageUrl, altText }) {
     return (
-        <article className="flex flex-col gap-6 items-center p-6 rounded-lg bg-slate-900 max-sm:w-full">
+        <article className="flex flex-col gap-6 items-center p-6 rounded-lg bg-slate-900 max-sm:w-full w-[200px]">
             <div className="flex justify-center items-center rounded-full bg-slate-900 h-[80px] w-[80px]">
                 <img
                     src={imageUrl}

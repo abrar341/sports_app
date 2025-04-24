@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { FaArrowRight, FaCheck, FaTimes } from "react-icons/fa";
 import { cancelSubscription, createCheckoutSession } from "../../Api/Stripe/stripe";
 import { plans } from "../Subscription/adjustedDates";
+import { useNavigate } from "react-router-dom";
 
 const ActionButton = ({ onClick, loading, children, icon, disabled, className }) => (
     <button
@@ -25,7 +26,10 @@ const ActionButton = ({ onClick, loading, children, icon, disabled, className })
 );
 
 const SubscriptionCard = ({ planName, price, duration, timeLeft, features, buttonText, priceId, subscriptionPlan }) => {
-    const { email } = useSelector((state) => state.auth.userInfo.data);
+
+    const navigate = useNavigate();
+
+    const email = useSelector((state) => state.auth.userInfo?.data?.email);
     const { userInfo } = useSelector((state) => state.auth);
     const [isCancelLoading, setIsCancelLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState(""); // State for error message
@@ -34,14 +38,15 @@ const SubscriptionCard = ({ planName, price, duration, timeLeft, features, butto
 
     const [loading, setLoading] = useState(false);
 
-    const activePlan = userInfo.data.subscriptionPlan === subscriptionPlan;
-    const inTrailMode = userInfo.data.subscriptionPlan === "trial";
-    const isActive = userInfo.data.subscriptionStatus === 'active';
+    const activePlan = userInfo?.data?.subscriptionPlan === subscriptionPlan;
+    const inTrailMode = userInfo?.data?.subscriptionPlan === "trial";
+    const isActive = userInfo?.data?.subscriptionStatus === 'active';
     const isTrailPlan = subscriptionPlan === 'trial';
 
     const handleSubscribe = async () => {
         if (!email) {
             console.error("User email not found.");
+            navigate("/login"); // Redirect to login
             return;
         }
         setLoading(true);
@@ -108,7 +113,7 @@ const SubscriptionCard = ({ planName, price, duration, timeLeft, features, butto
                 <p className="text-sm text-center font-semibold text-green-600 mb-2">{cancelMessage}</p>
             )}
             {!activePlan || !isActive ? (
-                <ActionButton disabled={isTrailPlan} onClick={handleSubscribe} isActive={activePlan} loading={loading} icon={<FaArrowRight />} className="bg-blue-600 hover:bg-blue-500">
+                <ActionButton disabled={isTrailPlan && email} onClick={handleSubscribe} isActive={activePlan} loading={loading} icon={<FaArrowRight />} className="bg-blue-600 hover:bg-blue-500">
                     {buttonText}
                 </ActionButton>
             ) : (

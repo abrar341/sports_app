@@ -25,7 +25,7 @@ const EventsBar = () => {
     }, [selectedSport]);
 
     return (
-        <div className="bg-[#001745] z-50 text-white py-2 px-4 flex items-center justify-between ">
+        <div className="relative bg-[#001745] z-50 text-white py-2 px-4 flex items-center justify-between ">
             {/* Left Section */}
             <div className="flex w-[150px] mt-2 flex-col items-center space-y-2">
                 <EventBarDropDown type="sports" /> {/* Sports Dropdown */}

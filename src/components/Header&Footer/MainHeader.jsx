@@ -70,7 +70,7 @@ const MainHeader = () => {
                             { to: "/", label: "Home" },
                             { to: "/news", label: "News" },
                             { to: "/games", label: "Games" },
-                            { to: "/betting-odds", label: "Betting Odds" },
+                            // { to: "/betting-odds", label: "Betting Odds" },
                             { to: "/pricing", label: "Pricing" },
                             // { to: "/education", label: "Education" },
                             { to: "/contact", label: "Contact Us" }

@@ -1,10 +1,24 @@
+import { useEffect, useState } from "react";
+
 const BackgroundSVG = () => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const viewBoxValue = isMobile ? "0 0 200 1075" : "0 0 588 1075";
   return (
     <svg
       className="absolute top-0 right-0 w-96 h-auto z-0"
       width="588"
       height="1075"
-      viewBox="0 0 588 1075"
+      viewBox={viewBoxValue}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >

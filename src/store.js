@@ -9,6 +9,7 @@ import selectionReducer from "./slices/selectionSlice";
 import fixturesReducer from "./slices/fixturesSlice";
 import eventBarReducer from "./slices/eventBarSlice";
 import predictionReducer from "./slices/predictionSlice";
+import newsReducer from "./slices/newsSlice";
 import { socketMiddleware } from "./middleware/socketMiddleware";
 
 const store = configureStore({
@@ -18,9 +19,10 @@ const store = configureStore({
     favorites: favoritesReducer,
     loading: loadingReducer,
     selection: selectionReducer,
-    fixtures: fixturesReducer, // Normal fixtures reducer without persist
-    eventBar: eventBarReducer, // Normal fixtures reducer without persist
-    prediction: predictionReducer, // Normal fixtures reducer without persist
+    fixtures: fixturesReducer,
+    eventBar: eventBarReducer,
+    prediction: predictionReducer,
+    news: newsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

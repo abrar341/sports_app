@@ -26,6 +26,7 @@ import Odds from '../components/GameInsights/Odds.jsx';
 import MatchStatistics from '../components/GameInsights/MatchStatistics.jsx';
 import Prediction from '../components/GameInsights/Prediction.jsx';
 import SportsCategorySelector from '../components/LandingPage/SportsCategory/SportsCategorySelector.jsx';
+import NewsPage from '../components/LandingPage/News/NewsPage.jsx';
 
 const AppRoutes = () => {
 
@@ -34,7 +35,7 @@ const AppRoutes = () => {
             {/* Authentication Routes */}
             <Route element={<MainLayout />}>
                 <Route path="/" element={<GuestRoute><LandingPage /></GuestRoute>} />
-                <Route path="/news" element={<GuestRoute><TrendingNews /></GuestRoute>} />
+                <Route path="/news" element={<GuestRoute><NewsPage /></GuestRoute>} />
                 <Route path="/pricing" element={<GuestRoute><SubscriptionMain /></GuestRoute>} />
                 <Route path="/games" element={<GuestRoute><SportsCategorySelector /></GuestRoute>} />
                 {/* <Route path="/betting-odds" element={<GuestRoute><LandingPage /></GuestRoute>} /> */}

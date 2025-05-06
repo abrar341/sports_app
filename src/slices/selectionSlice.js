@@ -47,6 +47,7 @@ const initialState = {
     favoritePlayersSports: "soccer", // Added state
     playerOrTeam: "player", // Added state
     sportsNameDashboard: "soccer", // selected Sports Name at Dashboard
+    selectedNews: null,
 };
 
 const selectionSlice = createSlice({
@@ -55,6 +56,9 @@ const selectionSlice = createSlice({
     reducers: {
         setSelectedPlayer: (state, action) => {
             state.selectedPlayer = action.payload ? { ...action.payload } : null;
+        },
+        setSelectedNewsItem: (state, action) => {
+            state.selectedNews = action.payload ? { ...action.payload } : null;
         },
         setSelectedTeam: (state, action) => {
             state.selectedTeam = action.payload ? { ...action.payload } : null;
@@ -100,5 +104,5 @@ const selectionSlice = createSlice({
     },
 });
 
-export const { setSelectedPlayer, setFavoritePlayersSports, setSelectedPlayerStats, setSelectedTeamSports, setSelectedPlayerSports, setSelectedTeam, setSelectedTeamStats, setPlayerOrTeam, setSportsNameDashboard, resetSelection } = selectionSlice.actions;
+export const { setSelectedPlayer, setFavoritePlayersSports, setSelectedPlayerStats, setSelectedTeamSports, setSelectedPlayerSports, setSelectedTeam, setSelectedTeamStats, setPlayerOrTeam, setSportsNameDashboard, resetSelection, setSelectedNewsItem } = selectionSlice.actions;
 export default selectionSlice.reducer;

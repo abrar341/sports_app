@@ -34,9 +34,9 @@ const MainHeader = () => {
         </div>
         <NavLink to="/dashboard/account-setting">
           <img
-            src="/assets/shield.png"
+            src="/assets/logo.png"
             alt="Logo"
-            className="w-12 h-12 hidden lg:block"
+            className="w-12  hidden lg:block"
           />
         </NavLink>
         <nav className="hidden lg:flex lg:space-x-4 lg:justify-center">
@@ -94,7 +94,7 @@ const MainHeader = () => {
         <div className="flex items-center justify-between p-4 border-b border-gray-700">
           <NavLink to="/dashboard/account-setting">
             <img
-              src="/assets/shield.png"
+              src="/assets/logo.png"
               alt="Sidebar Logo"
               className="w-8 h-8"
             />

@@ -1,12 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import NewsItem from "./NewsItem";
-import FeaturedNews from "./FeaturedNews";
 import { getAmericanFootballNews, getSoccerNews } from "../../../Api/News/News";
 import { EmptyState } from "../../Shared/EmptyState";
 import { FaRegSadTear } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import Loading from "../../Shared/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setPage,
@@ -45,7 +43,7 @@ function TrendingNews() {
   }, [selectedSport]);
 
   return (
-    <section className="overflow-hidden relative w-full bg-slate-900  px-2">
+    <section className="overflow-hidden w-full bg-slate-900  px-2">
       {/* <img
         src="https://cdn.builder.io/api/v1/image/assets/TEMP/7ddb7356d39c1d16d6f5c494e0dc42007a30fe50"
         alt="Abstract Shape"
@@ -85,7 +83,7 @@ function TrendingNews() {
             </button>
           </div>
           {loading ? (
-            <div className="flex   rounded-xl  w-full h-full justify-center items-center py-4">
+            <div className="flex  rounded-xl  w-full h-full justify-center items-center py-4">
               <div className="w-6 h-6 border-4 border-primarySolid border-t-secondary rounded-full animate-spin"></div>
             </div>
           ) : (

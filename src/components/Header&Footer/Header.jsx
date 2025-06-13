@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Header = () => {
   const { userInfo } = useSelector((state) => state.auth);
-
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -85,7 +84,7 @@ const Header = () => {
             </NavLink>
           ))}
         </nav>
-        <div>
+        <div className="">
           <div
             className="flex items-center cursor-pointer"
             onClick={toggleDropdown}

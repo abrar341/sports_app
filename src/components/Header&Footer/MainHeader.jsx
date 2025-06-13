@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
-import { useNavigate, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
+import ProfileIcon from "./ProfileIcon";
+import { useSelector } from "react-redux";
 
 const MainHeader = () => {
+  const { userInfo } = useSelector((state) => state.auth);
+  const isNotAuth = !userInfo || !userInfo?.success || !userInfo?.data;
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate();
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
   useEffect(() => {
@@ -18,7 +21,7 @@ const MainHeader = () => {
   }, []);
 
   return (
-    <header className="sticky top-0 z-20 bg-[#001745] text-white shadow-lg">
+    <header className="sticky top-0 z-0 bg-[#001745] text-white shadow-lg">
       <div className="flex items-center justify-between px-6 py-4">
         <div className="lg:hidden">
           <button
@@ -65,29 +68,33 @@ const MainHeader = () => {
           ))}
         </nav>
         {/* login and sign up button */}
-        <div className="flex gap-4">
-          <NavLink
-            to="/signin"
-            className="px-4 py-2 rounded-full bg-blue-700 text-white hover:bg-blue-800 transition"
-          >
-            Login
-          </NavLink>
-          <NavLink
-            to="/signup"
-            className="px-4 py-2 rounded-full bg-[#001765] hover:text-white transition"
-          >
-            Sign Up
-          </NavLink>
-        </div>
+        {isNotAuth ? (
+          <div className="flex gap-4">
+            <NavLink
+              to="/signin"
+              className="px-4 py-2 rounded-full bg-blue-700 text-white hover:bg-blue-800 transition"
+            >
+              Login
+            </NavLink>
+            <NavLink
+              to="/signup"
+              className="px-4 py-2 rounded-full bg-[#001765] hover:text-white transition"
+            >
+              Sign Up
+            </NavLink>
+          </div>
+        ) : (
+          <ProfileIcon />
+        )}
       </div>
       {menuOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          className="fixed inset-0 bg-black bg-opacity-50 z-30"
           onClick={toggleMenu}
         ></div>
       )}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-[#001745] text-white z-50 shadow-lg transform ${
+        className={`fixed top-0 left-0 h-full w-64 bg-[#001745] text-white z-30 shadow-lg transform ${
           menuOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300`}
       >

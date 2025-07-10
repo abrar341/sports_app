@@ -1,6 +1,6 @@
 // src/App.jsx
-import AppRoutes from './routes/AppRoutes';
-
+import Navbar from "./components/Header&Footer/Footer/Navbar";
+import AppRoutes from "./routes/AppRoutes";
 
 const App = () => {
   return (

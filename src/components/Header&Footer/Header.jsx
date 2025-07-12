@@ -53,7 +53,7 @@ const Header = () => {
             )}
           </button>
         </div>
-        <NavLink to="/dashboard/account-setting">
+        <NavLink to="/">
           <img
             src="/assets/logo.png"
             alt="Logo"
@@ -119,7 +119,7 @@ const Header = () => {
         } transition-transform duration-300`}
       >
         <div className="flex items-center justify-between p-4 border-b border-gray-700">
-          <NavLink to="/dashboard/account-setting">
+          <NavLink to="/">
             <img src="/assets/logo.png" alt="Sidebar Logo" className="w-8" />
           </NavLink>
           <button

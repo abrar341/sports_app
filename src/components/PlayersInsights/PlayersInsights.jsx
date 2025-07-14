@@ -67,7 +67,7 @@ const PlayersInsights = () => {
       {/* Grid Section */}
       <div className=" grid grid-cols-12 gap-3 md:gap-6">
         {/* Player Insight Search Bar */}
-        <div className="col-span-12  flex md:col-span-11 ">
+        <div className="col-span-12  flex md:col-span-12 ">
           {/* <PlayerInsightSearchBar /> */}
           <PlayerInsightSearchBar
             sportsName={sportsName}
@@ -100,11 +100,11 @@ const PlayersInsights = () => {
             <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white h-3 pointer-events-none" />
           </div>
         </div>
-        <div className="col-span-12 md:col-span-1 ">
+        {/* <div className="col-span-12 md:col-span-1 ">
           <button className="bg-primarySolid  h-full w-full flex justify-center items-center text-white px-2 py-2 md:py-3 rounded-full hover:bg-blue-700 focus:outline-none text-2xl">
             <FaSlidersH />
           </button>
-        </div>
+        </div> */}
 
         {/* Sports Dropdown */}
         {!selectedPlayer && playerProfileLoading && (

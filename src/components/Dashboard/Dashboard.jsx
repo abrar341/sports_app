@@ -134,7 +134,7 @@ const Dashboard = () => {
           })}
         </div>
 
-        <div className="col-span-12 md:col-span-8 w-full md:w-auto mr-4">
+        <div className="col-span-12 md:col-span-12 w-full md:w-auto">
           {/* Conditional Rendering */}
           <div className=" flex ">
             {playerOrTeam === "player" ? (
@@ -194,12 +194,12 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        <div className="flex w-full col-span-12 md:col-span-4 mt-3  md:mt-0">
-          {/* Advanced Search Button */}
+        {/* <div className="flex w-full col-span-12 md:col-span-4 mt-3  md:mt-0">
+          Advanced Search Button
           <button className="bg-primarySolid w-full overflow-auto  px-2 lg:px-4 py-2   rounded-full text-white">
             Advanced
           </button>
-        </div>
+        </div> */}
 
         <div className="self-center min-h-screen col-span-12">
           <div>

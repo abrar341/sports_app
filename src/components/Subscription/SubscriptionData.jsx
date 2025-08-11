@@ -28,22 +28,22 @@ const SubscriptionData = [
     isActive: false,
     subscriptionPlan: "six_months",
   },
-  //   {
-  //     planName: "Basic Plan",
-  //     price: "$20.99",
-  //     duration: "/ month",
-  //     priceId: import.meta.env.VITE_MONTHLY_PRICE_ID, // Fetch from .env
-  //     features: [
-  //       "Thousands of Props & Games",
-  //       "Trending Insights",
-  //       "Shareable Betslips",
-  //       "Sharp Book Odds",
-  //       "Advanced Data & Visuals",
-  //     ],
-  //     buttonText: "Get Started",
-  //     isActive: true, // Highlighted card
-  //     subscriptionPlan: "monthly",
-  //   },
+  {
+    planName: "Basic Plan",
+    price: "$2.00",
+    duration: "/ month",
+    priceId: import.meta.env.VITE_MONTHLY_PRICE_ID, // Fetch from .env
+    features: [
+      "Thousands of Props & Games",
+      "Trending Insights",
+      "Shareable Betslips",
+      "Sharp Book Odds",
+      "Advanced Data & Visuals",
+    ],
+    buttonText: "Get Started",
+    isActive: true, // Highlighted card
+    subscriptionPlan: "monthly",
+  },
   {
     planName: "Premium Plan",
     price: "$200.00",

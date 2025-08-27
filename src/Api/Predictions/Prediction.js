@@ -20,6 +20,16 @@ export const getAllUpcomingAFPredictions = async () => {
     }
 };
 
+export const getAFPredictionByGameId = async (gameId) => {
+    try {
+        const res = await api.get(`/american-football/AI/americanFootballPrediction?gameId=${gameId}`);
+        return res.data;
+    } catch (error) {
+        console.error(`Error fetching football prediction for game ${gameId}:`, error);
+        return null; // Return null to handle errors gracefully in the UI
+    }
+};
+
 // export const getAllUpcomingFixturesPredictions = async () => {
 //     try {
 //         const res = await fetch("http://localhost:3000/api/v1/soccer/AI/allUpcomingFixturesPredictions");
